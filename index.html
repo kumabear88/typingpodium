@@ -105,13 +105,13 @@
         }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-6 flex flex-col items-center justify-center text-slate-800" onclick="handleGlobalClick()">
+<body class="min-h-screen p-4 md:p-6 flex flex-col items-center justify-center text-slate-800" onclick="window.handleGlobalClick()">
 
     <div class="max-w-5xl w-full bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-blue-200 relative" onclick="event.stopPropagation()">
         
         <!-- 排行榜按鈕 (放在右上角) -->
         <div class="absolute top-4 right-4 z-20">
-            <button onclick="showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
+            <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
                 <i class="fa-solid fa-trophy"></i> 排行榜
             </button>
         </div>
@@ -144,14 +144,14 @@
                             <input type="text" id="login-seat" class="w-full text-center px-4 py-3 border-2 border-blue-300 rounded-xl focus:outline-none focus:border-blue-500 text-2xl font-bold transition-colors" maxlength="2">
                         </div>
                         <p id="login-error" class="hidden text-red-500 text-center font-bold text-sm animate-pulse">班級和座號不能空白喔！</p>
-                        <button onclick="loginStudent()" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg transition-transform transform hover:scale-105 flex items-center justify-center gap-2">
+                        <button onclick="window.loginStudent()" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg transition-transform transform hover:scale-105 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-play"></i> 進入遊戲
                         </button>
                     </div>
                 </div>
 
                 <!-- 教師後台入口按鈕 (隱藏在右下角) -->
-                <button onclick="showScreen('teacher-login-screen')" class="absolute bottom-4 right-4 text-gray-400 hover:text-gray-600 transition-colors text-sm font-bold flex items-center gap-1">
+                <button onclick="window.showScreen('teacher-login-screen')" class="absolute bottom-4 right-4 text-gray-400 hover:text-gray-600 transition-colors text-sm font-bold flex items-center gap-1">
                     <i class="fa-solid fa-lock"></i> 教師後台
                 </button>
             </div>
@@ -164,8 +164,8 @@
                     <input type="password" id="teacher-password" placeholder="請輸入密碼" class="w-full text-center px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-gray-500 text-xl mb-4">
                     <p id="teacher-login-error" class="hidden text-red-500 text-sm font-bold mb-4">密碼錯誤</p>
                     <div class="flex gap-3 justify-center">
-                        <button onclick="showScreen('login-screen')" class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors">返回</button>
-                        <button onclick="loginTeacher()" class="px-6 py-2 bg-gray-700 hover:bg-gray-800 text-white font-bold rounded-xl transition-colors">登入</button>
+                        <button onclick="window.showScreen('login-screen')" class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors">返回</button>
+                        <button onclick="window.loginTeacher()" class="px-6 py-2 bg-gray-700 hover:bg-gray-800 text-white font-bold rounded-xl transition-colors">登入</button>
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
             <div id="intro-screen" class="screen-section animate-fade-in space-y-8">
                 <!-- 排行榜按鈕 -->
                 <div class="flex justify-end mb-2">
-                    <button onclick="showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
+                    <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
                         <i class="fa-solid fa-trophy"></i> 英雄排行榜
                     </button>
                 </div>
@@ -192,17 +192,17 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button onclick="startGame('easy')" class="p-6 bg-green-50 hover:bg-green-100 text-green-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-green-200 flex flex-col items-center gap-2 shadow-sm">
+                    <button onclick="window.startGame('easy')" class="p-6 bg-green-50 hover:bg-green-100 text-green-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-green-200 flex flex-col items-center gap-2 shadow-sm">
                         <span class="text-3xl">🌱</span>
                         <span class="text-xl font-bold">新手等級</span>
                         <span class="text-sm text-center font-medium">短單字與流行詞彙<br/>(共 25 題)</span>
                     </button>
-                    <button onclick="startGame('medium')" class="p-6 bg-yellow-50 hover:bg-yellow-100 text-yellow-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-yellow-200 flex flex-col items-center gap-2 shadow-sm">
+                    <button onclick="window.startGame('medium')" class="p-6 bg-yellow-50 hover:bg-yellow-100 text-yellow-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-yellow-200 flex flex-col items-center gap-2 shadow-sm">
                         <span class="text-3xl">⭐</span>
                         <span class="text-xl font-bold">進階等級</span>
                         <span class="text-sm text-center font-medium">中單字與YouTuber<br/>(共 20 題)</span>
                     </button>
-                    <button onclick="startGame('hard')" class="p-6 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-blue-200 flex flex-col items-center gap-2 shadow-sm">
+                    <button onclick="window.startGame('hard')" class="p-6 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-blue-200 flex flex-col items-center gap-2 shadow-sm">
                         <span class="text-3xl">🚀</span>
                         <span class="text-xl font-bold">高手等級</span>
                         <span class="text-sm text-center font-medium">長單字與熱門動漫<br/>(共 15 題)</span>
@@ -210,7 +210,7 @@
                 </div>
                 
                 <div class="text-center mt-4">
-                    <button onclick="logoutStudent()" class="text-gray-400 hover:text-red-500 font-bold transition-colors underline text-sm">不是我？切換帳號</button>
+                    <button onclick="window.logoutStudent()" class="text-gray-400 hover:text-red-500 font-bold transition-colors underline text-sm">不是我？切換帳號</button>
                 </div>
             </div>
 
@@ -227,7 +227,7 @@
                             <i class="fa-regular fa-clock text-yellow-600"></i>
                             時間: <span id="timer-text">0</span> 秒
                         </span>
-                        <button onclick="showScreen('intro-screen')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-full flex items-center gap-1 transition-colors text-sm shadow-sm border border-gray-200 font-bold" title="放棄重來">
+                        <button onclick="window.showScreen('intro-screen')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-full flex items-center gap-1 transition-colors text-sm shadow-sm border border-gray-200 font-bold" title="放棄重來">
                             <i class="fa-solid fa-xmark"></i> 放棄
                         </button>
                     </div>
@@ -263,7 +263,7 @@
                     
                     <!-- 輸入區 -->
                     <div class="relative w-full max-w-lg mb-6">
-                        <input type="text" id="type-input" class="w-full text-center bg-transparent outline-none text-4xl md:text-5xl text-gray-800 font-bold border-b-4 border-blue-400 focus:border-blue-600 transition-colors py-2 mb-2 placeholder-blue-300/30" placeholder=" " autocomplete="off" oninput="checkInput()" onblur="handleInputBlur()">
+                        <input type="text" id="type-input" class="w-full text-center bg-transparent outline-none text-4xl md:text-5xl text-gray-800 font-bold border-b-4 border-blue-400 focus:border-blue-600 transition-colors py-2 mb-2 placeholder-blue-300/30" placeholder=" " autocomplete="off" oninput="window.checkInput()" onblur="window.handleInputBlur()">
                         
                         <div id="cursor-hint" class="absolute inset-0 flex items-center justify-center pointer-events-none mb-2">
                             <span class="w-1 h-12 bg-blue-400 animate-pulse rounded-full opacity-50"></span>
@@ -370,10 +370,10 @@
                 </div>
                 
                 <div class="mt-4 flex justify-center gap-4">
-                    <button onclick="showLeaderboard()" class="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
+                    <button onclick="window.showLeaderboard()" class="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
                         <i class="fa-solid fa-trophy"></i> 查看排行榜
                     </button>
-                    <button onclick="showScreen('intro-screen')" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
+                    <button onclick="window.showScreen('intro-screen')" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
                         <i class="fa-solid fa-rotate-right"></i> 再玩一次
                     </button>
                 </div>
@@ -385,7 +385,7 @@
                     <h2 class="text-3xl font-black text-yellow-600 flex items-center gap-3">
                         <i class="fa-solid fa-crown"></i> 英雄排行榜
                     </h2>
-                    <button onclick="showScreen('intro-screen')" class="text-gray-500 hover:text-gray-700 bg-gray-100 px-4 py-2 rounded-full font-bold transition-colors shadow-sm">
+                    <button onclick="window.showScreen('intro-screen')" class="text-gray-500 hover:text-gray-700 bg-gray-100 px-4 py-2 rounded-full font-bold transition-colors shadow-sm">
                         <i class="fa-solid fa-arrow-left"></i> 返回選單
                     </button>
                 </div>
@@ -405,27 +405,27 @@
                 <div class="flex flex-col md:flex-row justify-center items-center gap-3 mb-6 bg-slate-100 p-3 rounded-2xl shadow-inner">
                     <!-- 難度切換 -->
                     <div class="flex gap-1 w-full md:w-auto">
-                        <button onclick="switchLeaderboardTab('easy')" id="tab-easy" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors bg-white shadow text-yellow-600 border border-gray-200 text-sm md:text-base">🌱 新手</button>
-                        <button onclick="switchLeaderboardTab('medium')" id="tab-medium" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">⭐ 進階</button>
-                        <button onclick="switchLeaderboardTab('hard')" id="tab-hard" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">🚀 高手</button>
+                        <button onclick="window.switchLeaderboardTab('easy')" id="tab-easy" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors bg-white shadow text-yellow-600 border border-gray-200 text-sm md:text-base">🌱 新手</button>
+                        <button onclick="window.switchLeaderboardTab('medium')" id="tab-medium" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">⭐ 進階</button>
+                        <button onclick="window.switchLeaderboardTab('hard')" id="tab-hard" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">🚀 高手</button>
                     </div>
                     <div class="w-full md:w-px md:h-8 bg-gray-300 my-1 md:my-0"></div>
                     <!-- 排名範圍切換 -->
                     <div class="flex gap-2 w-full md:w-auto">
-                        <button onclick="setLbScope('class')" id="btn-scope-class" class="flex-1 px-4 py-2 rounded-xl bg-white shadow font-bold text-blue-600 border border-blue-200">
+                        <button onclick="window.setLbScope('class')" id="btn-scope-class" class="flex-1 px-4 py-2 rounded-xl bg-white shadow font-bold text-blue-600 border border-blue-200">
                             <i class="fa-solid fa-users-rectangle"></i> 班級排名
                         </button>
-                        <button onclick="setLbScope('grade')" id="btn-scope-grade" class="flex-1 px-4 py-2 rounded-xl font-bold text-gray-500 hover:bg-gray-200 border border-transparent transition-colors">
+                        <button onclick="window.setLbScope('grade')" id="btn-scope-grade" class="flex-1 px-4 py-2 rounded-xl font-bold text-gray-500 hover:bg-gray-200 border border-transparent transition-colors">
                             <i class="fa-solid fa-earth-asia"></i> 全年級排名
                         </button>
                     </div>
                     <!-- 隱藏的選擇器(供內部過濾用) -->
-                    <select id="lb-class-select" onchange="renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
+                    <select id="lb-class-select" onchange="window.renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
                         <option value="301">301班</option><option value="302">302班</option><option value="303">303班</option><option value="304">304班</option><option value="305">305班</option><option value="306">306班</option><option value="307">307班</option><option value="308">308班</option>
                         <option value="401">401班</option><option value="402">402班</option><option value="403">403班</option><option value="404">404班</option><option value="405">405班</option><option value="406">406班</option><option value="407">407班</option><option value="408">408班</option>
                         <option value="503">503班</option><option value="504">504班</option><option value="505">505班</option><option value="506">506班</option>
                     </select>
-                    <select id="lb-grade-select" onchange="renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
+                    <select id="lb-grade-select" onchange="window.renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
                         <option value="3">三年級</option>
                         <option value="4">四年級</option>
                         <option value="5">五六年級</option>
@@ -456,21 +456,21 @@
                         <i class="fa-solid fa-chalkboard-user"></i> 教師即時管理後台
                     </h2>
                     <div class="flex gap-2">
-                        <button onclick="clearAllScores()" class="text-red-600 hover:text-white bg-red-100 hover:bg-red-600 px-4 py-2 rounded-full font-bold transition-colors border border-red-200 flex items-center gap-1">
+                        <button onclick="window.clearAllScores()" class="text-red-600 hover:text-white bg-red-100 hover:bg-red-600 px-4 py-2 rounded-full font-bold transition-colors border border-red-200 flex items-center gap-1">
                             <i class="fa-solid fa-trash-can"></i> 清空全部成績
                         </button>
-                        <button onclick="logoutTeacher()" class="text-gray-500 hover:text-gray-700 bg-gray-200 px-4 py-2 rounded-full font-bold transition-colors border border-gray-300 flex items-center gap-1">
+                        <button onclick="window.logoutTeacher()" class="text-gray-500 hover:text-gray-700 bg-gray-200 px-4 py-2 rounded-full font-bold transition-colors border border-gray-300 flex items-center gap-1">
                             <i class="fa-solid fa-right-from-bracket"></i> 登出
                         </button>
                     </div>
                 </div>
 
                 <div class="flex justify-center gap-2 mb-6 bg-slate-100 p-2 rounded-2xl shadow-inner flex-wrap">
-                    <button onclick="switchTeacherTab('easy')" id="t-tab-easy" class="flex-1 min-w-[100px] py-2 px-4 rounded-xl font-bold transition-colors bg-white shadow text-gray-800 border border-gray-200">🌱 新手成績</button>
-                    <button onclick="switchTeacherTab('medium')" id="t-tab-medium" class="flex-1 min-w-[100px] py-2 px-4 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent">⭐ 進階成績</button>
-                    <button onclick="switchTeacherTab('hard')" id="t-tab-hard" class="flex-1 min-w-[100px] py-2 px-4 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent">🚀 高手成績</button>
+                    <button onclick="window.switchTeacherTab('easy')" id="t-tab-easy" class="flex-1 min-w-[100px] py-2 px-4 rounded-xl font-bold transition-colors bg-white shadow text-gray-800 border border-gray-200">🌱 新手成績</button>
+                    <button onclick="window.switchTeacherTab('medium')" id="t-tab-medium" class="flex-1 min-w-[100px] py-2 px-4 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent">⭐ 進階成績</button>
+                    <button onclick="window.switchTeacherTab('hard')" id="t-tab-hard" class="flex-1 min-w-[100px] py-2 px-4 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent">🚀 高手成績</button>
                     <div class="w-px bg-gray-300 mx-1"></div>
-                    <button onclick="switchTeacherTab('podium')" id="t-tab-podium" class="flex-1 min-w-[140px] py-2 px-4 rounded-xl font-bold transition-colors text-yellow-600 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200 shadow-sm flex items-center justify-center gap-2">
+                    <button onclick="window.switchTeacherTab('podium')" id="t-tab-podium" class="flex-1 min-w-[140px] py-2 px-4 rounded-xl font-bold transition-colors text-yellow-600 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200 shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-medal"></i> 班級頒獎台
                     </button>
                 </div>
@@ -520,7 +520,7 @@
                                     <option value="503">503班</option><option value="504">504班</option><option value="505">505班</option><option value="506">506班</option>
                                 </optgroup>
                             </select>
-                            <button onclick="renderPodium()" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-xl shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2">
+                            <button onclick="window.renderPodium()" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-xl shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2">
                                 <i class="fa-solid fa-gift"></i> 舉行頒獎
                             </button>
                         </div>
@@ -559,7 +559,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (靜態模組化載入，確保所有函數正常定義) -->
+    <!-- Firebase SDK (靜態模組化載入) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -568,7 +568,7 @@
         // =========================================================================
         // 🌟 自動連線設定：使用老師的專屬 Firebase 設定 🌟
         // =========================================================================
-        var firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyDBLFK7T2ewIk4qgvlBz9hfQuxEALLUezQ",
             authDomain: "typing-game-755a8.firebaseapp.com",
             projectId: "typing-game-755a8",
@@ -577,34 +577,34 @@
             appId: "1:938096537906:web:781dd1e9c4d194bacb272b",
             measurementId: "G-3GELY1R4WK"
         };
-        var GAME_APP_ID = "donghu-typing-game"; 
+        const GAME_APP_ID = "donghu-typing-game"; 
         // =========================================================================
 
-        // 全域應用狀態
-        window.currentGameState = 'login-screen'; 
-        window.currentDifficulty = null;
-        window.questions = [];
-        window.currentQIndex = 0;
-        window.startTime = null;
-        window.timerInterval = null;
-        window.elapsedTime = 0;
-        window.isTransitioning = false;
+        // 全域變數初始化
+        let currentGameState = 'login-screen'; 
+        let currentDifficulty = null;
+        let questions = [];
+        let currentQIndex = 0;
+        let startTime = null;
+        let timerInterval = null;
+        let elapsedTime = 0;
+        let isTransitioning = false;
 
         // 學生身分
-        window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
+        let studentInfo = { classCode: '', seatCode: '', grade: 3 };
 
         // Firebase 變數
-        window.auth = null;
-        window.db = null;
-        window.user = null;
-        window.appId = null;
-        window.allScoresData = []; 
-        window.currentLeaderboardTab = 'easy';
-        window.lbScope = 'class'; 
-        window.currentTeacherTab = 'easy';
+        let auth = null;
+        let db = null;
+        let user = null;
+        let appId = GAME_APP_ID;
+        let allScoresData = []; 
+        let currentLeaderboardTab = 'easy';
+        let lbScope = 'class'; 
+        let currentTeacherTab = 'easy';
 
-        // 畫面 DOM 元素
-        var screens = {
+        // --- 重新加上抓取網頁 DOM 元素的宣告 ---
+        const screens = {
             'login-screen': document.getElementById('login-screen'),
             'teacher-login-screen': document.getElementById('teacher-login-screen'),
             'intro-screen': document.getElementById('intro-screen'),
@@ -613,17 +613,16 @@
             'leaderboard-screen': document.getElementById('leaderboard-screen'),
             'teacher-dashboard-screen': document.getElementById('teacher-dashboard-screen')
         };
-        var typeInput = document.getElementById('type-input');
-        var timerText = document.getElementById('timer-text');
+        const typeInput = document.getElementById('type-input');
+        const timerText = document.getElementById('timer-text');
 
         // --- 虛擬鍵盤按鍵映射表 ---
-        var symbolToKey = {
+        const symbolToKey = {
             'a':'k-a', 'b':'k-b', 'c':'k-c', 'd':'k-d', 'e':'k-e', 'f':'k-f', 'g':'k-g', 'h':'k-h', 'i':'k-i', 'j':'k-j', 'k':'k-k', 'l':'k-l', 'm':'k-m', 'n':'k-n', 'o':'k-o', 'p':'k-p', 'q':'k-q', 'r':'k-r', 's':'k-s', 't':'k-t', 'u':'k-u', 'v':'k-v', 'w':'k-w', 'x':'k-x', 'y':'k-y', 'z':'k-z',
             'ㄅ':'k-1', 'ㄆ':'k-q', 'ㄇ':'k-a', 'ㄈ':'k-z', 'ㄉ':'k-2', 'ㄊ':'k-w', 'ㄋ':'k-s', 'ㄌ':'k-x', 'ㄍ':'k-e', 'ㄎ':'k-d', 'ㄏ':'k-c', 'ㄐ':'k-r', 'ㄑ':'k-f', 'ㄒ':'k-v', 'ㄓ':'k-5', 'ㄔ':'k-t', 'ㄕ':'k-g', 'ㄖ':'k-b', 'ㄗ':'k-y', 'ㄘ':'k-h', 'ㄙ':'k-n', 'ㄧ':'k-u', 'ㄨ':'k-j', 'ㄩ':'k-m', 'ㄚ':'k-8', 'ㄛ':'k-i', 'ㄜ':'k-k', 'ㄝ':'k-,', 'ㄞ':'k-9', 'ㄟ':'k-o', 'ㄠ':'k-l', 'ㄡ':'k-.', 'ㄢ':'k-0', 'ㄣ':'k-p', 'ㄤ':'k-[', 'ㄥ':'k-;', 'ㄦ':'k--', 'ˇ':'k-3', 'ˋ':'k-4', 'ˊ':'k-6', '˙':'k-space', ' ':'k-space'
         };
 
-        // --- 📚 超豐富分級題庫資料 (字數限制 <= 5) 📚 ---
-        var questionPools = {
+        const questionPools = {
             3: { // 三年級：單字為主，超短詞彙
                 easy: {
                     en: [
@@ -679,7 +678,11 @@
                         { target: '魯夫', zhuyin: ['ㄌㄨˇ', 'ㄈㄨ'], hint: '海賊王！', emoji: '🏴‍☠️' },
                         { target: '鳴人', zhuyin: ['ㄇㄧㄥˊ', 'ㄖㄣˊ'], hint: '火影忍者！', emoji: '🍥' },
                         { target: '周杰倫', zhuyin: ['ㄓㄡ', 'ㄐㄧㄝˊ', 'ㄌㄨㄣˊ'], hint: '有名的歌手。', emoji: '🎤' },
-                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' }
+                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' },
+                        { target: '好味小姐', zhuyin: ['ㄏㄠˇ', 'ㄨㄟˋ', 'ㄒㄧㄠˇ', 'ㄐㄧㄝˇ'], hint: '養貓咪的YouTuber。', emoji: '🐈' },
+                        { target: '這群人', zhuyin: ['ㄓㄜˋ', 'ㄑㄩㄣˊ', 'ㄖㄣˊ'], hint: '經典YouTuber團體。', emoji: '🎬' },
+                        { target: '千千進食', zhuyin: ['ㄑㄧㄢ', 'ㄑㄧㄢ', 'ㄐㄧㄣˋ', 'ㄕˊ'], hint: '很會吃美食的YouTuber。', emoji: '🍜' },
+                        { target: '老高', zhuyin: ['ㄌㄠˇ', 'ㄍㄠ'], hint: '講故事的YouTuber。', emoji: '👽' }
                     ]
                 },
                 hard: {
@@ -859,40 +862,120 @@
             }
         };
 
-        // --- 輔助函數：隨機抽取題目 ---
-        window.getRandomItems = function(array, count) {
+        function getRandomItems(array, count) {
             const shuffled = [...array].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
-        };
+        }
 
-        // --- 畫面切換通用函式 ---
-        window.showScreen = function(screenId) {
+        function shootConfetti() {
+            const colors = ['#fde047', '#3b82f6', '#ef4444', '#10b981', '#a855f7', '#f97316'];
+            for(let i=0; i<80; i++) {
+                let confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.zIndex = '9999';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.transition = `top ${Math.random() * 1.5 + 1.5}s ease-in, left 2s ease-in-out, transform 2s linear`;
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.style.top = '100vh';
+                    confetti.style.left = (parseFloat(confetti.style.left) + (Math.random() * 20 - 10)) + 'vw';
+                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
+                }, 50);
+
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        }
+
+        async function initFirebase() {
+            try {
+                let activeConfig = firebaseConfig;
+                appId = GAME_APP_ID;
+
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    activeConfig = JSON.parse(__firebase_config);
+                    appId = typeof __app_id !== 'undefined' ? __app_id : GAME_APP_ID;
+                }
+
+                const app = initializeApp(activeConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    try {
+                        await signInAnonymously(auth);
+                    } catch(err) {
+                        console.warn("匿名登入失敗，請確認 Firebase 設定是否開啟匿名登入", err);
+                    }
+                }
+
+                onAuthStateChanged(auth, (u) => {
+                    user = u;
+                    if (user) {
+                        setupDatabaseListener(); 
+                    }
+                });
+            } catch (err) {
+                console.error("Firebase 初始化失敗:", err);
+            }
+        }
+
+        function setupDatabaseListener() {
+            if (!db || !user) return;
+            const scoresRef = collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores');
+            
+            onSnapshot(scoresRef, (snapshot) => {
+                allScoresData = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    data.id = doc.id; 
+                    allScoresData.push(data);
+                });
+                
+                if (currentGameState === 'leaderboard-screen') {
+                    renderLeaderboard();
+                } else if (currentGameState === 'teacher-dashboard-screen') {
+                    renderTeacherDashboard();
+                }
+            }, (error) => {
+                console.error("資料讀取錯誤:", error);
+            });
+        }
+
+        function showScreen(screenId) {
             Object.values(screens).forEach(s => {
                 if (s) s.style.display = 'none';
             });
             if (screens[screenId]) {
                 screens[screenId].style.display = 'block';
             }
-            window.currentGameState = screenId;
+            currentGameState = screenId;
             
             if (screenId === 'playing-screen' && typeInput) {
                 setTimeout(() => typeInput.focus(), 100);
             }
             
             if (screenId === 'leaderboard-screen') {
-                if(window.studentInfo.classCode) {
+                if(studentInfo.classCode) {
                     const classSelect = document.getElementById('lb-class-select');
-                    if(classSelect) classSelect.value = window.studentInfo.classCode;
+                    if(classSelect) classSelect.value = studentInfo.classCode;
                     const gradeSelect = document.getElementById('lb-grade-select');
-                    if(gradeSelect) gradeSelect.value = window.studentInfo.grade;
+                    if(gradeSelect) gradeSelect.value = studentInfo.grade;
                 }
-                window.renderLeaderboard();
+                renderLeaderboard();
             }
-            if (screenId === 'teacher-dashboard-screen') window.renderTeacherDashboard();
-        };
+            if (screenId === 'teacher-dashboard-screen') renderTeacherDashboard();
+        }
 
-        // --- 登入與智慧年級判定邏輯 ---
-        window.loginStudent = function() {
+        function loginStudent() {
             const cInput = document.getElementById('login-class').value.trim();
             const sInput = document.getElementById('login-seat').value.trim();
             const err = document.getElementById('login-error');
@@ -910,9 +993,9 @@
             if (detectedGrade <= 3) detectedGrade = 3;
             if (detectedGrade >= 5) detectedGrade = 5;
 
-            window.studentInfo.classCode = cInput;
-            window.studentInfo.seatCode = sInput;
-            window.studentInfo.grade = detectedGrade;
+            studentInfo.classCode = cInput;
+            studentInfo.seatCode = sInput;
+            studentInfo.grade = detectedGrade;
             
             const welcomeEl = document.getElementById('welcome-student-name');
             if(welcomeEl) welcomeEl.innerText = `${cInput} 班 ${sInput} 號`;
@@ -924,19 +1007,19 @@
             }
             
             if(err) err.classList.add('hidden');
-            window.showScreen('intro-screen');
-        };
+            showScreen('intro-screen');
+        }
 
-        window.logoutStudent = function() {
-            window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
+        function logoutStudent() {
+            studentInfo = { classCode: '', seatCode: '', grade: 3 };
             const cInput = document.getElementById('login-class');
             const sInput = document.getElementById('login-seat');
             if (cInput) cInput.value = '';
             if (sInput) sInput.value = '';
-            window.showScreen('login-screen');
-        };
+            showScreen('login-screen');
+        }
 
-        window.loginTeacher = function() {
+        function loginTeacher() {
             const pwdInput = document.getElementById('teacher-password');
             const err = document.getElementById('teacher-login-error');
             const pwd = pwdInput ? pwdInput.value : '';
@@ -944,19 +1027,18 @@
             if (pwd === "0316") {
                 if(err) err.classList.add('hidden');
                 if(pwdInput) pwdInput.value = '';
-                window.showScreen('teacher-dashboard-screen');
+                showScreen('teacher-dashboard-screen');
             } else {
                 if(err) err.classList.remove('hidden');
             }
-        };
+        }
 
-        window.logoutTeacher = function() {
-            window.showScreen('login-screen');
-        };
+        function logoutTeacher() {
+            showScreen('login-screen');
+        }
 
-        // --- 遊戲邏輯 ---
-        window.startGame = function(level) {
-            const gradePool = questionPools[window.studentInfo.grade];
+        function startGame(level) {
+            const gradePool = questionPools[studentInfo.grade];
             
             let enCount, zhCount;
             if (level === 'easy') {
@@ -970,30 +1052,30 @@
                 zhCount = 7;  
             }
             
-            const enList = window.getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
-            const zhList = window.getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
+            const enList = getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
+            const zhList = getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
             
-            window.currentDifficulty = level;
-            window.questions = [...enList, ...zhList];
+            currentDifficulty = level;
+            questions = [...enList, ...zhList];
             
-            window.initGameSession();
-        };
+            initGameSession();
+        }
 
-        window.initGameSession = function() {
-            window.currentQIndex = 0;
-            window.elapsedTime = 0;
-            window.isTransitioning = false;
+        function initGameSession() {
+            currentQIndex = 0;
+            elapsedTime = 0;
+            isTransitioning = false;
             
-            window.renderQuestion();
-            window.startTimer();
-            window.showScreen('playing-screen');
-        };
+            renderQuestion();
+            startTimer();
+            showScreen('playing-screen');
+        }
 
-        window.renderQuestion = function() {
-            if (window.currentQIndex >= window.questions.length) return;
+        function renderQuestion() {
+            if (currentQIndex >= questions.length) return;
             
-            const q = window.questions[window.currentQIndex];
-            const prevQ = window.currentQIndex > 0 ? window.questions[window.currentQIndex - 1] : null;
+            const q = questions[currentQIndex];
+            const prevQ = currentQIndex > 0 ? questions[currentQIndex - 1] : null;
 
             const vk = document.getElementById('virtual-keyboard');
             if (vk) {
@@ -1008,7 +1090,7 @@
             
             const progressTextEl = document.getElementById('progress-text');
             if (progressTextEl) {
-                progressTextEl.innerText = `進度: ${window.currentQIndex + 1} / ${window.questions.length}`;
+                progressTextEl.innerText = `進度: ${currentQIndex + 1} / ${questions.length}`;
             }
 
             const badge = document.getElementById('lang-badge');
@@ -1024,7 +1106,7 @@
 
             const switchAlert = document.getElementById('switch-alert');
             if (switchAlert) {
-                if (window.currentQIndex > 0 && q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
+                if (currentQIndex > 0 && q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
                     switchAlert.classList.remove('hidden');
                 } else {
                     switchAlert.classList.add('hidden');
@@ -1032,7 +1114,7 @@
             }
 
             let teacherMsg = "";
-            if (window.currentQIndex === 0 && q.lang === 'en') {
+            if (currentQIndex === 0 && q.lang === 'en') {
                 teacherMsg = "現在是【英文】模式喔！如果打出注音，請按一下 Shift 鍵切換。";
             } else if (q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
                 teacherMsg = "準備切換囉！現在要打【中文】了，請按一下鍵盤上的 Shift 鍵切換輸入法。";
@@ -1085,18 +1167,18 @@
                 typeInput.disabled = false;
             }
             
-            window.hideWarning();
+            hideWarning();
             const successOverlay = document.getElementById('success-overlay');
             if (successOverlay) successOverlay.classList.add('hidden');
             
-            window.updateCursorHint();
-            window.updateKeyboardHighlight();
-        };
+            updateCursorHint();
+            updateKeyboardHighlight();
+        }
 
-        window.updateKeyboardHighlight = function() {
+        function updateKeyboardHighlight() {
             document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('highlight'));
             
-            const q = window.questions[window.currentQIndex];
+            const q = questions[currentQIndex];
             if (!q || !typeInput) return;
 
             const val = typeInput.value;
@@ -1130,59 +1212,59 @@
                     }
                 }
             }
-        };
+        }
 
-        window.checkInput = function() {
-            if (window.isTransitioning || window.currentQIndex >= window.questions.length || !typeInput) return;
+        function checkInput() {
+            if (isTransitioning || currentQIndex >= questions.length || !typeInput) return;
 
-            const q = window.questions[window.currentQIndex];
+            const q = questions[currentQIndex];
             const val = typeInput.value;
             
-            window.updateCursorHint();
-            window.updateKeyboardHighlight();
+            updateCursorHint();
+            updateKeyboardHighlight();
 
             if (val === q.target) {
-                window.handleSuccess();
+                handleSuccess();
                 return;
             }
 
             if (val.length > 0) {
                 if (q.lang === 'zh' && /[a-zA-Z]/.test(val)) {
-                    window.showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
+                    showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
                 } else if (q.lang === 'en' && /[A-Z]/.test(val)) {
-                    window.showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
+                    showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
                 } else if (val.length >= q.target.length) {
-                    window.showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
+                    showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
                 } else {
-                    window.hideWarning();
+                    hideWarning();
                 }
             } else {
-                window.hideWarning();
+                hideWarning();
             }
-        };
+        }
 
-        window.handleSuccess = function() {
-            window.isTransitioning = true;
+        function handleSuccess() {
+            isTransitioning = true;
             if (typeInput) typeInput.disabled = true;
-            window.hideWarning();
+            hideWarning();
             document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('highlight'));
             
             const successOverlay = document.getElementById('success-overlay');
             if (successOverlay) successOverlay.classList.remove('hidden');
             
             setTimeout(() => {
-                if (window.currentQIndex < window.questions.length - 1) {
-                    window.currentQIndex++;
-                    window.isTransitioning = false;
-                    window.renderQuestion();
+                if (currentQIndex < questions.length - 1) {
+                    currentQIndex++;
+                    isTransitioning = false;
+                    renderQuestion();
                     if (typeInput) setTimeout(() => typeInput.focus(), 50);
                 } else {
-                    window.finishGame();
+                    finishGame();
                 }
             }, 600);
-        };
+        }
 
-        window.showWarning = function(type, msg) {
+        function showWarning(type, msg) {
             const box = document.getElementById('warning-box');
             const text = document.getElementById('warning-text');
             if (text) text.innerText = msg;
@@ -1192,14 +1274,14 @@
                 }`;
                 box.classList.remove('hidden');
             }
-        };
+        }
 
-        window.hideWarning = function() {
+        function hideWarning() {
             const box = document.getElementById('warning-box');
             if (box) box.classList.add('hidden');
-        };
+        }
 
-        window.updateCursorHint = function() {
+        function updateCursorHint() {
             const cursorHint = document.getElementById('cursor-hint');
             if (cursorHint && typeInput) {
                 if (typeInput.value === '') {
@@ -1208,32 +1290,32 @@
                     cursorHint.classList.add('hidden');
                 }
             }
-        };
+        }
 
-        window.startTimer = function() {
-            clearInterval(window.timerInterval);
-            window.startTime = Date.now();
+        function startTimer() {
+            clearInterval(timerInterval);
+            startTime = Date.now();
             if (timerText) timerText.innerText = "0";
-            window.timerInterval = setInterval(() => {
-                window.elapsedTime = Math.floor((Date.now() - window.startTime) / 1000);
-                if (timerText) timerText.innerText = window.elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                if (timerText) timerText.innerText = elapsedTime;
             }, 1000);
-        };
+        }
 
         // --- 遊戲結束與自動上傳 ---
-        window.finishGame = async function() {
-            clearInterval(window.timerInterval);
+        async function finishGame() {
+            clearInterval(timerInterval);
             
             const finalTimeEl = document.getElementById('final-time');
-            if (finalTimeEl) finalTimeEl.innerText = window.elapsedTime;
+            if (finalTimeEl) finalTimeEl.innerText = elapsedTime;
             
             const finishNameEl = document.getElementById('finish-student-name');
             if (finishNameEl) {
-                finishNameEl.innerText = `${window.studentInfo.classCode} 班 ${window.studentInfo.seatCode} 號`;
+                finishNameEl.innerText = `${studentInfo.classCode} 班 ${studentInfo.seatCode} 號`;
             }
             
             const totalCountEl = document.getElementById('total-q-count');
-            if (totalCountEl) totalCountEl.innerText = window.questions.length;
+            if (totalCountEl) totalCountEl.innerText = questions.length;
 
             const autoSaveStatus = document.getElementById('auto-save-status');
             if (autoSaveStatus) {
@@ -1241,16 +1323,16 @@
                 autoSaveStatus.className = "bg-blue-50 border-2 border-blue-200 text-blue-800 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
             }
             
-            window.showScreen('finished-screen');
+            showScreen('finished-screen');
 
-            if (window.user && window.db) {
+            if (user && db) {
                 try {
-                    await addDoc(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores'), {
-                        className: window.studentInfo.classCode,
-                        seatNumber: window.studentInfo.seatCode,
-                        time: window.elapsedTime,
-                        difficulty: window.currentDifficulty,
-                        gradePool: window.studentInfo.grade,
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores'), {
+                        className: studentInfo.classCode,
+                        seatNumber: studentInfo.seatCode,
+                        time: elapsedTime,
+                        difficulty: currentDifficulty,
+                        gradePool: studentInfo.grade,
                         timestamp: Date.now()
                     });
                     
@@ -1262,7 +1344,7 @@
                     console.error("成績自動上傳失敗:", err);
                     
                     let errorMsg = '網路連線失敗，成績未上傳。';
-                    if (err.message.includes("Missing or insufficient permissions")) {
+                    if (err.message && err.message.includes("Missing or insufficient permissions")) {
                         errorMsg = '資料庫權限不足！請老師確認 Firebase 的 Rules 設定。';
                     }
 
@@ -1277,37 +1359,36 @@
                     autoSaveStatus.className = "bg-gray-100 border-2 border-gray-300 text-gray-600 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
                 }
             }
-        };
+        }
 
-        window.restartGame = function() {
-            clearInterval(window.timerInterval);
-            window.showScreen('intro-screen');
-        };
+        function restartGame() {
+            clearInterval(timerInterval);
+            showScreen('intro-screen');
+        }
 
-        window.handleGlobalClick = function() {
-            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
+        function handleGlobalClick() {
+            if (currentGameState === 'playing-screen' && !isTransitioning && typeInput) {
                 typeInput.focus();
             }
-        };
+        }
 
-        window.handleInputBlur = function() {
-            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
+        function handleInputBlur() {
+            if (currentGameState === 'playing-screen' && !isTransitioning && typeInput) {
                 setTimeout(() => typeInput.focus(), 150);
             }
-        };
+        }
 
-        // --- 顯示排行榜與分頁切換 ---
-        window.showLeaderboard = function() {
-            window.showScreen('leaderboard-screen');
-        };
+        function showLeaderboard() {
+            showScreen('leaderboard-screen');
+        }
 
-        window.switchLeaderboardTab = function(diff) {
-            window.currentLeaderboardTab = diff;
-            window.renderLeaderboard();
-        };
+        function switchLeaderboardTab(diff) {
+            currentLeaderboardTab = diff;
+            renderLeaderboard();
+        }
 
-        window.setLbScope = function(scope) {
-            window.lbScope = scope;
+        function setLbScope(scope) {
+            lbScope = scope;
             const btnClass = document.getElementById('btn-scope-class');
             const btnGrade = document.getElementById('btn-scope-grade');
             const selClass = document.getElementById('lb-class-select');
@@ -1324,14 +1405,14 @@
                 if(selClass) selClass.classList.add('hidden');
                 if(selGrade) selGrade.classList.remove('hidden');
             }
-            window.renderLeaderboard();
-        };
+            renderLeaderboard();
+        }
 
-        window.renderLeaderboard = function() {
+        function renderLeaderboard() {
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`tab-${d}`);
                 if (btn) {
-                    if (d === window.currentLeaderboardTab) {
+                    if (d === currentLeaderboardTab) {
                         btn.className = "flex-1 py-2 px-3 rounded-xl font-bold transition-colors bg-white shadow text-yellow-600 border border-gray-200 text-sm md:text-base";
                     } else {
                         btn.className = "flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base";
@@ -1343,15 +1424,15 @@
             const myRankBanner = document.getElementById('my-rank-banner');
             if (!tbody) return;
             
-            if (!window.user || !window.db) {
+            if (!user || !db) {
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-gray-500 font-medium">連線準備中...</td></tr>`;
                 if(myRankBanner) myRankBanner.classList.add('hidden');
                 return;
             }
 
-            let filteredData = window.allScoresData.filter(d => d.difficulty === window.currentLeaderboardTab);
+            let filteredData = allScoresData.filter(d => d.difficulty === currentLeaderboardTab);
             
-            if (window.lbScope === 'class') {
+            if (lbScope === 'class') {
                 const selClass = document.getElementById('lb-class-select');
                 if(selClass) {
                     filteredData = filteredData.filter(d => d.className === selClass.value);
@@ -1372,8 +1453,8 @@
             });
             const uniqueSorted = Array.from(bestScoresMap.values()).sort((a, b) => a.time - b.time);
 
-            if (window.studentInfo && window.studentInfo.classCode && myRankBanner) {
-                const myKey = `${window.studentInfo.classCode}-${window.studentInfo.seatCode}`;
+            if (studentInfo && studentInfo.classCode && myRankBanner) {
+                const myKey = `${studentInfo.classCode}-${studentInfo.seatCode}`;
                 const myIndex = uniqueSorted.findIndex(d => `${d.className}-${d.seatNumber}` === myKey);
                 
                 if (myIndex !== -1) {
@@ -1400,7 +1481,7 @@
                 if (index === 1) rankBadge = `<i class="fa-solid fa-medal text-2xl text-gray-300 drop-shadow-md"></i>`;
                 if (index === 2) rankBadge = `<i class="fa-solid fa-medal text-2xl text-amber-600 drop-shadow-md"></i>`;
 
-                const isMe = (data.className === window.studentInfo.classCode && data.seatNumber === window.studentInfo.seatCode);
+                const isMe = (data.className === studentInfo.classCode && data.seatNumber === studentInfo.seatCode);
                 const rowClass = isMe ? "bg-yellow-100 hover:bg-yellow-200" : "hover:bg-yellow-50";
 
                 return `
@@ -1411,11 +1492,10 @@
                     </tr>
                 `;
             }).join('');
-        };
+        }
 
-        // --- 顯示教師後台與分頁切換 ---
-        window.switchTeacherTab = function(tabName) {
-            window.currentTeacherTab = tabName;
+        function switchTeacherTab(tabName) {
+            currentTeacherTab = tabName;
             
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`t-tab-${d}`);
@@ -1446,22 +1526,22 @@
             } else {
                 if(viewList) viewList.classList.remove('hidden');
                 if(viewPodium) viewPodium.classList.add('hidden');
-                window.renderTeacherDashboard();
+                renderTeacherDashboard();
             }
-        };
+        }
 
-        window.renderTeacherDashboard = function() {
-            if (window.currentTeacherTab === 'podium') return; 
+        function renderTeacherDashboard() {
+            if (currentTeacherTab === 'podium') return; 
 
             const tbody = document.getElementById('teacher-dashboard-body');
             if (!tbody) return;
             
-            if (!window.user || !window.db) {
+            if (!user || !db) {
                 tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-gray-500 font-medium">連線準備中...</td></tr>`;
                 return;
             }
 
-            const filteredData = window.allScoresData.filter(d => d.difficulty === window.currentTeacherTab);
+            const filteredData = allScoresData.filter(d => d.difficulty === currentTeacherTab);
             
             if (filteredData.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-gray-400 font-medium">這個難度目前還沒有學生成績紀錄。</td></tr>`;
@@ -1491,46 +1571,45 @@
                         <td class="py-3 px-6 font-black text-blue-600 text-right">${data.time} 秒</td>
                         <td class="py-3 px-6 text-right text-sm text-gray-400 font-mono">${timeString}</td>
                         <td class="py-3 px-4 text-center">
-                            <button onclick="deleteScore('${data.id}')" class="text-red-400 hover:text-red-600 transition-colors p-2" title="刪除此紀錄">
+                            <button onclick="window.deleteScore('${data.id}')" class="text-red-400 hover:text-red-600 transition-colors p-2" title="刪除此紀錄">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </td>
                     </tr>
                 `;
             }).join('');
-        };
+        }
 
-        // --- 🏆 班級專屬頒獎台邏輯 ---
-        window.renderPodium = function() {
+        function renderPodium() {
             const selectEl = document.getElementById('podium-class-select');
             if(!selectEl) return;
             
             const targetClass = selectEl.value;
-            const classScores = window.allScoresData.filter(d => d.className === targetClass);
+            const classScores = allScoresData.filter(d => d.className === targetClass);
 
-            const bestEasy = window.getBestForClassAndDiff(classScores, 'easy');
-            const bestMedium = window.getBestForClassAndDiff(classScores, 'medium');
-            const bestHard = window.getBestForClassAndDiff(classScores, 'hard');
+            const bestEasy = getBestForClassAndDiff(classScores, 'easy');
+            const bestMedium = getBestForClassAndDiff(classScores, 'medium');
+            const bestHard = getBestForClassAndDiff(classScores, 'hard');
 
-            window.updatePodiumCard('podium-easy', bestEasy);
-            window.updatePodiumCard('podium-medium', bestMedium);
-            window.updatePodiumCard('podium-hard', bestHard);
+            updatePodiumCard('podium-easy', bestEasy);
+            updatePodiumCard('podium-medium', bestMedium);
+            updatePodiumCard('podium-hard', bestHard);
 
             const resultsContainer = document.getElementById('podium-results');
             if(resultsContainer) {
                 resultsContainer.classList.replace('opacity-0', 'opacity-100');
             }
-            window.shootConfetti();
-        };
+            shootConfetti();
+        }
 
-        window.getBestForClassAndDiff = function(scoresArray, diff) {
+        function getBestForClassAndDiff(scoresArray, diff) {
             const filtered = scoresArray.filter(d => d.difficulty === diff);
             if (filtered.length === 0) return null;
             filtered.sort((a, b) => a.time - b.time);
             return filtered[0];
-        };
+        }
 
-        window.updatePodiumCard = function(prefix, data) {
+        function updatePodiumCard(prefix, data) {
             const nameEl = document.getElementById(`${prefix}-name`);
             const timeEl = document.getElementById(`${prefix}-time`);
             
@@ -1543,32 +1622,31 @@
                 nameEl.className = "text-3xl font-black mb-2 text-gray-300"; 
                 timeEl.innerText = "-";
             }
-        };
+        }
 
-        // --- 教師後台：刪除與清空功能 ---
-        window.deleteScore = async function(docId) {
+        async function deleteScore(docId) {
             if (!confirm("確定要刪除這筆成績嗎？")) return;
-            if (!window.user || !window.db) return;
+            if (!user || !db) return;
             try {
-                await deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores', docId));
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'typing_scores', docId));
             } catch (err) {
                 console.error("刪除失敗:", err);
                 alert("刪除失敗，請檢查資料庫權限是否允許寫入與刪除。");
             }
-        };
+        }
 
-        window.clearAllScores = async function() {
+        async function clearAllScores() {
             if (!confirm("⚠️ 警告：這將會清空【所有難度】的【所有學生成績】！\n這通常在換下一個班級上課時使用。\n\n請問確定要全部清空嗎？")) return;
             if (!confirm("再次確認：清空後成績將無法復原，確定清空？")) return;
             
-            if (!window.user || !window.db) return;
+            if (!user || !db) return;
             try {
-                const scoresRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores');
+                const scoresRef = collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores');
                 const snapshot = await getDocs(scoresRef);
                 
                 const deletePromises = [];
                 snapshot.forEach(document => {
-                    deletePromises.push(deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores', document.id)));
+                    deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'typing_scores', document.id)));
                 });
                 
                 await Promise.all(deletePromises);
@@ -1577,10 +1655,29 @@
                 console.error("清空失敗:", err);
                 alert("清空失敗，請檢查資料庫權限是否允許寫入與刪除。");
             }
-        };
+        }
+
+        // --- 將按鈕需要的函數開放到 window 中 ---
+        window.handleGlobalClick = handleGlobalClick;
+        window.showLeaderboard = showLeaderboard;
+        window.loginStudent = loginStudent;
+        window.showScreen = showScreen;
+        window.loginTeacher = loginTeacher;
+        window.startGame = startGame;
+        window.logoutStudent = logoutStudent;
+        window.checkInput = checkInput;
+        window.handleInputBlur = handleInputBlur;
+        window.switchLeaderboardTab = switchLeaderboardTab;
+        window.setLbScope = setLbScope;
+        window.renderLeaderboard = renderLeaderboard;
+        window.clearAllScores = clearAllScores;
+        window.logoutTeacher = logoutTeacher;
+        window.switchTeacherTab = switchTeacherTab;
+        window.renderPodium = renderPodium;
+        window.deleteScore = deleteScore;
 
         // 啟動 Firebase
-        window.initFirebase();
+        initFirebase();
 
     </script>
 </body>
