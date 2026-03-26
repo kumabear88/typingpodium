@@ -559,16 +559,16 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (模組化) -->
+    <!-- Firebase SDK (靜態模組化載入，確保所有函數正常定義) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================================
-        // 🌟 Firebase 排行榜資料庫設定 🌟
+        // 🌟 自動連線設定：使用老師的專屬 Firebase 設定 🌟
         // =========================================================================
-        const firebaseConfig = {
+        var firebaseConfig = {
             apiKey: "AIzaSyDBLFK7T2ewIk4qgvlBz9hfQuxEALLUezQ",
             authDomain: "typing-game-755a8.firebaseapp.com",
             projectId: "typing-game-755a8",
@@ -577,37 +577,53 @@
             appId: "1:938096537906:web:781dd1e9c4d194bacb272b",
             measurementId: "G-3GELY1R4WK"
         };
-        const GAME_APP_ID = "donghu-typing-game"; 
+        var GAME_APP_ID = "donghu-typing-game"; 
         // =========================================================================
 
         // 全域應用狀態
         window.currentGameState = 'login-screen'; 
         window.currentDifficulty = null;
-        let questions = [];
-        let currentQIndex = 0;
-        let startTime = null;
-        let timerInterval = null;
-        let elapsedTime = 0;
-        let isTransitioning = false;
+        window.questions = [];
+        window.currentQIndex = 0;
+        window.startTime = null;
+        window.timerInterval = null;
+        window.elapsedTime = 0;
+        window.isTransitioning = false;
 
         // 學生身分
         window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
 
         // Firebase 變數
-        let auth, db, user, appId;
+        window.auth = null;
+        window.db = null;
+        window.user = null;
+        window.appId = null;
         window.allScoresData = []; 
         window.currentLeaderboardTab = 'easy';
-        window.lbScope = 'class'; // 'class' 或 'grade' 範圍切換
+        window.lbScope = 'class'; 
         window.currentTeacherTab = 'easy';
 
+        // 畫面 DOM 元素
+        var screens = {
+            'login-screen': document.getElementById('login-screen'),
+            'teacher-login-screen': document.getElementById('teacher-login-screen'),
+            'intro-screen': document.getElementById('intro-screen'),
+            'playing-screen': document.getElementById('playing-screen'),
+            'finished-screen': document.getElementById('finished-screen'),
+            'leaderboard-screen': document.getElementById('leaderboard-screen'),
+            'teacher-dashboard-screen': document.getElementById('teacher-dashboard-screen')
+        };
+        var typeInput = document.getElementById('type-input');
+        var timerText = document.getElementById('timer-text');
+
         // --- 虛擬鍵盤按鍵映射表 ---
-        const symbolToKey = {
+        var symbolToKey = {
             'a':'k-a', 'b':'k-b', 'c':'k-c', 'd':'k-d', 'e':'k-e', 'f':'k-f', 'g':'k-g', 'h':'k-h', 'i':'k-i', 'j':'k-j', 'k':'k-k', 'l':'k-l', 'm':'k-m', 'n':'k-n', 'o':'k-o', 'p':'k-p', 'q':'k-q', 'r':'k-r', 's':'k-s', 't':'k-t', 'u':'k-u', 'v':'k-v', 'w':'k-w', 'x':'k-x', 'y':'k-y', 'z':'k-z',
             'ㄅ':'k-1', 'ㄆ':'k-q', 'ㄇ':'k-a', 'ㄈ':'k-z', 'ㄉ':'k-2', 'ㄊ':'k-w', 'ㄋ':'k-s', 'ㄌ':'k-x', 'ㄍ':'k-e', 'ㄎ':'k-d', 'ㄏ':'k-c', 'ㄐ':'k-r', 'ㄑ':'k-f', 'ㄒ':'k-v', 'ㄓ':'k-5', 'ㄔ':'k-t', 'ㄕ':'k-g', 'ㄖ':'k-b', 'ㄗ':'k-y', 'ㄘ':'k-h', 'ㄙ':'k-n', 'ㄧ':'k-u', 'ㄨ':'k-j', 'ㄩ':'k-m', 'ㄚ':'k-8', 'ㄛ':'k-i', 'ㄜ':'k-k', 'ㄝ':'k-,', 'ㄞ':'k-9', 'ㄟ':'k-o', 'ㄠ':'k-l', 'ㄡ':'k-.', 'ㄢ':'k-0', 'ㄣ':'k-p', 'ㄤ':'k-[', 'ㄥ':'k-;', 'ㄦ':'k--', 'ˇ':'k-3', 'ˋ':'k-4', 'ˊ':'k-6', '˙':'k-space', ' ':'k-space'
         };
 
         // --- 📚 超豐富分級題庫資料 (字數限制 <= 5) 📚 ---
-        const questionPools = {
+        var questionPools = {
             3: { // 三年級：單字為主，超短詞彙
                 easy: {
                     en: [
@@ -663,11 +679,7 @@
                         { target: '魯夫', zhuyin: ['ㄌㄨˇ', 'ㄈㄨ'], hint: '海賊王！', emoji: '🏴‍☠️' },
                         { target: '鳴人', zhuyin: ['ㄇㄧㄥˊ', 'ㄖㄣˊ'], hint: '火影忍者！', emoji: '🍥' },
                         { target: '周杰倫', zhuyin: ['ㄓㄡ', 'ㄐㄧㄝˊ', 'ㄌㄨㄣˊ'], hint: '有名的歌手。', emoji: '🎤' },
-                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' },
-                        { target: '好味小姐', zhuyin: ['ㄏㄠˇ', 'ㄨㄟˋ', 'ㄒㄧㄠˇ', 'ㄐㄧㄝˇ'], hint: '養貓咪的YouTuber。', emoji: '🐈' },
-                        { target: '這群人', zhuyin: ['ㄓㄜˋ', 'ㄑㄩㄣˊ', 'ㄖㄣˊ'], hint: '經典YouTuber團體。', emoji: '🎬' },
-                        { target: '千千進食', zhuyin: ['ㄑㄧㄢ', 'ㄑㄧㄢ', 'ㄐㄧㄣˋ', 'ㄕˊ'], hint: '很會吃美食的YouTuber。', emoji: '🍜' },
-                        { target: '老高', zhuyin: ['ㄌㄠˇ', 'ㄍㄠ'], hint: '講故事的YouTuber。', emoji: '👽' }
+                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' }
                     ]
                 },
                 hard: {
@@ -747,11 +759,7 @@
                         { target: '拔苗助長', zhuyin: ['ㄅㄚˊ', 'ㄇㄧㄠˊ', 'ㄓㄨˋ', 'ㄓㄤˇ'], hint: '急於求成反而壞事。', emoji: '🌱' },
                         { target: '井底之蛙', zhuyin: ['ㄐㄧㄥˇ', 'ㄉㄧˇ', 'ㄓ', 'ㄨㄚ'], hint: '見識淺薄的人。', emoji: '🐸' },
                         { target: '亡羊補牢', zhuyin: ['ㄨㄤˊ', 'ㄧㄤˊ', 'ㄅㄨˇ', 'ㄌㄠˊ'], hint: '犯錯後及時補救。', emoji: '🐑' },
-                        { target: '掩耳盜鈴', zhuyin: ['ㄧㄢˇ', 'ㄦˇ', 'ㄉㄠˋ', 'ㄌㄧㄥˊ'], hint: '自欺欺人。', emoji: '🔔' },
-                        { target: '伏黑惠', zhuyin: ['ㄈㄨˊ', 'ㄏㄟ', 'ㄏㄨㄟˋ'], hint: '召喚玉犬的式神使。', emoji: '🐺' },
-                        { target: '釘崎野薔薇', zhuyin: ['ㄉㄧㄥ', 'ㄑㄧˊ', 'ㄧㄝˇ', 'ㄑㄧㄤˊ', 'ㄨㄟˊ'], hint: '使用釘子和鐵鎚。', emoji: '🔨' },
-                        { target: '庫巴', zhuyin: ['ㄎㄨˋ', 'ㄅㄚ'], hint: '瑪利歐的敵人。', emoji: '🐢' },
-                        { target: '薩爾達', zhuyin: ['ㄙㄚˋ', 'ㄦˇ', 'ㄉㄚˊ'], hint: '海拉魯公主。', emoji: '👑' }
+                        { target: '掩耳盜鈴', zhuyin: ['ㄧㄢˇ', 'ㄦˇ', 'ㄉㄠˋ', 'ㄌㄧㄥˊ'], hint: '自欺欺人。', emoji: '🔔' }
                     ]
                 },
                 hard: {
@@ -824,8 +832,7 @@
                         { target: '斯普拉遁', zhuyin: ['ㄙ', 'ㄆㄨˇ', 'ㄌㄚ', 'ㄉㄨㄣˋ'], hint: '漆彈大作戰。', emoji: '🦑' },
                         { target: '傳說對決', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨㄛ', 'ㄉㄨㄟˋ', 'ㄐㄩㄝˊ'], hint: '手機裡的推塔遊戲。', emoji: '📱' },
                         { target: '貓咪大戰爭', zhuyin: ['ㄇㄠ', 'ㄇㄧ', 'ㄉㄚˋ', 'ㄓㄢˋ', 'ㄓㄥ'], hint: '可愛又奇怪的貓咪。', emoji: '🐾' },
-                        { target: '怪物彈珠', zhuyin: ['ㄍㄨㄞˋ', 'ㄨˋ', 'ㄉㄢˋ', 'ㄓㄨ'], hint: '拉彈珠撞敵人的遊戲。', emoji: '🎯' },
-                        { target: '星之卡比', zhuyin: ['ㄒㄧㄥ', 'ㄓ', 'ㄎㄚˇ', 'ㄅㄧˇ'], hint: '粉紅色圓圓的。', emoji: '🌟' }
+                        { target: '怪物彈珠', zhuyin: ['ㄍㄨㄞˋ', 'ㄨˋ', 'ㄉㄢˋ', 'ㄓㄨ'], hint: '拉彈珠撞敵人的遊戲。', emoji: '🎯' }
                     ]
                 },
                 hard: {
@@ -853,142 +860,9 @@
         };
 
         // --- 輔助函數：隨機抽取題目 ---
-        function getRandomItems(array, count) {
+        window.getRandomItems = function(array, count) {
             const shuffled = [...array].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
-        }
-
-        // --- DOM 快取 ---
-        const screens = {
-            'login-screen': document.getElementById('login-screen'),
-            'teacher-login-screen': document.getElementById('teacher-login-screen'),
-            'intro-screen': document.getElementById('intro-screen'),
-            'playing-screen': document.getElementById('playing-screen'),
-            'finished-screen': document.getElementById('finished-screen'),
-            'leaderboard-screen': document.getElementById('leaderboard-screen'),
-            'teacher-dashboard-screen': document.getElementById('teacher-dashboard-screen')
-        };
-        const typeInput = document.getElementById('type-input');
-        const timerText = document.getElementById('timer-text');
-
-        // --- 撒花慶祝動畫 (頒獎台專用) ---
-        function shootConfetti() {
-            const colors = ['#fde047', '#3b82f6', '#ef4444', '#10b981', '#a855f7', '#f97316'];
-            for(let i=0; i<80; i++) {
-                let confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-20px';
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.zIndex = '9999';
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                confetti.style.transition = `top ${Math.random() * 1.5 + 1.5}s ease-in, left 2s ease-in-out, transform 2s linear`;
-                document.body.appendChild(confetti);
-
-                setTimeout(() => {
-                    confetti.style.top = '100vh';
-                    confetti.style.left = (parseFloat(confetti.style.left) + (Math.random() * 20 - 10)) + 'vw';
-                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-                }, 50);
-
-                setTimeout(() => confetti.remove(), 3500);
-            }
-        }
-
-        // --- Firebase 初始化與資料監聽 ---
-        async function initFirebase() {
-            try {
-                let activeConfig = firebaseConfig;
-                appId = GAME_APP_ID;
-
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    activeConfig = JSON.parse(__firebase_config);
-                    appId = typeof __app_id !== 'undefined' ? __app_id : GAME_APP_ID;
-                }
-
-                const app = initializeApp(activeConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    try {
-                        await signInAnonymously(auth);
-                    } catch(err) {
-                        console.warn("匿名登入失敗，請確認 Firebase 設定是否開啟匿名登入", err);
-                    }
-                }
-
-                onAuthStateChanged(auth, (u) => {
-                    user = u;
-                    if (user) {
-                        setupDatabaseListener(); 
-                    }
-                });
-            } catch (err) {
-                console.error("Firebase 初始化失敗:", err);
-            }
-        }
-
-        // ✨ 核心功能：即時監聽資料庫 (onSnapshot) ✨
-        function setupDatabaseListener() {
-            if (!db || !user) return;
-            const scoresRef = collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores');
-            
-            onSnapshot(scoresRef, (snapshot) => {
-                window.allScoresData = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    data.id = doc.id; 
-                    window.allScoresData.push(data);
-                });
-                
-                if (window.currentGameState === 'leaderboard-screen') {
-                    renderLeaderboard();
-                } else if (window.currentGameState === 'teacher-dashboard-screen') {
-                    renderTeacherDashboard();
-                }
-            }, (error) => {
-                console.error("資料讀取錯誤:", error);
-            });
-        }
-
-        // --- 教師後台：刪除與清空功能 ---
-        window.deleteScore = async function(docId) {
-            if (!confirm("確定要刪除這筆成績嗎？")) return;
-            if (!user || !db) return;
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'typing_scores', docId));
-            } catch (err) {
-                console.error("刪除失敗:", err);
-                alert("刪除失敗，請檢查資料庫權限是否允許寫入與刪除。");
-            }
-        };
-
-        window.clearAllScores = async function() {
-            if (!confirm("⚠️ 警告：這將會清空【所有難度】的【所有學生成績】！\n這通常在換下一個班級上課時使用。\n\n請問確定要全部清空嗎？")) return;
-            if (!confirm("再次確認：清空後成績將無法復原，確定清空？")) return;
-            
-            if (!user || !db) return;
-            try {
-                const scoresRef = collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores');
-                const snapshot = await getDocs(scoresRef);
-                
-                const deletePromises = [];
-                snapshot.forEach(document => {
-                    deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'typing_scores', document.id)));
-                });
-                
-                await Promise.all(deletePromises);
-                alert("所有成績已成功清空！您可以開始新的一堂課了。");
-            } catch (err) {
-                console.error("清空失敗:", err);
-                alert("清空失敗，請檢查資料庫權限是否允許寫入與刪除。");
-            }
         };
 
         // --- 畫面切換通用函式 ---
@@ -1006,17 +880,16 @@
             }
             
             if (screenId === 'leaderboard-screen') {
-                // 如果學生已登入，預設選擇他的班級與年級
                 if(window.studentInfo.classCode) {
                     const classSelect = document.getElementById('lb-class-select');
                     if(classSelect) classSelect.value = window.studentInfo.classCode;
                     const gradeSelect = document.getElementById('lb-grade-select');
                     if(gradeSelect) gradeSelect.value = window.studentInfo.grade;
                 }
-                renderLeaderboard();
+                window.renderLeaderboard();
             }
-            if (screenId === 'teacher-dashboard-screen') renderTeacherDashboard();
-        }
+            if (screenId === 'teacher-dashboard-screen') window.renderTeacherDashboard();
+        };
 
         // --- 登入與智慧年級判定邏輯 ---
         window.loginStudent = function() {
@@ -1051,7 +924,7 @@
             }
             
             if(err) err.classList.add('hidden');
-            showScreen('intro-screen');
+            window.showScreen('intro-screen');
         };
 
         window.logoutStudent = function() {
@@ -1060,7 +933,7 @@
             const sInput = document.getElementById('login-seat');
             if (cInput) cInput.value = '';
             if (sInput) sInput.value = '';
-            showScreen('login-screen');
+            window.showScreen('login-screen');
         };
 
         window.loginTeacher = function() {
@@ -1071,14 +944,14 @@
             if (pwd === "0316") {
                 if(err) err.classList.add('hidden');
                 if(pwdInput) pwdInput.value = '';
-                showScreen('teacher-dashboard-screen');
+                window.showScreen('teacher-dashboard-screen');
             } else {
                 if(err) err.classList.remove('hidden');
             }
         };
 
         window.logoutTeacher = function() {
-            showScreen('login-screen');
+            window.showScreen('login-screen');
         };
 
         // --- 遊戲邏輯 ---
@@ -1088,39 +961,39 @@
             let enCount, zhCount;
             if (level === 'easy') {
                 enCount = 13; 
-                zhCount = 12; // 25 題
+                zhCount = 12; 
             } else if (level === 'medium') {
                 enCount = 10; 
-                zhCount = 10; // 20 題
+                zhCount = 10; 
             } else {
                 enCount = 8; 
-                zhCount = 7;  // 15 題
+                zhCount = 7;  
             }
             
-            const enList = getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
-            const zhList = getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
+            const enList = window.getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
+            const zhList = window.getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
             
             window.currentDifficulty = level;
-            questions = [...enList, ...zhList];
+            window.questions = [...enList, ...zhList];
             
-            initGameSession();
+            window.initGameSession();
         };
 
-        function initGameSession() {
-            currentQIndex = 0;
-            elapsedTime = 0;
-            isTransitioning = false;
+        window.initGameSession = function() {
+            window.currentQIndex = 0;
+            window.elapsedTime = 0;
+            window.isTransitioning = false;
             
-            renderQuestion();
-            startTimer();
-            showScreen('playing-screen');
-        }
+            window.renderQuestion();
+            window.startTimer();
+            window.showScreen('playing-screen');
+        };
 
-        function renderQuestion() {
-            if (currentQIndex >= questions.length) return;
+        window.renderQuestion = function() {
+            if (window.currentQIndex >= window.questions.length) return;
             
-            const q = questions[currentQIndex];
-            const prevQ = currentQIndex > 0 ? questions[currentQIndex - 1] : null;
+            const q = window.questions[window.currentQIndex];
+            const prevQ = window.currentQIndex > 0 ? window.questions[window.currentQIndex - 1] : null;
 
             const vk = document.getElementById('virtual-keyboard');
             if (vk) {
@@ -1135,7 +1008,7 @@
             
             const progressTextEl = document.getElementById('progress-text');
             if (progressTextEl) {
-                progressTextEl.innerText = `進度: ${currentQIndex + 1} / ${questions.length}`;
+                progressTextEl.innerText = `進度: ${window.currentQIndex + 1} / ${window.questions.length}`;
             }
 
             const badge = document.getElementById('lang-badge');
@@ -1151,7 +1024,7 @@
 
             const switchAlert = document.getElementById('switch-alert');
             if (switchAlert) {
-                if (currentQIndex > 0 && q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
+                if (window.currentQIndex > 0 && q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
                     switchAlert.classList.remove('hidden');
                 } else {
                     switchAlert.classList.add('hidden');
@@ -1159,7 +1032,7 @@
             }
 
             let teacherMsg = "";
-            if (currentQIndex === 0 && q.lang === 'en') {
+            if (window.currentQIndex === 0 && q.lang === 'en') {
                 teacherMsg = "現在是【英文】模式喔！如果打出注音，請按一下 Shift 鍵切換。";
             } else if (q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
                 teacherMsg = "準備切換囉！現在要打【中文】了，請按一下鍵盤上的 Shift 鍵切換輸入法。";
@@ -1212,18 +1085,18 @@
                 typeInput.disabled = false;
             }
             
-            hideWarning();
+            window.hideWarning();
             const successOverlay = document.getElementById('success-overlay');
             if (successOverlay) successOverlay.classList.add('hidden');
             
-            updateCursorHint();
-            updateKeyboardHighlight();
-        }
+            window.updateCursorHint();
+            window.updateKeyboardHighlight();
+        };
 
-        function updateKeyboardHighlight() {
+        window.updateKeyboardHighlight = function() {
             document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('highlight'));
             
-            const q = questions[currentQIndex];
+            const q = window.questions[window.currentQIndex];
             if (!q || !typeInput) return;
 
             const val = typeInput.value;
@@ -1257,59 +1130,59 @@
                     }
                 }
             }
-        }
+        };
 
         window.checkInput = function() {
-            if (isTransitioning || currentQIndex >= questions.length || !typeInput) return;
+            if (window.isTransitioning || window.currentQIndex >= window.questions.length || !typeInput) return;
 
-            const q = questions[currentQIndex];
+            const q = window.questions[window.currentQIndex];
             const val = typeInput.value;
             
-            updateCursorHint();
-            updateKeyboardHighlight();
+            window.updateCursorHint();
+            window.updateKeyboardHighlight();
 
             if (val === q.target) {
-                handleSuccess();
+                window.handleSuccess();
                 return;
             }
 
             if (val.length > 0) {
                 if (q.lang === 'zh' && /[a-zA-Z]/.test(val)) {
-                    showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
+                    window.showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
                 } else if (q.lang === 'en' && /[A-Z]/.test(val)) {
-                    showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
+                    window.showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
                 } else if (val.length >= q.target.length) {
-                    showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
+                    window.showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
                 } else {
-                    hideWarning();
+                    window.hideWarning();
                 }
             } else {
-                hideWarning();
+                window.hideWarning();
             }
         };
 
-        function handleSuccess() {
-            isTransitioning = true;
+        window.handleSuccess = function() {
+            window.isTransitioning = true;
             if (typeInput) typeInput.disabled = true;
-            hideWarning();
+            window.hideWarning();
             document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('highlight'));
             
             const successOverlay = document.getElementById('success-overlay');
             if (successOverlay) successOverlay.classList.remove('hidden');
             
             setTimeout(() => {
-                if (currentQIndex < questions.length - 1) {
-                    currentQIndex++;
-                    isTransitioning = false;
-                    renderQuestion();
+                if (window.currentQIndex < window.questions.length - 1) {
+                    window.currentQIndex++;
+                    window.isTransitioning = false;
+                    window.renderQuestion();
                     if (typeInput) setTimeout(() => typeInput.focus(), 50);
                 } else {
-                    finishGame();
+                    window.finishGame();
                 }
             }, 600);
-        }
+        };
 
-        function showWarning(type, msg) {
+        window.showWarning = function(type, msg) {
             const box = document.getElementById('warning-box');
             const text = document.getElementById('warning-text');
             if (text) text.innerText = msg;
@@ -1319,14 +1192,14 @@
                 }`;
                 box.classList.remove('hidden');
             }
-        }
+        };
 
-        function hideWarning() {
+        window.hideWarning = function() {
             const box = document.getElementById('warning-box');
             if (box) box.classList.add('hidden');
-        }
+        };
 
-        function updateCursorHint() {
+        window.updateCursorHint = function() {
             const cursorHint = document.getElementById('cursor-hint');
             if (cursorHint && typeInput) {
                 if (typeInput.value === '') {
@@ -1335,24 +1208,24 @@
                     cursorHint.classList.add('hidden');
                 }
             }
-        }
+        };
 
-        function startTimer() {
-            clearInterval(timerInterval);
-            startTime = Date.now();
+        window.startTimer = function() {
+            clearInterval(window.timerInterval);
+            window.startTime = Date.now();
             if (timerText) timerText.innerText = "0";
-            timerInterval = setInterval(() => {
-                elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                if (timerText) timerText.innerText = elapsedTime;
+            window.timerInterval = setInterval(() => {
+                window.elapsedTime = Math.floor((Date.now() - window.startTime) / 1000);
+                if (timerText) timerText.innerText = window.elapsedTime;
             }, 1000);
-        }
+        };
 
         // --- 遊戲結束與自動上傳 ---
-        async function finishGame() {
-            clearInterval(timerInterval);
+        window.finishGame = async function() {
+            clearInterval(window.timerInterval);
             
             const finalTimeEl = document.getElementById('final-time');
-            if (finalTimeEl) finalTimeEl.innerText = elapsedTime;
+            if (finalTimeEl) finalTimeEl.innerText = window.elapsedTime;
             
             const finishNameEl = document.getElementById('finish-student-name');
             if (finishNameEl) {
@@ -1360,7 +1233,7 @@
             }
             
             const totalCountEl = document.getElementById('total-q-count');
-            if (totalCountEl) totalCountEl.innerText = questions.length;
+            if (totalCountEl) totalCountEl.innerText = window.questions.length;
 
             const autoSaveStatus = document.getElementById('auto-save-status');
             if (autoSaveStatus) {
@@ -1368,14 +1241,14 @@
                 autoSaveStatus.className = "bg-blue-50 border-2 border-blue-200 text-blue-800 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
             }
             
-            showScreen('finished-screen');
+            window.showScreen('finished-screen');
 
-            if (user && db) {
+            if (window.user && window.db) {
                 try {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores'), {
+                    await addDoc(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores'), {
                         className: window.studentInfo.classCode,
                         seatNumber: window.studentInfo.seatCode,
-                        time: elapsedTime,
+                        time: window.elapsedTime,
                         difficulty: window.currentDifficulty,
                         gradePool: window.studentInfo.grade,
                         timestamp: Date.now()
@@ -1404,29 +1277,33 @@
                     autoSaveStatus.className = "bg-gray-100 border-2 border-gray-300 text-gray-600 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
                 }
             }
-        }
+        };
 
         window.restartGame = function() {
-            clearInterval(timerInterval);
-            showScreen('intro-screen');
+            clearInterval(window.timerInterval);
+            window.showScreen('intro-screen');
         };
 
         window.handleGlobalClick = function() {
-            if (window.currentGameState === 'playing-screen' && !isTransitioning && typeInput) {
+            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
                 typeInput.focus();
             }
         };
 
         window.handleInputBlur = function() {
-            if (window.currentGameState === 'playing-screen' && !isTransitioning && typeInput) {
+            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
                 setTimeout(() => typeInput.focus(), 150);
             }
         };
 
         // --- 顯示排行榜與分頁切換 ---
+        window.showLeaderboard = function() {
+            window.showScreen('leaderboard-screen');
+        };
+
         window.switchLeaderboardTab = function(diff) {
             window.currentLeaderboardTab = diff;
-            renderLeaderboard();
+            window.renderLeaderboard();
         };
 
         window.setLbScope = function(scope) {
@@ -1447,11 +1324,10 @@
                 if(selClass) selClass.classList.add('hidden');
                 if(selGrade) selGrade.classList.remove('hidden');
             }
-            renderLeaderboard();
+            window.renderLeaderboard();
         };
 
         window.renderLeaderboard = function() {
-            // 更新難度 Tab 樣式
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`tab-${d}`);
                 if (btn) {
@@ -1467,16 +1343,14 @@
             const myRankBanner = document.getElementById('my-rank-banner');
             if (!tbody) return;
             
-            if (!user || !db) {
+            if (!window.user || !window.db) {
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-gray-500 font-medium">連線準備中...</td></tr>`;
                 if(myRankBanner) myRankBanner.classList.add('hidden');
                 return;
             }
 
-            // 1. 根據難度過濾
             let filteredData = window.allScoresData.filter(d => d.difficulty === window.currentLeaderboardTab);
             
-            // 2. 根據 範圍(班級/年級) 過濾
             if (window.lbScope === 'class') {
                 const selClass = document.getElementById('lb-class-select');
                 if(selClass) {
@@ -1489,7 +1363,6 @@
                 }
             }
 
-            // 3. 去除重複，同一個學生只保留最佳成績
             const bestScoresMap = new Map();
             filteredData.forEach(d => {
                 const key = `${d.className}-${d.seatNumber}`;
@@ -1499,7 +1372,6 @@
             });
             const uniqueSorted = Array.from(bestScoresMap.values()).sort((a, b) => a.time - b.time);
 
-            // 4. 計算「我的排名」 (如果學生有登入，且他的成績有在這個過濾範圍內)
             if (window.studentInfo && window.studentInfo.classCode && myRankBanner) {
                 const myKey = `${window.studentInfo.classCode}-${window.studentInfo.seatCode}`;
                 const myIndex = uniqueSorted.findIndex(d => `${d.className}-${d.seatNumber}` === myKey);
@@ -1509,14 +1381,12 @@
                     document.getElementById('my-rank-num').innerText = myIndex + 1;
                     document.getElementById('my-rank-time').innerText = uniqueSorted[myIndex].time;
                 } else {
-                    // 還沒玩過，或不在這個過濾條件內
                     myRankBanner.classList.add('hidden');
                 }
             } else {
                 if(myRankBanner) myRankBanner.classList.add('hidden');
             }
 
-            // 5. 渲染表格 (取 Top 20)
             if (uniqueSorted.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-gray-400 font-medium"><i class="fa-solid fa-ghost text-2xl mb-2"></i><br>目前還沒有人挑戰，快來搶第一名！</td></tr>`;
                 return;
@@ -1541,7 +1411,7 @@
                     </tr>
                 `;
             }).join('');
-        }
+        };
 
         // --- 顯示教師後台與分頁切換 ---
         window.switchTeacherTab = function(tabName) {
@@ -1576,17 +1446,17 @@
             } else {
                 if(viewList) viewList.classList.remove('hidden');
                 if(viewPodium) viewPodium.classList.add('hidden');
-                renderTeacherDashboard();
+                window.renderTeacherDashboard();
             }
         };
 
-        function renderTeacherDashboard() {
+        window.renderTeacherDashboard = function() {
             if (window.currentTeacherTab === 'podium') return; 
 
             const tbody = document.getElementById('teacher-dashboard-body');
             if (!tbody) return;
             
-            if (!user || !db) {
+            if (!window.user || !window.db) {
                 tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-gray-500 font-medium">連線準備中...</td></tr>`;
                 return;
             }
@@ -1617,7 +1487,7 @@
                 return `
                     <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                         <td class="py-3 px-6 text-center font-bold text-gray-500">${index + 1}</td>
-                        <td class="py-3 px-6 font-bold text-gray-800">${data.className} 班 ${data.seatNumber} 號 <span class="text-xs text-gray-400 font-normal ml-1">(${data.gradePool}年級題庫)</span></td>
+                        <td class="py-3 px-6 font-bold text-gray-800">${data.className} 班 ${data.seatNumber} 號 <span class="text-xs text-gray-400 font-normal ml-1">(${data.gradePool}年級)</span></td>
                         <td class="py-3 px-6 font-black text-blue-600 text-right">${data.time} 秒</td>
                         <td class="py-3 px-6 text-right text-sm text-gray-400 font-mono">${timeString}</td>
                         <td class="py-3 px-4 text-center">
@@ -1628,7 +1498,7 @@
                     </tr>
                 `;
             }).join('');
-        }
+        };
 
         // --- 🏆 班級專屬頒獎台邏輯 ---
         window.renderPodium = function() {
@@ -1638,29 +1508,29 @@
             const targetClass = selectEl.value;
             const classScores = window.allScoresData.filter(d => d.className === targetClass);
 
-            const bestEasy = getBestForClassAndDiff(classScores, 'easy');
-            const bestMedium = getBestForClassAndDiff(classScores, 'medium');
-            const bestHard = getBestForClassAndDiff(classScores, 'hard');
+            const bestEasy = window.getBestForClassAndDiff(classScores, 'easy');
+            const bestMedium = window.getBestForClassAndDiff(classScores, 'medium');
+            const bestHard = window.getBestForClassAndDiff(classScores, 'hard');
 
-            updatePodiumCard('podium-easy', bestEasy);
-            updatePodiumCard('podium-medium', bestMedium);
-            updatePodiumCard('podium-hard', bestHard);
+            window.updatePodiumCard('podium-easy', bestEasy);
+            window.updatePodiumCard('podium-medium', bestMedium);
+            window.updatePodiumCard('podium-hard', bestHard);
 
             const resultsContainer = document.getElementById('podium-results');
             if(resultsContainer) {
                 resultsContainer.classList.replace('opacity-0', 'opacity-100');
             }
-            shootConfetti();
+            window.shootConfetti();
         };
 
-        function getBestForClassAndDiff(scoresArray, diff) {
+        window.getBestForClassAndDiff = function(scoresArray, diff) {
             const filtered = scoresArray.filter(d => d.difficulty === diff);
             if (filtered.length === 0) return null;
             filtered.sort((a, b) => a.time - b.time);
             return filtered[0];
-        }
+        };
 
-        function updatePodiumCard(prefix, data) {
+        window.updatePodiumCard = function(prefix, data) {
             const nameEl = document.getElementById(`${prefix}-name`);
             const timeEl = document.getElementById(`${prefix}-time`);
             
@@ -1673,10 +1543,44 @@
                 nameEl.className = "text-3xl font-black mb-2 text-gray-300"; 
                 timeEl.innerText = "-";
             }
-        }
+        };
+
+        // --- 教師後台：刪除與清空功能 ---
+        window.deleteScore = async function(docId) {
+            if (!confirm("確定要刪除這筆成績嗎？")) return;
+            if (!window.user || !window.db) return;
+            try {
+                await deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores', docId));
+            } catch (err) {
+                console.error("刪除失敗:", err);
+                alert("刪除失敗，請檢查資料庫權限是否允許寫入與刪除。");
+            }
+        };
+
+        window.clearAllScores = async function() {
+            if (!confirm("⚠️ 警告：這將會清空【所有難度】的【所有學生成績】！\n這通常在換下一個班級上課時使用。\n\n請問確定要全部清空嗎？")) return;
+            if (!confirm("再次確認：清空後成績將無法復原，確定清空？")) return;
+            
+            if (!window.user || !window.db) return;
+            try {
+                const scoresRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores');
+                const snapshot = await getDocs(scoresRef);
+                
+                const deletePromises = [];
+                snapshot.forEach(document => {
+                    deletePromises.push(deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores', document.id)));
+                });
+                
+                await Promise.all(deletePromises);
+                alert("所有成績已成功清空！您可以開始新的一堂課了。");
+            } catch (err) {
+                console.error("清空失敗:", err);
+                alert("清空失敗，請檢查資料庫權限是否允許寫入與刪除。");
+            }
+        };
 
         // 啟動 Firebase
-        initFirebase();
+        window.initFirebase();
 
     </script>
 </body>
