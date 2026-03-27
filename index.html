@@ -195,17 +195,17 @@
                     <button onclick="window.startGame('easy')" class="p-6 bg-green-50 hover:bg-green-100 text-green-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-green-200 flex flex-col items-center gap-2 shadow-sm">
                         <span class="text-3xl">🌱</span>
                         <span class="text-xl font-bold">新手等級</span>
-                        <span class="text-sm text-center font-medium">短單字與流行詞彙<br/>(共 25 題)</span>
+                        <span class="text-sm text-center font-medium">常見詞與熱門卡通<br/>(共 25 題)</span>
                     </button>
                     <button onclick="window.startGame('medium')" class="p-6 bg-yellow-50 hover:bg-yellow-100 text-yellow-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-yellow-200 flex flex-col items-center gap-2 shadow-sm">
                         <span class="text-3xl">⭐</span>
                         <span class="text-xl font-bold">進階等級</span>
-                        <span class="text-sm text-center font-medium">中單字與YouTuber<br/>(共 20 題)</span>
+                        <span class="text-sm text-center font-medium">流行事物與遊戲<br/>(共 20 題)</span>
                     </button>
                     <button onclick="window.startGame('hard')" class="p-6 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-blue-200 flex flex-col items-center gap-2 shadow-sm">
                         <span class="text-3xl">🚀</span>
                         <span class="text-xl font-bold">高手等級</span>
-                        <span class="text-sm text-center font-medium">長單字與熱門動漫<br/>(共 15 題)</span>
+                        <span class="text-sm text-center font-medium">大明星與經典成語<br/>(共 15 題)</span>
                     </button>
                 </div>
                 
@@ -456,8 +456,8 @@
                         <i class="fa-solid fa-chalkboard-user"></i> 教師即時管理後台
                     </h2>
                     <div class="flex gap-2">
-                        <button onclick="window.clearAllScores()" class="text-red-600 hover:text-white bg-red-100 hover:bg-red-600 px-4 py-2 rounded-full font-bold transition-colors border border-red-200 flex items-center gap-1">
-                            <i class="fa-solid fa-trash-can"></i> 清空全部成績
+                        <button onclick="window.clearAllScores()" class="text-red-600 hover:text-white bg-red-100 hover:bg-red-600 px-4 py-2 rounded-full font-bold transition-colors border border-red-200 flex items-center gap-1" title="依下方選擇的班級進行清空">
+                            <i class="fa-solid fa-trash-can"></i> 批次清空成績
                         </button>
                         <button onclick="window.logoutTeacher()" class="text-gray-500 hover:text-gray-700 bg-gray-200 px-4 py-2 rounded-full font-bold transition-colors border border-gray-300 flex items-center gap-1">
                             <i class="fa-solid fa-right-from-bracket"></i> 登出
@@ -477,9 +477,26 @@
 
                 <!-- 教師視圖 1：成績列表 -->
                 <div id="teacher-view-list">
-                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-xl text-blue-800 font-medium flex justify-between items-center shadow-sm">
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4 rounded-r-xl text-blue-800 font-medium flex flex-col md:flex-row justify-between items-start md:items-center shadow-sm gap-2">
                         <div><i class="fa-solid fa-circle-info mr-2"></i> 畫面會 <strong>自動即時更新</strong>，老師不需手動重新整理喔！</div>
                         <span class="text-xs bg-blue-200 px-2 py-1 rounded text-blue-700 animate-pulse border border-blue-300">Live 同步中</span>
+                    </div>
+
+                    <!-- 新增班級篩選 -->
+                    <div class="flex justify-end items-center mb-4 gap-2">
+                        <label class="font-bold text-gray-700"><i class="fa-solid fa-filter"></i> 篩選班級：</label>
+                        <select id="teacher-class-filter" onchange="window.renderTeacherDashboard()" class="px-4 py-2 rounded-xl border-2 border-blue-300 font-bold text-blue-800 outline-none focus:border-blue-500 shadow-sm cursor-pointer">
+                            <option value="all">顯示全部班級</option>
+                            <optgroup label="三年級">
+                                <option value="301">301班</option><option value="302">302班</option><option value="303">303班</option><option value="304">304班</option><option value="305">305班</option><option value="306">306班</option><option value="307">307班</option><option value="308">308班</option>
+                            </optgroup>
+                            <optgroup label="四年級">
+                                <option value="401">401班</option><option value="402">402班</option><option value="403">403班</option><option value="404">404班</option><option value="405">405班</option><option value="406">406班</option><option value="407">407班</option><option value="408">408班</option>
+                            </optgroup>
+                            <optgroup label="五年級">
+                                <option value="503">503班</option><option value="504">504班</option><option value="505">505班</option><option value="506">506班</option>
+                            </optgroup>
+                        </select>
                     </div>
 
                     <div class="bg-white border-2 border-gray-200 rounded-2xl shadow-md overflow-hidden">
@@ -581,27 +598,27 @@
         // =========================================================================
 
         // 全域變數初始化
-        let currentGameState = 'login-screen'; 
-        let currentDifficulty = null;
-        let questions = [];
-        let currentQIndex = 0;
-        let startTime = null;
-        let timerInterval = null;
-        let elapsedTime = 0;
-        let isTransitioning = false;
+        window.currentGameState = 'login-screen'; 
+        window.currentDifficulty = null;
+        window.questions = [];
+        window.currentQIndex = 0;
+        window.startTime = null;
+        window.timerInterval = null;
+        window.elapsedTime = 0;
+        window.isTransitioning = false;
 
         // 學生身分
-        let studentInfo = { classCode: '', seatCode: '', grade: 3 };
+        window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
 
         // Firebase 變數
-        let auth = null;
-        let db = null;
-        let user = null;
-        let appId = GAME_APP_ID;
-        let allScoresData = []; 
-        let currentLeaderboardTab = 'easy';
-        let lbScope = 'class'; 
-        let currentTeacherTab = 'easy';
+        window.auth = null;
+        window.db = null;
+        window.user = null;
+        window.appId = GAME_APP_ID;
+        window.allScoresData = []; 
+        window.currentLeaderboardTab = 'easy';
+        window.lbScope = 'class'; 
+        window.currentTeacherTab = 'easy';
 
         // --- 重新加上抓取網頁 DOM 元素的宣告 ---
         const screens = {
@@ -623,7 +640,7 @@
         };
 
         const questionPools = {
-            3: { // 三年級：單字為主，超短詞彙
+            3: { // 三年級
                 easy: {
                     en: [
                         { target: 'a', hint: '左手小指放的地方喔！', emoji: '🍎' }, { target: 'b', hint: 'f 鍵往右下的地方。', emoji: '🐻' },
@@ -641,16 +658,21 @@
                         { target: 'y', hint: 'j 鍵往左上的地方。', emoji: '🪀' }, { target: 'z', hint: 'a 鍵往右下的地方。', emoji: '🦓' }
                     ],
                     zh: [
-                        { target: 'ㄅ', hint: '鍵盤左上角喔！', emoji: '🍞' }, { target: 'ㄆ', hint: 'q 的位置。', emoji: '🍇' },
-                        { target: 'ㄇ', hint: 'a 鍵的上面喔！', emoji: '🐱' }, { target: 'ㄈ', hint: 'z 的位置。', emoji: '🚁' },
-                        { target: 'ㄉ', hint: '數字 2 的位置。', emoji: '🎂' }, { target: 'ㄊ', hint: 'w 的位置。', emoji: '🍑' },
-                        { target: 'ㄋ', hint: 's 的位置。', emoji: '🐦' }, { target: 'ㄌ', hint: 'x 的位置。', emoji: '🎁' },
-                        { target: 'ㄍ', hint: 'e 的位置。', emoji: '🐶' }, { target: 'ㄎ', hint: 'd 的位置。', emoji: '👖' },
-                        { target: 'ㄏ', hint: 'c 的位置。', emoji: '🐵' }, { target: 'ㄐ', hint: 'r 的位置。', emoji: '🐔' },
-                        { target: 'ㄑ', hint: 'f 的位置。', emoji: '🐧' }, { target: 'ㄒ', hint: 'v 的位置。', emoji: '🍉' },
-                        { target: 'ㄓ', hint: '5 的位置喔！', emoji: '🕷️' }, { target: 'ㄔ', hint: 't 的位置。', emoji: '🚗' },
-                        { target: 'ㄕ', hint: 'g 的位置。', emoji: '🦁' }, { target: 'ㄖ', hint: 'b 的位置。', emoji: '🌞' },
-                        { target: 'ㄗ', hint: 'y 的位置。', emoji: '🪀' }, { target: 'ㄘ', hint: 'h 的位置。', emoji: '🧲' }
+                        { target: '你好', zhuyin: ['ㄋㄧˇ', 'ㄏㄠˇ'], hint: '很有禮貌的打招呼！', emoji: '👋' },
+                        { target: '早安', zhuyin: ['ㄗㄠˇ', 'ㄢ'], hint: '每天早上都要有精神地說喔！', emoji: '🌅' },
+                        { target: '謝謝', zhuyin: ['ㄒㄧㄝˋ', 'ㄒㄧㄝ˙'], hint: '別人幫忙你要記得說喔！', emoji: '🙏' },
+                        { target: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'], hint: '要認真上課喔！', emoji: '👩‍🏫' },
+                        { target: '同學', zhuyin: ['ㄊㄨㄥˊ', 'ㄒㄩㄝˊ'], hint: '一起學習的好夥伴。', emoji: '👦' },
+                        { target: '小貓', zhuyin: ['ㄒㄧㄠˇ', 'ㄇㄠ'], hint: '喵喵叫的小動物。', emoji: '🐱' },
+                        { target: '小狗', zhuyin: ['ㄒㄧㄠˇ', 'ㄍㄡˇ'], hint: '汪汪叫的小動物。', emoji: '🐶' },
+                        { target: '蘋果', zhuyin: ['ㄆㄧㄥˊ', 'ㄍㄨㄛˇ'], hint: '紅紅的水果。', emoji: '🍎' },
+                        { target: '香蕉', zhuyin: ['ㄒㄧㄤ', 'ㄐㄧㄠ'], hint: '彎彎的黃色水果。', emoji: '🍌' },
+                        { target: '西瓜', zhuyin: ['ㄒㄧ', 'ㄍㄨㄚ'], hint: '夏天吃最棒了。', emoji: '🍉' },
+                        { target: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'], hint: '每天都要開開心心。', emoji: '😄' },
+                        { target: '大家', zhuyin: ['ㄉㄚˋ', 'ㄐㄧㄚ'], hint: '我們都是好朋友。', emoji: '👨‍👩‍👧‍👦' },
+                        { target: '朋友', zhuyin: ['ㄆㄥˊ', 'ㄧㄡˇ'], hint: '好朋友一起玩。', emoji: '🤝' },
+                        { target: '太陽', zhuyin: ['ㄊㄞˋ', 'ㄧㄤˊ'], hint: '白天在天上發光。', emoji: '☀️' },
+                        { target: '月亮', zhuyin: ['ㄩㄝˋ', 'ㄌㄧㄤˋ'], hint: '晚上在天上發光。', emoji: '🌙' }
                     ]
                 },
                 medium: {
@@ -667,22 +689,21 @@
                         { target: 'boy', hint: '男孩的英文。', emoji: '👦' }, { target: 'girl', hint: '女孩的英文。', emoji: '👧' }
                     ],
                     zh: [
-                        { target: '小貓', zhuyin: ['ㄒㄧㄠˇ', 'ㄇㄠ'], hint: '小(ㄒㄧㄠˇ)，貓(ㄇㄠ)。', emoji: '🐱' },
-                        { target: '小狗', zhuyin: ['ㄒㄧㄠˇ', 'ㄍㄡˇ'], hint: '小(ㄒㄧㄠˇ)，狗(ㄍㄡˇ)。', emoji: '🐶' },
-                        { target: '你好', zhuyin: ['ㄋㄧˇ', 'ㄏㄠˇ'], hint: '很有禮貌的話！', emoji: '👋' },
-                        { target: '早安', zhuyin: ['ㄗㄠˇ', 'ㄢ'], hint: '每天早上都要有精神地說喔！', emoji: '🌅' },
-                        { target: '蘋果', zhuyin: ['ㄆㄧㄥˊ', 'ㄍㄨㄛˇ'], hint: '紅紅的蘋果。', emoji: '🍎' },
-                        { target: '香蕉', zhuyin: ['ㄒㄧㄤ', 'ㄐㄧㄠ'], hint: '彎彎的香蕉。', emoji: '🍌' },
-                        { target: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'], hint: '要認真上課喔！', emoji: '👩‍🏫' },
-                        { target: '阿神', zhuyin: ['ㄚ', 'ㄕㄣˊ'], hint: '大家熟悉的YouTuber。', emoji: '🎮' },
-                        { target: '魯夫', zhuyin: ['ㄌㄨˇ', 'ㄈㄨ'], hint: '海賊王！', emoji: '🏴‍☠️' },
-                        { target: '鳴人', zhuyin: ['ㄇㄧㄥˊ', 'ㄖㄣˊ'], hint: '火影忍者！', emoji: '🍥' },
-                        { target: '周杰倫', zhuyin: ['ㄓㄡ', 'ㄐㄧㄝˊ', 'ㄌㄨㄣˊ'], hint: '有名的歌手。', emoji: '🎤' },
-                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' },
-                        { target: '好味小姐', zhuyin: ['ㄏㄠˇ', 'ㄨㄟˋ', 'ㄒㄧㄠˇ', 'ㄐㄧㄝˇ'], hint: '養貓咪的YouTuber。', emoji: '🐈' },
-                        { target: '這群人', zhuyin: ['ㄓㄜˋ', 'ㄑㄩㄣˊ', 'ㄖㄣˊ'], hint: '經典YouTuber團體。', emoji: '🎬' },
-                        { target: '千千進食', zhuyin: ['ㄑㄧㄢ', 'ㄑㄧㄢ', 'ㄐㄧㄣˋ', 'ㄕˊ'], hint: '很會吃美食的YouTuber。', emoji: '🍜' },
-                        { target: '老高', zhuyin: ['ㄌㄠˇ', 'ㄍㄠ'], hint: '講故事的YouTuber。', emoji: '👽' }
+                        { target: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'], hint: '我們都在東湖國小學習。', emoji: '🏫' },
+                        { target: '天氣', zhuyin: ['ㄊㄧㄢ', 'ㄑㄧˋ'], hint: '今天出大太陽。', emoji: '⛅' },
+                        { target: '看書', zhuyin: ['ㄎㄢˋ', 'ㄕㄨ'], hint: '可以學到很多知識。', emoji: '📖' },
+                        { target: '好玩', zhuyin: ['ㄏㄠˇ', 'ㄨㄢˊ'], hint: '打字小冒險真有趣。', emoji: '🎠' },
+                        { target: '遊戲', zhuyin: ['ㄧㄡˊ', 'ㄒㄧˋ'], hint: '打完字就可以玩囉！', emoji: '🎮' },
+                        { target: '吃飯', zhuyin: ['ㄔ', 'ㄈㄢˋ'], hint: '肚子餓了要吃飽。', emoji: '🍚' },
+                        { target: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'], hint: '很晚了要休息。', emoji: '💤' },
+                        { target: '起床', zhuyin: ['ㄑㄧˇ', 'ㄔㄨㄤˊ'], hint: '太陽曬屁股囉。', emoji: '🛏️' },
+                        { target: '星星', zhuyin: ['ㄒㄧㄥ', 'ㄒㄧㄥ'], hint: '一閃一閃亮晶晶。', emoji: '⭐' },
+                        { target: '天空', zhuyin: ['ㄊㄧㄢ', 'ㄎㄨㄥ'], hint: '藍色的很大。', emoji: '☁️' },
+                        { target: '白雲', zhuyin: ['ㄅㄞˊ', 'ㄩㄣˊ'], hint: '像棉花糖一樣。', emoji: '☁️' },
+                        { target: '鉛筆', zhuyin: ['ㄑㄧㄢ', 'ㄅㄧˇ'], hint: '寫字的好幫手。', emoji: '✏️' },
+                        { target: '書包', zhuyin: ['ㄕㄨ', 'ㄅㄠ'], hint: '裝滿課本。', emoji: '🎒' },
+                        { target: '教室', zhuyin: ['ㄐㄧㄠˋ', 'ㄕˋ'], hint: '上課的地方。', emoji: '🏫' },
+                        { target: '可以', zhuyin: ['ㄎㄜˇ', 'ㄧˇ'], hint: '你一定辦得到！', emoji: '⭕' }
                     ]
                 },
                 hard: {
@@ -711,7 +732,7 @@
                     ]
                 }
             },
-            4: { // 四年級：流行短詞、四字成語
+            4: { // 四年級
                 easy: {
                     en: [
                         { target: 'mario', hint: '瑪利歐的英文。', emoji: '🍄' }, { target: 'kirby', hint: '星之卡比的英文。', emoji: '🌟' },
@@ -726,17 +747,21 @@
                         { target: 'youtube', hint: '看影片的網站。', emoji: '▶️' }, { target: 'singer', hint: '歌手的英文。', emoji: '🎤' }
                     ],
                     zh: [
-                        { target: '吉伊卡哇', zhuyin: ['ㄐㄧˊ', 'ㄧ', 'ㄎㄚˇ', 'ㄨㄚ'], hint: '又小又可愛的傢伙！', emoji: '🐹' },
+                        { target: '麥塊', zhuyin: ['ㄇㄞˋ', 'ㄎㄨㄞˋ'], hint: '大家最愛的方塊遊戲。', emoji: '🧱' },
+                        { target: '動森', zhuyin: ['ㄉㄨㄥˋ', 'ㄙㄣ'], hint: '在無人島建村。', emoji: '🏝️' },
+                        { target: '柯南', zhuyin: ['ㄎㄜ', 'ㄋㄢˊ'], hint: '真相永遠只有一個。', emoji: '🕵️' },
+                        { target: '魯夫', zhuyin: ['ㄌㄨˇ', 'ㄈㄨ'], hint: '海賊王！', emoji: '🏴‍☠️' },
+                        { target: '鳴人', zhuyin: ['ㄇㄧㄥˊ', 'ㄖㄣˊ'], hint: '火影忍者！', emoji: '🍥' },
+                        { target: '皮卡丘', zhuyin: ['ㄆㄧˊ', 'ㄎㄚˇ', 'ㄑㄧㄡ'], hint: '黃色電擊鼠。', emoji: '⚡' },
+                        { target: '胖丁', zhuyin: ['ㄆㄤˋ', 'ㄉㄧㄥ'], hint: '愛唱歌的粉紅寶可夢。', emoji: '🎤' },
+                        { target: '卡比', zhuyin: ['ㄎㄚˇ', 'ㄅㄧˇ'], hint: '粉紅色圓圓的。', emoji: '🌟' },
+                        { target: '老高', zhuyin: ['ㄌㄠˇ', 'ㄍㄠ'], hint: '講故事的YouTuber。', emoji: '👽' },
+                        { target: '阿神', zhuyin: ['ㄚ', 'ㄕㄣˊ'], hint: '玩遊戲的YouTuber。', emoji: '🎮' },
+                        { target: '瑪利歐', zhuyin: ['ㄇㄚˇ', 'ㄌㄧˋ', 'ㄡ'], hint: '最紅的水管工。', emoji: '🍄' },
+                        { target: '庫巴', zhuyin: ['ㄎㄨˋ', 'ㄅㄚ'], hint: '瑪利歐的敵人。', emoji: '🐢' },
+                        { target: '吉伊', zhuyin: ['ㄐㄧˊ', 'ㄧ'], hint: '又小又可愛的傢伙！', emoji: '🐹' },
                         { target: '烏薩奇', zhuyin: ['ㄨ', 'ㄙㄚˋ', 'ㄑㄧˊ'], hint: '呀哈！黃色的兔子。', emoji: '🐰' },
-                        { target: '小八貓', zhuyin: ['ㄒㄧㄠˇ', 'ㄅㄚ', 'ㄇㄠ'], hint: '很會拍照的藍白小貓。', emoji: '📷' },
-                        { target: '傳說對決', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨㄛ', 'ㄉㄨㄟˋ', 'ㄐㄩㄝˊ'], hint: '推塔遊戲！', emoji: '📱' },
-                        { target: '斯普拉遁', zhuyin: ['ㄙ', 'ㄆㄨˇ', 'ㄌㄚ', 'ㄉㄨㄣˋ'], hint: '漆彈大作戰！', emoji: '🦑' },
-                        { target: '鬼滅之刃', zhuyin: ['ㄍㄨㄟˇ', 'ㄇㄧㄝˋ', 'ㄓ', 'ㄖㄣˋ'], hint: '水之呼吸！', emoji: '🗡️' },
-                        { target: '咒術迴戰', zhuyin: ['ㄓㄡˋ', 'ㄕㄨˋ', 'ㄏㄨㄟˊ', 'ㄓㄢˋ'], hint: '領域展開！', emoji: '🤞' },
-                        { target: '黃氏兄弟', zhuyin: ['ㄏㄨㄤˊ', 'ㄕˋ', 'ㄒㄩㄥ', 'ㄉㄧˋ'], hint: '知名YouTuber兄弟。', emoji: '👬' },
-                        { target: '好味小姐', zhuyin: ['ㄏㄠˇ', 'ㄨㄟˋ', 'ㄒㄧㄠˇ', 'ㄐㄧㄝˇ'], hint: '養貓咪的YouTuber。', emoji: '🐈' },
-                        { target: '這群人', zhuyin: ['ㄓㄜˋ', 'ㄑㄩㄣˊ', 'ㄖㄣˊ'], hint: '經典YouTuber團體。', emoji: '🎬' },
-                        { target: '千千進食', zhuyin: ['ㄑㄧㄢ', 'ㄑㄧㄢ', 'ㄐㄧㄣˋ', 'ㄕˊ'], hint: '很會吃美食的YouTuber。', emoji: '🍜' }
+                        { target: '小八', zhuyin: ['ㄒㄧㄠˇ', 'ㄅㄚ'], hint: '藍白小貓。', emoji: '📷' }
                     ]
                 },
                 medium: {
@@ -751,18 +776,21 @@
                         { target: 'morning', hint: '早上的英文。', emoji: '🌅' }, { target: 'teacher', hint: '老師的英文。', emoji: '👩‍🏫' }
                     ],
                     zh: [
-                        { target: '炭治郎', zhuyin: ['ㄊㄢˋ', 'ㄓˋ', 'ㄌㄤˊ'], hint: '鬼滅之刃男主角。', emoji: '🎴' },
-                        { target: '柯南', zhuyin: ['ㄎㄜ', 'ㄋㄢˊ'], hint: '真相永遠只有一個。', emoji: '🕵️‍♂️' },
-                        { target: '老高小茉', zhuyin: ['ㄌㄠˇ', 'ㄍㄠ', 'ㄒㄧㄠˇ', 'ㄇㄛˋ'], hint: '講故事的YouTuber。', emoji: '👽' },
-                        { target: '木曜四', zhuyin: ['ㄇㄨˋ', 'ㄧㄠˋ', 'ㄙˋ'], hint: '熱門網路節目。', emoji: '🪵' },
-                        { target: '貓咪大戰爭', zhuyin: ['ㄇㄠ', 'ㄇㄧ', 'ㄉㄚˋ', 'ㄓㄢˋ', 'ㄓㄥ'], hint: '派貓去打仗。', emoji: '🐾' },
-                        { target: '守株待兔', zhuyin: ['ㄕㄡˇ', 'ㄓㄨ', 'ㄉㄞˋ', 'ㄊㄨˋ'], hint: '妄想不勞而獲。', emoji: '🐇' },
-                        { target: '刻舟求劍', zhuyin: ['ㄎㄜˋ', 'ㄓㄡ', 'ㄑㄧㄡˊ', 'ㄐㄧㄢˋ'], hint: '比喻不知變通。', emoji: '⛵' },
-                        { target: '畫蛇添足', zhuyin: ['ㄏㄨㄚˋ', 'ㄕㄜˊ', 'ㄊㄧㄢ', 'ㄗㄨˊ'], hint: '比喻多此一舉。', emoji: '🐍' },
-                        { target: '拔苗助長', zhuyin: ['ㄅㄚˊ', 'ㄇㄧㄠˊ', 'ㄓㄨˋ', 'ㄓㄤˇ'], hint: '急於求成反而壞事。', emoji: '🌱' },
-                        { target: '井底之蛙', zhuyin: ['ㄐㄧㄥˇ', 'ㄉㄧˇ', 'ㄓ', 'ㄨㄚ'], hint: '見識淺薄的人。', emoji: '🐸' },
-                        { target: '亡羊補牢', zhuyin: ['ㄨㄤˊ', 'ㄧㄤˊ', 'ㄅㄨˇ', 'ㄌㄠˊ'], hint: '犯錯後及時補救。', emoji: '🐑' },
-                        { target: '掩耳盜鈴', zhuyin: ['ㄧㄢˇ', 'ㄦˇ', 'ㄉㄠˋ', 'ㄌㄧㄥˊ'], hint: '自欺欺人。', emoji: '🔔' }
+                        { target: '巧克力', zhuyin: ['ㄑㄧㄠˇ', 'ㄎㄜˋ', 'ㄌㄧˋ'], hint: '甜甜的零食。', emoji: '🍫' },
+                        { target: '草莓', zhuyin: ['ㄘㄠˇ', 'ㄇㄟˊ'], hint: '紅色的水果。', emoji: '🍓' },
+                        { target: '冰淇淋', zhuyin: ['ㄅㄧㄥ', 'ㄑㄧˊ', 'ㄌㄧㄣˊ'], hint: '夏天吃最涼快。', emoji: '🍦' },
+                        { target: '溜滑梯', zhuyin: ['ㄌㄧㄡ', 'ㄏㄨㄚˊ', 'ㄊㄧ'], hint: '公園裡好玩的設施。', emoji: '🛝' },
+                        { target: '腳踏車', zhuyin: ['ㄐㄧㄠˇ', 'ㄊㄚˋ', 'ㄔㄜ'], hint: '有兩個輪子。', emoji: '🚲' },
+                        { target: '捷運', zhuyin: ['ㄐㄧㄝˊ', 'ㄩㄣˋ'], hint: '台北很方便的交通工具。', emoji: '🚇' },
+                        { target: '公車', zhuyin: ['ㄍㄨㄥ', 'ㄔㄜ'], hint: '路上很大的車。', emoji: '🚌' },
+                        { target: '飛機', zhuyin: ['ㄈㄟ', 'ㄐㄧ'], hint: '在天空飛。', emoji: '✈️' },
+                        { target: '機器人', zhuyin: ['ㄐㄧ', 'ㄑㄧˋ', 'ㄖㄣˊ'], hint: '未來的科技。', emoji: '🤖' },
+                        { target: '恐龍', zhuyin: ['ㄎㄨㄥˇ', 'ㄌㄨㄥˊ'], hint: '很久以前的動物。', emoji: '🦖' },
+                        { target: '獅子', zhuyin: ['ㄕ', 'ㄗ˙'], hint: '草原上的國王。', emoji: '🦁' },
+                        { target: '老虎', zhuyin: ['ㄌㄠˇ', 'ㄏㄨˇ'], hint: '身上有條紋。', emoji: '🐯' },
+                        { target: '大象', zhuyin: ['ㄉㄚˋ', 'ㄒㄧㄤˋ'], hint: '有長長的鼻子。', emoji: '🐘' },
+                        { target: '長頸鹿', zhuyin: ['ㄔㄤˊ', 'ㄐㄧㄥˇ', 'ㄌㄨˋ'], hint: '脖子很長。', emoji: '🦒' },
+                        { target: '這群人', zhuyin: ['ㄓㄜˋ', 'ㄑㄩㄣˊ', 'ㄖㄣˊ'], hint: '經典YouTuber團體。', emoji: '🎬' }
                     ]
                 },
                 hard: {
@@ -789,7 +817,7 @@
                     ]
                 }
             },
-            5: { // 五六年級：進階熱門遊戲、動漫、唐詩
+            5: { // 五六年級
                 easy: {
                     en: [
                         { target: 'minecraft', hint: '麥塊英文原名！', emoji: '⛏️' }, { target: 'creeper', hint: '苦力怕的英文，會爆炸喔！', emoji: '💥' },
@@ -804,16 +832,21 @@
                         { target: 'tiktok', hint: '短影音平台。', emoji: '📱' }, { target: 'gamer', hint: '玩家的英文。', emoji: '🎮' }
                     ],
                     zh: [
-                        { target: '原神啟動', zhuyin: ['ㄩㄢˊ', 'ㄕㄣˊ', 'ㄑㄧˇ', 'ㄉㄨㄥˋ'], hint: '熱門遊戲台詞！', emoji: '🎮' },
-                        { target: '黑神話悟空', zhuyin: ['ㄏㄟ', 'ㄕㄣˊ', 'ㄏㄨㄚˋ', 'ㄨˋ', 'ㄎㄨㄥ'], hint: '化身天命人！', emoji: '🐒' },
+                        { target: '原神', zhuyin: ['ㄩㄢˊ', 'ㄕㄣˊ'], hint: '熱門遊戲啟動！', emoji: '🎮' },
+                        { target: '悟空', zhuyin: ['ㄨˋ', 'ㄎㄨㄥ'], hint: '黑神話天命人！', emoji: '🐒' },
                         { target: '絕區零', zhuyin: ['ㄐㄩㄝˊ', 'ㄑㄩ', 'ㄌㄧㄥˊ'], hint: '米哈遊的新遊戲。', emoji: '📺' },
                         { target: '芙莉蓮', zhuyin: ['ㄈㄨˊ', 'ㄌㄧˋ', 'ㄌㄧㄢˊ'], hint: '活了千年的精靈。', emoji: '🧝‍♀️' },
                         { target: '欣梅爾', zhuyin: ['ㄒㄧㄣ', 'ㄇㄟˊ', 'ㄦˇ'], hint: '帥氣的勇者。', emoji: '🗡️' },
                         { target: '五條悟', zhuyin: ['ㄨˇ', 'ㄊㄧㄠˊ', 'ㄨˋ'], hint: '無下限術式！', emoji: '🤞' },
-                        { target: '虎杖悠仁', zhuyin: ['ㄏㄨˇ', 'ㄓㄤˋ', 'ㄧㄡ', 'ㄖㄣˊ'], hint: '吃下宿儺手指的少年。', emoji: '👊' },
-                        { target: '伏黑惠', zhuyin: ['ㄈㄨˊ', 'ㄏㄟ', 'ㄏㄨㄟˋ'], hint: '召喚玉犬的式神使。', emoji: '🐺' },
-                        { target: '釘崎野薔薇', zhuyin: ['ㄉㄧㄥ', 'ㄑㄧˊ', 'ㄧㄝˇ', 'ㄑㄧㄤˊ', 'ㄨㄟˊ'], hint: '使用釘子和鐵鎚。', emoji: '🔨' },
-                        { target: '瑪利歐', zhuyin: ['ㄇㄚˇ', 'ㄌㄧˋ', 'ㄡ'], hint: '最紅的水管工。', emoji: '🍄' }
+                        { target: '虎杖', zhuyin: ['ㄏㄨˇ', 'ㄓㄤˋ'], hint: '吃下宿儺手指的少年。', emoji: '👊' },
+                        { target: '伏黑', zhuyin: ['ㄈㄨˊ', 'ㄏㄟ'], hint: '召喚玉犬的式神使。', emoji: '🐺' },
+                        { target: '釘崎', zhuyin: ['ㄉㄧㄥ', 'ㄑㄧˊ'], hint: '使用釘子和鐵鎚。', emoji: '🔨' },
+                        { target: '炭治郎', zhuyin: ['ㄊㄢˋ', 'ㄓˋ', 'ㄌㄤˊ'], hint: '鬼滅之刃男主角。', emoji: '🎴' },
+                        { target: '蔡阿嘎', zhuyin: ['ㄘㄞˋ', 'ㄚ', 'ㄍㄚ'], hint: '搞笑YouTuber。', emoji: '🎥' },
+                        { target: '蔡依林', zhuyin: ['ㄘㄞˋ', 'ㄧ', 'ㄌㄧㄣˊ'], hint: '知名女歌手。', emoji: '💃' },
+                        { target: '周杰倫', zhuyin: ['ㄓㄡ', 'ㄐㄧㄝˊ', 'ㄌㄨㄣˊ'], hint: '有名的歌手。', emoji: '🎤' },
+                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' },
+                        { target: '告五人', zhuyin: ['ㄍㄠˋ', 'ㄨˇ', 'ㄖㄣˊ'], hint: '好聽的樂團。', emoji: '🍈' }
                     ]
                 },
                 medium: {
@@ -827,15 +860,22 @@
                         { target: 'hardware', hint: '硬體的英文。', emoji: '⚙️' }, { target: 'network', hint: '網路的英文。', emoji: '🕸️' }
                     ],
                     zh: [
-                        { target: '英雄聯盟', zhuyin: ['ㄧㄥ', 'ㄒㄩㄥˊ', 'ㄌㄧㄢˊ', 'ㄇㄥˊ'], hint: '超知名的推塔遊戲。', emoji: '🛡️' },
-                        { target: '荒野亂鬥', zhuyin: ['ㄏㄨㄤ', 'ㄧㄝˇ', 'ㄌㄨㄢˋ', 'ㄉㄡˋ'], hint: '快節奏的對戰遊戲。', emoji: '🔫' },
-                        { target: '健身環', zhuyin: ['ㄐㄧㄢˋ', 'ㄕㄣ', 'ㄏㄨㄢˊ'], hint: '邊運動邊打怪。', emoji: '🏃' },
-                        { target: '瑪利歐賽車', zhuyin: ['ㄇㄚˇ', 'ㄌㄧˋ', 'ㄡ', 'ㄙㄞˋ', 'ㄔㄜ'], hint: '丟香蕉皮陷害朋友！', emoji: '🏎️' },
-                        { target: '寶可夢朱紫', zhuyin: ['ㄅㄠˇ', 'ㄎㄜˇ', 'ㄇㄥˋ', 'ㄓㄨ', 'ㄗˇ'], hint: '抓寶可夢的最新遊戲。', emoji: '🔴' },
-                        { target: '斯普拉遁', zhuyin: ['ㄙ', 'ㄆㄨˇ', 'ㄌㄚ', 'ㄉㄨㄣˋ'], hint: '漆彈大作戰。', emoji: '🦑' },
-                        { target: '傳說對決', zhuyin: ['ㄔㄨㄢˊ', 'ㄕㄨㄛ', 'ㄉㄨㄟˋ', 'ㄐㄩㄝˊ'], hint: '手機裡的推塔遊戲。', emoji: '📱' },
-                        { target: '貓咪大戰爭', zhuyin: ['ㄇㄠ', 'ㄇㄧ', 'ㄉㄚˋ', 'ㄓㄢˋ', 'ㄓㄥ'], hint: '可愛又奇怪的貓咪。', emoji: '🐾' },
-                        { target: '怪物彈珠', zhuyin: ['ㄍㄨㄞˋ', 'ㄨˋ', 'ㄉㄢˋ', 'ㄓㄨ'], hint: '拉彈珠撞敵人的遊戲。', emoji: '🎯' }
+                        { target: '網路', zhuyin: ['ㄨㄤˇ', 'ㄌㄨˋ'], hint: '連上世界。', emoji: '🌐' },
+                        { target: '電腦', zhuyin: ['ㄉㄧㄢˋ', 'ㄋㄠˇ'], hint: '資訊課用的機器。', emoji: '💻' },
+                        { target: '鍵盤', zhuyin: ['ㄐㄧㄢˋ', 'ㄆㄢˊ'], hint: '打字用的工具。', emoji: '⌨️' },
+                        { target: '滑鼠', zhuyin: ['ㄏㄨㄚˊ', 'ㄕㄨˇ'], hint: '游標控制。', emoji: '🖱️' },
+                        { target: '螢幕', zhuyin: ['ㄧㄥˊ', 'ㄇㄨˋ'], hint: '看畫面的地方。', emoji: '🖥️' },
+                        { target: '程式', zhuyin: ['ㄔㄥˊ', 'ㄕˋ'], hint: '寫代碼。', emoji: '👨‍💻' },
+                        { target: '手機', zhuyin: ['ㄕㄡˇ', 'ㄐㄧ'], hint: '每天都在用。', emoji: '📱' },
+                        { target: '密碼', zhuyin: ['ㄇㄧˋ', 'ㄇㄚˇ'], hint: '要記好不能給別人。', emoji: '🔑' },
+                        { target: '帳號', zhuyin: ['ㄓㄤˋ', 'ㄏㄠˋ'], hint: '登入用的。', emoji: '👤' },
+                        { target: '遊戲', zhuyin: ['ㄧㄡˊ', 'ㄒㄧˋ'], hint: '打完字就可以玩囉！', emoji: '🎮' },
+                        { target: '實況主', zhuyin: ['ㄕˊ', 'ㄎㄨㄤˋ', 'ㄓㄨˇ'], hint: '開直播的人。', emoji: '🎙️' },
+                        { target: '影片', zhuyin: ['ㄧㄥˇ', 'ㄆㄧㄢˋ'], hint: '在YouTube上看。', emoji: '🎬' },
+                        { target: '訂閱', zhuyin: ['ㄉㄧㄥˋ', 'ㄩㄝˋ'], hint: '喜歡頻道記得按。', emoji: '🔔' },
+                        { target: '按讚', zhuyin: ['ㄢˋ', 'ㄗㄢˋ'], hint: '給個愛心。', emoji: '👍' },
+                        { target: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'], hint: '傳給好朋友。', emoji: '⤴️' },
+                        { target: '斯普拉遁', zhuyin: ['ㄙ', 'ㄆㄨˇ', 'ㄌㄚ', 'ㄉㄨㄣˋ'], hint: '漆彈大作戰。', emoji: '🦑' }
                     ]
                 },
                 hard: {
@@ -862,120 +902,37 @@
             }
         };
 
-        function getRandomItems(array, count) {
+        window.getRandomItems = function(array, count) {
             const shuffled = [...array].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
-        }
+        };
 
-        function shootConfetti() {
-            const colors = ['#fde047', '#3b82f6', '#ef4444', '#10b981', '#a855f7', '#f97316'];
-            for(let i=0; i<80; i++) {
-                let confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-20px';
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.zIndex = '9999';
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                confetti.style.transition = `top ${Math.random() * 1.5 + 1.5}s ease-in, left 2s ease-in-out, transform 2s linear`;
-                document.body.appendChild(confetti);
-
-                setTimeout(() => {
-                    confetti.style.top = '100vh';
-                    confetti.style.left = (parseFloat(confetti.style.left) + (Math.random() * 20 - 10)) + 'vw';
-                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-                }, 50);
-
-                setTimeout(() => confetti.remove(), 3500);
-            }
-        }
-
-        async function initFirebase() {
-            try {
-                let activeConfig = firebaseConfig;
-                appId = GAME_APP_ID;
-
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    activeConfig = JSON.parse(__firebase_config);
-                    appId = typeof __app_id !== 'undefined' ? __app_id : GAME_APP_ID;
-                }
-
-                const app = initializeApp(activeConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    try {
-                        await signInAnonymously(auth);
-                    } catch(err) {
-                        console.warn("匿名登入失敗，請確認 Firebase 設定是否開啟匿名登入", err);
-                    }
-                }
-
-                onAuthStateChanged(auth, (u) => {
-                    user = u;
-                    if (user) {
-                        setupDatabaseListener(); 
-                    }
-                });
-            } catch (err) {
-                console.error("Firebase 初始化失敗:", err);
-            }
-        }
-
-        function setupDatabaseListener() {
-            if (!db || !user) return;
-            const scoresRef = collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores');
-            
-            onSnapshot(scoresRef, (snapshot) => {
-                allScoresData = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    data.id = doc.id; 
-                    allScoresData.push(data);
-                });
-                
-                if (currentGameState === 'leaderboard-screen') {
-                    renderLeaderboard();
-                } else if (currentGameState === 'teacher-dashboard-screen') {
-                    renderTeacherDashboard();
-                }
-            }, (error) => {
-                console.error("資料讀取錯誤:", error);
-            });
-        }
-
-        function showScreen(screenId) {
+        window.showScreen = function(screenId) {
             Object.values(screens).forEach(s => {
                 if (s) s.style.display = 'none';
             });
             if (screens[screenId]) {
                 screens[screenId].style.display = 'block';
             }
-            currentGameState = screenId;
+            window.currentGameState = screenId;
             
             if (screenId === 'playing-screen' && typeInput) {
                 setTimeout(() => typeInput.focus(), 100);
             }
             
             if (screenId === 'leaderboard-screen') {
-                if(studentInfo.classCode) {
+                if(window.studentInfo.classCode) {
                     const classSelect = document.getElementById('lb-class-select');
-                    if(classSelect) classSelect.value = studentInfo.classCode;
+                    if(classSelect) classSelect.value = window.studentInfo.classCode;
                     const gradeSelect = document.getElementById('lb-grade-select');
-                    if(gradeSelect) gradeSelect.value = studentInfo.grade;
+                    if(gradeSelect) gradeSelect.value = window.studentInfo.grade;
                 }
-                renderLeaderboard();
+                window.renderLeaderboard();
             }
-            if (screenId === 'teacher-dashboard-screen') renderTeacherDashboard();
-        }
+            if (screenId === 'teacher-dashboard-screen') window.renderTeacherDashboard();
+        };
 
-        function loginStudent() {
+        window.loginStudent = function() {
             const cInput = document.getElementById('login-class').value.trim();
             const sInput = document.getElementById('login-seat').value.trim();
             const err = document.getElementById('login-error');
@@ -993,9 +950,9 @@
             if (detectedGrade <= 3) detectedGrade = 3;
             if (detectedGrade >= 5) detectedGrade = 5;
 
-            studentInfo.classCode = cInput;
-            studentInfo.seatCode = sInput;
-            studentInfo.grade = detectedGrade;
+            window.studentInfo.classCode = cInput;
+            window.studentInfo.seatCode = sInput;
+            window.studentInfo.grade = detectedGrade;
             
             const welcomeEl = document.getElementById('welcome-student-name');
             if(welcomeEl) welcomeEl.innerText = `${cInput} 班 ${sInput} 號`;
@@ -1007,19 +964,19 @@
             }
             
             if(err) err.classList.add('hidden');
-            showScreen('intro-screen');
-        }
+            window.showScreen('intro-screen');
+        };
 
-        function logoutStudent() {
-            studentInfo = { classCode: '', seatCode: '', grade: 3 };
+        window.logoutStudent = function() {
+            window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
             const cInput = document.getElementById('login-class');
             const sInput = document.getElementById('login-seat');
             if (cInput) cInput.value = '';
             if (sInput) sInput.value = '';
-            showScreen('login-screen');
-        }
+            window.showScreen('login-screen');
+        };
 
-        function loginTeacher() {
+        window.loginTeacher = function() {
             const pwdInput = document.getElementById('teacher-password');
             const err = document.getElementById('teacher-login-error');
             const pwd = pwdInput ? pwdInput.value : '';
@@ -1027,18 +984,18 @@
             if (pwd === "0316") {
                 if(err) err.classList.add('hidden');
                 if(pwdInput) pwdInput.value = '';
-                showScreen('teacher-dashboard-screen');
+                window.showScreen('teacher-dashboard-screen');
             } else {
                 if(err) err.classList.remove('hidden');
             }
-        }
+        };
 
-        function logoutTeacher() {
-            showScreen('login-screen');
-        }
+        window.logoutTeacher = function() {
+            window.showScreen('login-screen');
+        };
 
-        function startGame(level) {
-            const gradePool = questionPools[studentInfo.grade];
+        window.startGame = function(level) {
+            const gradePool = questionPools[window.studentInfo.grade];
             
             let enCount, zhCount;
             if (level === 'easy') {
@@ -1052,30 +1009,30 @@
                 zhCount = 7;  
             }
             
-            const enList = getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
-            const zhList = getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
+            const enList = window.getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
+            const zhList = window.getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
             
-            currentDifficulty = level;
-            questions = [...enList, ...zhList];
+            window.currentDifficulty = level;
+            window.questions = [...enList, ...zhList];
             
-            initGameSession();
-        }
+            window.initGameSession();
+        };
 
-        function initGameSession() {
-            currentQIndex = 0;
-            elapsedTime = 0;
-            isTransitioning = false;
+        window.initGameSession = function() {
+            window.currentQIndex = 0;
+            window.elapsedTime = 0;
+            window.isTransitioning = false;
             
-            renderQuestion();
-            startTimer();
-            showScreen('playing-screen');
-        }
+            window.renderQuestion();
+            window.startTimer();
+            window.showScreen('playing-screen');
+        };
 
-        function renderQuestion() {
-            if (currentQIndex >= questions.length) return;
+        window.renderQuestion = function() {
+            if (window.currentQIndex >= window.questions.length) return;
             
-            const q = questions[currentQIndex];
-            const prevQ = currentQIndex > 0 ? questions[currentQIndex - 1] : null;
+            const q = window.questions[window.currentQIndex];
+            const prevQ = window.currentQIndex > 0 ? window.questions[window.currentQIndex - 1] : null;
 
             const vk = document.getElementById('virtual-keyboard');
             if (vk) {
@@ -1090,7 +1047,7 @@
             
             const progressTextEl = document.getElementById('progress-text');
             if (progressTextEl) {
-                progressTextEl.innerText = `進度: ${currentQIndex + 1} / ${questions.length}`;
+                progressTextEl.innerText = `進度: ${window.currentQIndex + 1} / ${window.questions.length}`;
             }
 
             const badge = document.getElementById('lang-badge');
@@ -1106,7 +1063,7 @@
 
             const switchAlert = document.getElementById('switch-alert');
             if (switchAlert) {
-                if (currentQIndex > 0 && q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
+                if (window.currentQIndex > 0 && q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
                     switchAlert.classList.remove('hidden');
                 } else {
                     switchAlert.classList.add('hidden');
@@ -1114,7 +1071,7 @@
             }
 
             let teacherMsg = "";
-            if (currentQIndex === 0 && q.lang === 'en') {
+            if (window.currentQIndex === 0 && q.lang === 'en') {
                 teacherMsg = "現在是【英文】模式喔！如果打出注音，請按一下 Shift 鍵切換。";
             } else if (q.lang === 'zh' && prevQ && prevQ.lang === 'en') {
                 teacherMsg = "準備切換囉！現在要打【中文】了，請按一下鍵盤上的 Shift 鍵切換輸入法。";
@@ -1167,18 +1124,18 @@
                 typeInput.disabled = false;
             }
             
-            hideWarning();
+            window.hideWarning();
             const successOverlay = document.getElementById('success-overlay');
             if (successOverlay) successOverlay.classList.add('hidden');
             
-            updateCursorHint();
-            updateKeyboardHighlight();
-        }
+            window.updateCursorHint();
+            window.updateKeyboardHighlight();
+        };
 
-        function updateKeyboardHighlight() {
+        window.updateKeyboardHighlight = function() {
             document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('highlight'));
             
-            const q = questions[currentQIndex];
+            const q = window.questions[window.currentQIndex];
             if (!q || !typeInput) return;
 
             const val = typeInput.value;
@@ -1212,59 +1169,59 @@
                     }
                 }
             }
-        }
+        };
 
-        function checkInput() {
-            if (isTransitioning || currentQIndex >= questions.length || !typeInput) return;
+        window.checkInput = function() {
+            if (window.isTransitioning || window.currentQIndex >= window.questions.length || !typeInput) return;
 
-            const q = questions[currentQIndex];
+            const q = window.questions[window.currentQIndex];
             const val = typeInput.value;
             
-            updateCursorHint();
-            updateKeyboardHighlight();
+            window.updateCursorHint();
+            window.updateKeyboardHighlight();
 
             if (val === q.target) {
-                handleSuccess();
+                window.handleSuccess();
                 return;
             }
 
             if (val.length > 0) {
                 if (q.lang === 'zh' && /[a-zA-Z]/.test(val)) {
-                    showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
+                    window.showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
                 } else if (q.lang === 'en' && /[A-Z]/.test(val)) {
-                    showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
+                    window.showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
                 } else if (val.length >= q.target.length) {
-                    showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
+                    window.showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
                 } else {
-                    hideWarning();
+                    window.hideWarning();
                 }
             } else {
-                hideWarning();
+                window.hideWarning();
             }
-        }
+        };
 
-        function handleSuccess() {
-            isTransitioning = true;
+        window.handleSuccess = function() {
+            window.isTransitioning = true;
             if (typeInput) typeInput.disabled = true;
-            hideWarning();
+            window.hideWarning();
             document.querySelectorAll('.vk-key').forEach(k => k.classList.remove('highlight'));
             
             const successOverlay = document.getElementById('success-overlay');
             if (successOverlay) successOverlay.classList.remove('hidden');
             
             setTimeout(() => {
-                if (currentQIndex < questions.length - 1) {
-                    currentQIndex++;
-                    isTransitioning = false;
-                    renderQuestion();
+                if (window.currentQIndex < window.questions.length - 1) {
+                    window.currentQIndex++;
+                    window.isTransitioning = false;
+                    window.renderQuestion();
                     if (typeInput) setTimeout(() => typeInput.focus(), 50);
                 } else {
-                    finishGame();
+                    window.finishGame();
                 }
             }, 600);
-        }
+        };
 
-        function showWarning(type, msg) {
+        window.showWarning = function(type, msg) {
             const box = document.getElementById('warning-box');
             const text = document.getElementById('warning-text');
             if (text) text.innerText = msg;
@@ -1274,14 +1231,14 @@
                 }`;
                 box.classList.remove('hidden');
             }
-        }
+        };
 
-        function hideWarning() {
+        window.hideWarning = function() {
             const box = document.getElementById('warning-box');
             if (box) box.classList.add('hidden');
-        }
+        };
 
-        function updateCursorHint() {
+        window.updateCursorHint = function() {
             const cursorHint = document.getElementById('cursor-hint');
             if (cursorHint && typeInput) {
                 if (typeInput.value === '') {
@@ -1290,32 +1247,32 @@
                     cursorHint.classList.add('hidden');
                 }
             }
-        }
+        };
 
-        function startTimer() {
-            clearInterval(timerInterval);
-            startTime = Date.now();
+        window.startTimer = function() {
+            clearInterval(window.timerInterval);
+            window.startTime = Date.now();
             if (timerText) timerText.innerText = "0";
-            timerInterval = setInterval(() => {
-                elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                if (timerText) timerText.innerText = elapsedTime;
+            window.timerInterval = setInterval(() => {
+                window.elapsedTime = Math.floor((Date.now() - window.startTime) / 1000);
+                if (timerText) timerText.innerText = window.elapsedTime;
             }, 1000);
-        }
+        };
 
         // --- 遊戲結束與自動上傳 ---
-        async function finishGame() {
-            clearInterval(timerInterval);
+        window.finishGame = async function() {
+            clearInterval(window.timerInterval);
             
             const finalTimeEl = document.getElementById('final-time');
-            if (finalTimeEl) finalTimeEl.innerText = elapsedTime;
+            if (finalTimeEl) finalTimeEl.innerText = window.elapsedTime;
             
             const finishNameEl = document.getElementById('finish-student-name');
             if (finishNameEl) {
-                finishNameEl.innerText = `${studentInfo.classCode} 班 ${studentInfo.seatCode} 號`;
+                finishNameEl.innerText = `${window.studentInfo.classCode} 班 ${window.studentInfo.seatCode} 號`;
             }
             
             const totalCountEl = document.getElementById('total-q-count');
-            if (totalCountEl) totalCountEl.innerText = questions.length;
+            if (totalCountEl) totalCountEl.innerText = window.questions.length;
 
             const autoSaveStatus = document.getElementById('auto-save-status');
             if (autoSaveStatus) {
@@ -1323,16 +1280,16 @@
                 autoSaveStatus.className = "bg-blue-50 border-2 border-blue-200 text-blue-800 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
             }
             
-            showScreen('finished-screen');
+            window.showScreen('finished-screen');
 
-            if (user && db) {
+            if (window.user && window.db) {
                 try {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores'), {
-                        className: studentInfo.classCode,
-                        seatNumber: studentInfo.seatCode,
-                        time: elapsedTime,
-                        difficulty: currentDifficulty,
-                        gradePool: studentInfo.grade,
+                    await window.addDoc(window.collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores'), {
+                        className: window.studentInfo.classCode,
+                        seatNumber: window.studentInfo.seatCode,
+                        time: window.elapsedTime,
+                        difficulty: window.currentDifficulty,
+                        gradePool: window.studentInfo.grade,
                         timestamp: Date.now()
                     });
                     
@@ -1359,36 +1316,36 @@
                     autoSaveStatus.className = "bg-gray-100 border-2 border-gray-300 text-gray-600 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
                 }
             }
-        }
+        };
 
-        function restartGame() {
-            clearInterval(timerInterval);
-            showScreen('intro-screen');
-        }
+        window.restartGame = function() {
+            clearInterval(window.timerInterval);
+            window.showScreen('intro-screen');
+        };
 
-        function handleGlobalClick() {
-            if (currentGameState === 'playing-screen' && !isTransitioning && typeInput) {
+        window.handleGlobalClick = function() {
+            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
                 typeInput.focus();
             }
-        }
+        };
 
-        function handleInputBlur() {
-            if (currentGameState === 'playing-screen' && !isTransitioning && typeInput) {
+        window.handleInputBlur = function() {
+            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
                 setTimeout(() => typeInput.focus(), 150);
             }
-        }
+        };
 
-        function showLeaderboard() {
-            showScreen('leaderboard-screen');
-        }
+        window.showLeaderboard = function() {
+            window.showScreen('leaderboard-screen');
+        };
 
-        function switchLeaderboardTab(diff) {
-            currentLeaderboardTab = diff;
-            renderLeaderboard();
-        }
+        window.switchLeaderboardTab = function(diff) {
+            window.currentLeaderboardTab = diff;
+            window.renderLeaderboard();
+        };
 
-        function setLbScope(scope) {
-            lbScope = scope;
+        window.setLbScope = function(scope) {
+            window.lbScope = scope;
             const btnClass = document.getElementById('btn-scope-class');
             const btnGrade = document.getElementById('btn-scope-grade');
             const selClass = document.getElementById('lb-class-select');
@@ -1405,14 +1362,14 @@
                 if(selClass) selClass.classList.add('hidden');
                 if(selGrade) selGrade.classList.remove('hidden');
             }
-            renderLeaderboard();
-        }
+            window.renderLeaderboard();
+        };
 
-        function renderLeaderboard() {
+        window.renderLeaderboard = function() {
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`tab-${d}`);
                 if (btn) {
-                    if (d === currentLeaderboardTab) {
+                    if (d === window.currentLeaderboardTab) {
                         btn.className = "flex-1 py-2 px-3 rounded-xl font-bold transition-colors bg-white shadow text-yellow-600 border border-gray-200 text-sm md:text-base";
                     } else {
                         btn.className = "flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base";
@@ -1424,15 +1381,15 @@
             const myRankBanner = document.getElementById('my-rank-banner');
             if (!tbody) return;
             
-            if (!user || !db) {
+            if (!window.user || !window.db) {
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-gray-500 font-medium">連線準備中...</td></tr>`;
                 if(myRankBanner) myRankBanner.classList.add('hidden');
                 return;
             }
 
-            let filteredData = allScoresData.filter(d => d.difficulty === currentLeaderboardTab);
+            let filteredData = window.allScoresData.filter(d => d.difficulty === window.currentLeaderboardTab);
             
-            if (lbScope === 'class') {
+            if (window.lbScope === 'class') {
                 const selClass = document.getElementById('lb-class-select');
                 if(selClass) {
                     filteredData = filteredData.filter(d => d.className === selClass.value);
@@ -1453,8 +1410,8 @@
             });
             const uniqueSorted = Array.from(bestScoresMap.values()).sort((a, b) => a.time - b.time);
 
-            if (studentInfo && studentInfo.classCode && myRankBanner) {
-                const myKey = `${studentInfo.classCode}-${studentInfo.seatCode}`;
+            if (window.studentInfo && window.studentInfo.classCode && myRankBanner) {
+                const myKey = `${window.studentInfo.classCode}-${window.studentInfo.seatCode}`;
                 const myIndex = uniqueSorted.findIndex(d => `${d.className}-${d.seatNumber}` === myKey);
                 
                 if (myIndex !== -1) {
@@ -1481,7 +1438,7 @@
                 if (index === 1) rankBadge = `<i class="fa-solid fa-medal text-2xl text-gray-300 drop-shadow-md"></i>`;
                 if (index === 2) rankBadge = `<i class="fa-solid fa-medal text-2xl text-amber-600 drop-shadow-md"></i>`;
 
-                const isMe = (data.className === studentInfo.classCode && data.seatNumber === studentInfo.seatCode);
+                const isMe = (data.className === window.studentInfo.classCode && data.seatNumber === window.studentInfo.seatCode);
                 const rowClass = isMe ? "bg-yellow-100 hover:bg-yellow-200" : "hover:bg-yellow-50";
 
                 return `
@@ -1492,10 +1449,10 @@
                     </tr>
                 `;
             }).join('');
-        }
+        };
 
-        function switchTeacherTab(tabName) {
-            currentTeacherTab = tabName;
+        window.switchTeacherTab = function(tabName) {
+            window.currentTeacherTab = tabName;
             
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`t-tab-${d}`);
@@ -1526,25 +1483,31 @@
             } else {
                 if(viewList) viewList.classList.remove('hidden');
                 if(viewPodium) viewPodium.classList.add('hidden');
-                renderTeacherDashboard();
+                window.renderTeacherDashboard();
             }
-        }
+        };
 
-        function renderTeacherDashboard() {
-            if (currentTeacherTab === 'podium') return; 
+        window.renderTeacherDashboard = function() {
+            if (window.currentTeacherTab === 'podium') return; 
 
             const tbody = document.getElementById('teacher-dashboard-body');
+            const classFilter = document.getElementById('teacher-class-filter')?.value || 'all';
+
             if (!tbody) return;
             
-            if (!user || !db) {
+            if (!window.user || !window.db) {
                 tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-gray-500 font-medium">連線準備中...</td></tr>`;
                 return;
             }
 
-            const filteredData = allScoresData.filter(d => d.difficulty === currentTeacherTab);
+            let filteredData = window.allScoresData.filter(d => d.difficulty === window.currentTeacherTab);
             
+            if (classFilter !== 'all') {
+                filteredData = filteredData.filter(d => d.className === classFilter);
+            }
+
             if (filteredData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-gray-400 font-medium">這個難度目前還沒有學生成績紀錄。</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-gray-400 font-medium">目前還沒有學生成績紀錄。</td></tr>`;
                 return;
             }
 
@@ -1578,38 +1541,38 @@
                     </tr>
                 `;
             }).join('');
-        }
+        };
 
-        function renderPodium() {
+        window.renderPodium = function() {
             const selectEl = document.getElementById('podium-class-select');
             if(!selectEl) return;
             
             const targetClass = selectEl.value;
-            const classScores = allScoresData.filter(d => d.className === targetClass);
+            const classScores = window.allScoresData.filter(d => d.className === targetClass);
 
-            const bestEasy = getBestForClassAndDiff(classScores, 'easy');
-            const bestMedium = getBestForClassAndDiff(classScores, 'medium');
-            const bestHard = getBestForClassAndDiff(classScores, 'hard');
+            const bestEasy = window.getBestForClassAndDiff(classScores, 'easy');
+            const bestMedium = window.getBestForClassAndDiff(classScores, 'medium');
+            const bestHard = window.getBestForClassAndDiff(classScores, 'hard');
 
-            updatePodiumCard('podium-easy', bestEasy);
-            updatePodiumCard('podium-medium', bestMedium);
-            updatePodiumCard('podium-hard', bestHard);
+            window.updatePodiumCard('podium-easy', bestEasy);
+            window.updatePodiumCard('podium-medium', bestMedium);
+            window.updatePodiumCard('podium-hard', bestHard);
 
             const resultsContainer = document.getElementById('podium-results');
             if(resultsContainer) {
                 resultsContainer.classList.replace('opacity-0', 'opacity-100');
             }
-            shootConfetti();
-        }
+            window.shootConfetti();
+        };
 
-        function getBestForClassAndDiff(scoresArray, diff) {
+        window.getBestForClassAndDiff = function(scoresArray, diff) {
             const filtered = scoresArray.filter(d => d.difficulty === diff);
             if (filtered.length === 0) return null;
             filtered.sort((a, b) => a.time - b.time);
             return filtered[0];
-        }
+        };
 
-        function updatePodiumCard(prefix, data) {
+        window.updatePodiumCard = function(prefix, data) {
             const nameEl = document.getElementById(`${prefix}-name`);
             const timeEl = document.getElementById(`${prefix}-time`);
             
@@ -1622,62 +1585,169 @@
                 nameEl.className = "text-3xl font-black mb-2 text-gray-300"; 
                 timeEl.innerText = "-";
             }
-        }
+        };
 
-        async function deleteScore(docId) {
+        window.shootConfetti = function() {
+            const colors = ['#fde047', '#3b82f6', '#ef4444', '#10b981', '#a855f7', '#f97316'];
+            for(let i=0; i<80; i++) {
+                let confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.zIndex = '9999';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.transition = `top ${Math.random() * 1.5 + 1.5}s ease-in, left 2s ease-in-out, transform 2s linear`;
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.style.top = '100vh';
+                    confetti.style.left = (parseFloat(confetti.style.left) + (Math.random() * 20 - 10)) + 'vw';
+                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
+                }, 50);
+
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        };
+
+        window.deleteScore = async function(docId) {
             if (!confirm("確定要刪除這筆成績嗎？")) return;
-            if (!user || !db) return;
+            if (!window.user || !window.db) return;
             try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'typing_scores', docId));
+                await window.deleteDoc(window.doc(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores', docId));
             } catch (err) {
                 console.error("刪除失敗:", err);
                 alert("刪除失敗，請檢查資料庫權限是否允許寫入與刪除。");
             }
-        }
+        };
 
-        async function clearAllScores() {
-            if (!confirm("⚠️ 警告：這將會清空【所有難度】的【所有學生成績】！\n這通常在換下一個班級上課時使用。\n\n請問確定要全部清空嗎？")) return;
+        window.clearAllScores = async function() {
+            let classFilter = 'all';
+            let scopeText = "【所有班級】的【所有學生成績】";
+
+            if (window.currentTeacherTab === 'podium') {
+                classFilter = document.getElementById('podium-class-select').value;
+                scopeText = `【${classFilter}班】的【所有學生成績】`;
+            } else {
+                const classSelect = document.getElementById('teacher-class-filter');
+                if (classSelect) {
+                    classFilter = classSelect.value;
+                    if (classFilter !== 'all') {
+                        scopeText = `【${classFilter}班】的【所有學生成績】`;
+                    }
+                }
+            }
+
+            if (!confirm(`⚠️ 警告：這將會清空 ${scopeText}！\n\n請問確定要清空嗎？`)) return;
             if (!confirm("再次確認：清空後成績將無法復原，確定清空？")) return;
             
-            if (!user || !db) return;
+            if (!window.user || !window.db) return;
             try {
-                const scoresRef = collection(db, 'artifacts', appId, 'public', 'data', 'typing_scores');
-                const snapshot = await getDocs(scoresRef);
+                let docsToDelete = window.allScoresData;
                 
+                if (classFilter !== 'all') {
+                    docsToDelete = window.allScoresData.filter(d => d.className === classFilter);
+                }
+
+                if (docsToDelete.length === 0) {
+                    alert("目前沒有可以清空的成績喔！");
+                    return;
+                }
+
                 const deletePromises = [];
-                snapshot.forEach(document => {
-                    deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'typing_scores', document.id)));
+                docsToDelete.forEach(data => {
+                    if (data.id) {
+                        deletePromises.push(window.deleteDoc(window.doc(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores', data.id)));
+                    }
                 });
                 
                 await Promise.all(deletePromises);
-                alert("所有成績已成功清空！您可以開始新的一堂課了。");
+                alert(`${scopeText} 已成功清空！您可以開始新的一堂課了。`);
             } catch (err) {
                 console.error("清空失敗:", err);
                 alert("清空失敗，請檢查資料庫權限是否允許寫入與刪除。");
             }
-        }
+        };
 
-        // --- 將按鈕需要的函數開放到 window 中 ---
-        window.handleGlobalClick = handleGlobalClick;
-        window.showLeaderboard = showLeaderboard;
-        window.loginStudent = loginStudent;
-        window.showScreen = showScreen;
-        window.loginTeacher = loginTeacher;
-        window.startGame = startGame;
-        window.logoutStudent = logoutStudent;
-        window.checkInput = checkInput;
-        window.handleInputBlur = handleInputBlur;
-        window.switchLeaderboardTab = switchLeaderboardTab;
-        window.setLbScope = setLbScope;
-        window.renderLeaderboard = renderLeaderboard;
-        window.clearAllScores = clearAllScores;
-        window.logoutTeacher = logoutTeacher;
-        window.switchTeacherTab = switchTeacherTab;
-        window.renderPodium = renderPodium;
-        window.deleteScore = deleteScore;
+        // --- 啟動函式 ---
+        window.initFirebase = async function() {
+            try {
+                // 動態載入 Firebase 模組
+                const appModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+                const authModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+                const fsModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                
+                // 將需要的 Firebase 函數綁定到全域
+                window.addDoc = fsModule.addDoc;
+                window.collection = fsModule.collection;
+                window.doc = fsModule.doc;
+                window.deleteDoc = fsModule.deleteDoc;
+                window.getDocs = fsModule.getDocs;
+                
+                let activeConfig = firebaseConfig;
+                window.appId = GAME_APP_ID;
 
-        // 啟動 Firebase
-        initFirebase();
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    activeConfig = JSON.parse(__firebase_config);
+                    window.appId = typeof __app_id !== 'undefined' ? __app_id : GAME_APP_ID;
+                }
+
+                const app = appModule.initializeApp(activeConfig);
+                window.auth = authModule.getAuth(app);
+                window.db = fsModule.getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await authModule.signInWithCustomToken(window.auth, __initial_auth_token);
+                } else {
+                    try {
+                        await authModule.signInAnonymously(window.auth);
+                    } catch(err) {
+                        console.warn("匿名登入失敗:", err);
+                        alert("⚠️【Firebase 診斷：登入失敗】\n請確認控制台有開啟匿名登入！");
+                    }
+                }
+
+                authModule.onAuthStateChanged(window.auth, (u) => {
+                    window.user = u;
+                    if (window.user) {
+                        window.setupDatabaseListener(); 
+                    }
+                });
+            } catch (err) {
+                console.error("Firebase 初始化失敗:", err);
+            }
+        };
+
+        window.setupDatabaseListener = function() {
+            if (!window.db || !window.user) return;
+            
+            import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(fsModule => {
+                const scoresRef = fsModule.collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores');
+                
+                fsModule.onSnapshot(scoresRef, (snapshot) => {
+                    window.allScoresData = [];
+                    snapshot.forEach(document => {
+                        const data = document.data();
+                        data.id = document.id; 
+                        window.allScoresData.push(data);
+                    });
+                    
+                    if (window.currentGameState === 'leaderboard-screen') {
+                        window.renderLeaderboard();
+                    } else if (window.currentGameState === 'teacher-dashboard-screen') {
+                        window.renderTeacherDashboard();
+                    }
+                }, (error) => {
+                    console.error("資料讀取錯誤:", error);
+                });
+            });
+        };
+
+        // 啟動應用
+        window.initFirebase();
 
     </script>
 </body>
