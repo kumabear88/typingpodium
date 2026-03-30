@@ -225,7 +225,7 @@
                     <div class="flex items-center gap-3">
                         <span class="bg-yellow-100 px-4 py-2 rounded-full flex items-center gap-2 text-yellow-800 shadow-sm font-mono text-lg min-w-[120px] justify-center border border-yellow-300">
                             <i class="fa-regular fa-clock text-yellow-600"></i>
-                            時間: <span id="timer-text">0</span> 秒
+                            時間: <span id="timer-text">0秒</span>
                         </span>
                         <button onclick="window.showScreen('intro-screen')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-full flex items-center gap-1 transition-colors text-sm shadow-sm border border-gray-200 font-bold" title="放棄重來">
                             <i class="fa-solid fa-xmark"></i> 放棄
@@ -263,7 +263,8 @@
                     
                     <!-- 輸入區 -->
                     <div class="relative w-full max-w-lg mb-6">
-                        <input type="text" id="type-input" class="w-full text-center bg-transparent outline-none text-4xl md:text-5xl text-gray-800 font-bold border-b-4 border-blue-400 focus:border-blue-600 transition-colors py-2 mb-2 placeholder-blue-300/30" placeholder=" " autocomplete="off" oninput="window.checkInput()" onblur="window.handleInputBlur()">
+                        <!-- 加入 oncomposition 確保注音輸入中不會誤判 -->
+                        <input type="text" id="type-input" class="w-full text-center bg-transparent outline-none text-4xl md:text-5xl text-gray-800 font-bold border-b-4 border-blue-400 focus:border-blue-600 transition-colors py-2 mb-2 placeholder-blue-300/30" placeholder=" " autocomplete="off" oninput="window.checkInput()" onblur="window.handleInputBlur()" oncompositionstart="window.isComposing = true" oncompositionend="window.isComposing = false; window.checkInput()">
                         
                         <div id="cursor-hint" class="absolute inset-0 flex items-center justify-center pointer-events-none mb-2">
                             <span class="w-1 h-12 bg-blue-400 animate-pulse rounded-full opacity-50"></span>
@@ -360,7 +361,7 @@
                     <p class="text-2xl text-gray-800 font-bold mb-2">總共花費時間</p>
                     <p class="text-blue-600 font-black text-6xl flex items-center justify-center gap-3">
                         <i class="fa-regular fa-clock text-yellow-600 text-4xl"></i>
-                        <span id="final-time">0</span> <span class="text-3xl text-gray-600 mt-3">秒</span>
+                        <span id="final-time">0秒</span>
                     </p>
                 </div>
 
@@ -397,7 +398,7 @@
                         我的排名：第 <span id="my-rank-num" class="text-4xl text-yellow-300 font-black px-1">?</span> 名
                     </div>
                     <div class="text-blue-100 font-medium text-right">
-                        最佳時間<br><span id="my-rank-time" class="text-white font-black text-2xl">?</span> 秒
+                        最佳時間<br><span id="my-rank-time" class="text-white font-black text-2xl">?</span>
                     </div>
                 </div>
 
@@ -550,7 +551,7 @@
                                 <div class="mt-6 mb-2 text-5xl">🏅</div>
                                 <p class="text-gray-500 font-bold mb-1">最速傳說</p>
                                 <p id="podium-easy-name" class="text-3xl font-black text-green-700 mb-2">-</p>
-                                <p class="text-lg font-bold text-gray-600"><span id="podium-easy-time" class="text-2xl text-blue-600">-</span> 秒</p>
+                                <p class="text-lg font-bold text-gray-600"><span id="podium-easy-time" class="text-2xl text-blue-600">-</span></p>
                             </div>
                             <!-- 進階冠軍 -->
                             <div class="podium-card bg-white rounded-2xl border-4 border-yellow-300 p-6 flex flex-col items-center shadow-lg relative overflow-hidden transform md:-translate-y-4">
@@ -558,7 +559,7 @@
                                 <div class="mt-6 mb-2 text-6xl">🏆</div>
                                 <p class="text-gray-500 font-bold mb-1">最速傳說</p>
                                 <p id="podium-medium-name" class="text-3xl font-black text-yellow-700 mb-2">-</p>
-                                <p class="text-lg font-bold text-gray-600"><span id="podium-medium-time" class="text-2xl text-blue-600">-</span> 秒</p>
+                                <p class="text-lg font-bold text-gray-600"><span id="podium-medium-time" class="text-2xl text-blue-600">-</span></p>
                             </div>
                             <!-- 高手冠軍 -->
                             <div class="podium-card bg-white rounded-2xl border-4 border-blue-300 p-6 flex flex-col items-center shadow-lg relative overflow-hidden">
@@ -566,7 +567,7 @@
                                 <div class="mt-6 mb-2 text-5xl">🏅</div>
                                 <p class="text-gray-500 font-bold mb-1">最速傳說</p>
                                 <p id="podium-hard-name" class="text-3xl font-black text-blue-700 mb-2">-</p>
-                                <p class="text-lg font-bold text-gray-600"><span id="podium-hard-time" class="text-2xl text-blue-600">-</span> 秒</p>
+                                <p class="text-lg font-bold text-gray-600"><span id="podium-hard-time" class="text-2xl text-blue-600">-</span></p>
                             </div>
                         </div>
                     </div>
@@ -606,6 +607,7 @@
         window.timerInterval = null;
         window.elapsedTime = 0;
         window.isTransitioning = false;
+        window.isComposing = false;
 
         // 學生身分
         window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
@@ -639,272 +641,287 @@
             'ㄅ':'k-1', 'ㄆ':'k-q', 'ㄇ':'k-a', 'ㄈ':'k-z', 'ㄉ':'k-2', 'ㄊ':'k-w', 'ㄋ':'k-s', 'ㄌ':'k-x', 'ㄍ':'k-e', 'ㄎ':'k-d', 'ㄏ':'k-c', 'ㄐ':'k-r', 'ㄑ':'k-f', 'ㄒ':'k-v', 'ㄓ':'k-5', 'ㄔ':'k-t', 'ㄕ':'k-g', 'ㄖ':'k-b', 'ㄗ':'k-y', 'ㄘ':'k-h', 'ㄙ':'k-n', 'ㄧ':'k-u', 'ㄨ':'k-j', 'ㄩ':'k-m', 'ㄚ':'k-8', 'ㄛ':'k-i', 'ㄜ':'k-k', 'ㄝ':'k-,', 'ㄞ':'k-9', 'ㄟ':'k-o', 'ㄠ':'k-l', 'ㄡ':'k-.', 'ㄢ':'k-0', 'ㄣ':'k-p', 'ㄤ':'k-[', 'ㄥ':'k-;', 'ㄦ':'k--', 'ˇ':'k-3', 'ˋ':'k-4', 'ˊ':'k-6', '˙':'k-space', ' ':'k-space'
         };
 
-        const questionPools = {
-            3: { // 三年級
+        // --- 📚 超巨量緊湊字串題庫 (用函數解析以節省空間) 📚 ---
+        // 格式 EN: "target|hint|emoji"
+        // 格式 ZH: "target|zhuyin1,zhuyin2|hint|emoji"
+        const rawPools = {
+            3: {
                 easy: {
                     en: [
-                        { target: 'a', hint: '左手小指放的地方喔！', emoji: '🍎' }, { target: 'b', hint: 'f 鍵往右下的地方。', emoji: '🐻' },
-                        { target: 'c', hint: 'd 鍵往下的地方。', emoji: '🐱' }, { target: 'd', hint: '左手中指放的地方喔！', emoji: '🐶' },
-                        { target: 'e', hint: 'd 鍵往上的地方。', emoji: '🐘' }, { target: 'f', hint: '左手食指的家喔！', emoji: '👆' },
-                        { target: 'g', hint: 'f 鍵往右的地方。', emoji: '🦒' }, { target: 'h', hint: 'j 鍵往左的地方。', emoji: '🐴' },
-                        { target: 'i', hint: 'k 鍵往上的地方。', emoji: '🍦' }, { target: 'j', hint: '右手食指的家喔！', emoji: '👇' },
-                        { target: 'k', hint: '右手中指放的地方喔！', emoji: '🪁' }, { target: 'l', hint: '右手無名指放的地方喔！', emoji: '🍋' },
-                        { target: 'm', hint: 'j 鍵往右下的地方。', emoji: '🐭' }, { target: 'n', hint: 'j 鍵往左下的地方。', emoji: '🥜' },
-                        { target: 'o', hint: 'l 鍵往上的地方。', emoji: '🐙' }, { target: 'p', hint: '右手小指往上按。', emoji: '🐷' },
-                        { target: 'q', hint: 'a 鍵往上的地方。', emoji: '👑' }, { target: 'r', hint: 'f 鍵往上的地方。', emoji: '🚀' },
-                        { target: 's', hint: '左手無名指放的地方喔！', emoji: '🐍' }, { target: 't', hint: 'f 鍵往右上的地方。', emoji: '🐢' },
-                        { target: 'u', hint: 'j 鍵往上的地方。', emoji: '☂️' }, { target: 'v', hint: 'f 鍵往右下的地方。', emoji: '🚐' },
-                        { target: 'w', hint: 's 鍵往上的地方。', emoji: '🍉' }, { target: 'x', hint: 's 鍵往下的地方。', emoji: '✖️' },
-                        { target: 'y', hint: 'j 鍵往左上的地方。', emoji: '🪀' }, { target: 'z', hint: 'a 鍵往右下的地方。', emoji: '🦓' }
+                        "a|左手小指|🍎", "b|f鍵往右下|🐻", "c|d鍵往下|🐱", "d|左手中指|🐶", "e|d鍵往上|🐘", 
+                        "f|左手食指|👆", "g|f鍵往右|🦒", "h|j鍵往左|🐴", "i|k鍵往上|🍦", "j|右手食指|👇", 
+                        "k|右手中指|🪁", "l|右手無名指|🍋", "m|j鍵往右下|🐭", "n|j鍵往左下|🥜", "o|l鍵往上|🐙", 
+                        "p|右手小指往上|🐷", "q|a鍵往上|👑", "r|f鍵往上|🚀", "s|左手無名指|🐍", "t|f鍵往右上|🐢", 
+                        "u|j鍵往上|☂️", "v|f鍵往右下|🚐", "w|s鍵往上|🍉", "x|s鍵往下|✖️", "y|j鍵往左上|🪀", 
+                        "z|a鍵往右下|🦓", "cat|小貓|🐱", "dog|小狗|🐶", "pig|小豬|🐷", "cow|乳牛|🐮",
+                        "sun|太陽|☀️", "toy|玩具|🧸", "box|箱子|📦", "boy|男孩|👦", "car|車子|🚗",
+                        "map|地圖|🗺️", "red|紅色|🔴", "pen|筆|🖊️", "cup|杯子|🥤", "hat|帽子|🧢",
+                        "run|跑|🏃", "sit|坐下|🪑", "fly|飛|🦅", "bug|蟲子|🐛", "bus|公車|🚌",
+                        "dot|點|🔘", "fox|狐狸|🦊", "gum|口香糖|🍬", "hop|跳|🐇", "jar|罐子|🫙"
                     ],
                     zh: [
-                        { target: '你好', zhuyin: ['ㄋㄧˇ', 'ㄏㄠˇ'], hint: '很有禮貌的打招呼！', emoji: '👋' },
-                        { target: '早安', zhuyin: ['ㄗㄠˇ', 'ㄢ'], hint: '每天早上都要有精神地說喔！', emoji: '🌅' },
-                        { target: '謝謝', zhuyin: ['ㄒㄧㄝˋ', 'ㄒㄧㄝ˙'], hint: '別人幫忙你要記得說喔！', emoji: '🙏' },
-                        { target: '老師', zhuyin: ['ㄌㄠˇ', 'ㄕ'], hint: '要認真上課喔！', emoji: '👩‍🏫' },
-                        { target: '同學', zhuyin: ['ㄊㄨㄥˊ', 'ㄒㄩㄝˊ'], hint: '一起學習的好夥伴。', emoji: '👦' },
-                        { target: '小貓', zhuyin: ['ㄒㄧㄠˇ', 'ㄇㄠ'], hint: '喵喵叫的小動物。', emoji: '🐱' },
-                        { target: '小狗', zhuyin: ['ㄒㄧㄠˇ', 'ㄍㄡˇ'], hint: '汪汪叫的小動物。', emoji: '🐶' },
-                        { target: '蘋果', zhuyin: ['ㄆㄧㄥˊ', 'ㄍㄨㄛˇ'], hint: '紅紅的水果。', emoji: '🍎' },
-                        { target: '香蕉', zhuyin: ['ㄒㄧㄤ', 'ㄐㄧㄠ'], hint: '彎彎的黃色水果。', emoji: '🍌' },
-                        { target: '西瓜', zhuyin: ['ㄒㄧ', 'ㄍㄨㄚ'], hint: '夏天吃最棒了。', emoji: '🍉' },
-                        { target: '快樂', zhuyin: ['ㄎㄨㄞˋ', 'ㄌㄜˋ'], hint: '每天都要開開心心。', emoji: '😄' },
-                        { target: '大家', zhuyin: ['ㄉㄚˋ', 'ㄐㄧㄚ'], hint: '我們都是好朋友。', emoji: '👨‍👩‍👧‍👦' },
-                        { target: '朋友', zhuyin: ['ㄆㄥˊ', 'ㄧㄡˇ'], hint: '好朋友一起玩。', emoji: '🤝' },
-                        { target: '太陽', zhuyin: ['ㄊㄞˋ', 'ㄧㄤˊ'], hint: '白天在天上發光。', emoji: '☀️' },
-                        { target: '月亮', zhuyin: ['ㄩㄝˋ', 'ㄌㄧㄤˋ'], hint: '晚上在天上發光。', emoji: '🌙' }
+                        "ㄅ|左上角|🍞", "ㄆ|q位置|🍇", "ㄇ|a鍵的上面|🐱", "ㄈ|z的位置|🚁", "ㄉ|數字2|🎂",
+                        "ㄊ|w的位置|🍑", "ㄋ|s的位置|🐦", "ㄌ|x的位置|🎁", "ㄍ|e的位置|🐶", "ㄎ|d的位置|👖",
+                        "ㄏ|c的位置|🐵", "ㄐ|r的位置|🐔", "ㄑ|f的位置|🐧", "ㄒ|v的位置|🍉", "ㄓ|數字5|🕷️",
+                        "ㄔ|t的位置|🚗", "ㄕ|g的位置|🦁", "ㄖ|b的位置|🌞", "ㄗ|y的位置|🪀", "ㄘ|h的位置|🧲",
+                        "ㄙ|n的位置|🧵", "ㄧ|u的位置|🦆", "ㄨ|j的位置|🐢", "ㄩ|m的位置|🐟", "ㄚ|數字8|🦆",
+                        "ㄛ|i的位置|🍩", "ㄜ|k的位置|🦢", "ㄝ|,的位置|🍃", "ㄞ|數字9|❤️", "ㄟ|o的位置|🛸",
+                        "ㄠ|l的位置|🐈", "ㄡ|.的位置|🧅", "ㄢ|數字0|🐜", "ㄣ|p的位置|🪱", "ㄤ|[的位置|🦅",
+                        "ㄥ|;的位置|🦅", "ㄦ|-的位置|👂", "一|ㄧ|數字一|1️⃣", "二|ㄦˋ|數字二|2️⃣", "三|ㄙㄢ|數字三|3️⃣",
+                        "四|ㄙˋ|數字四|4️⃣", "五|ㄨˇ|數字五|5️⃣", "六|ㄌㄧㄡˋ|數字六|6️⃣", "七|ㄑㄧ|數字七|7️⃣", "八|ㄅㄚ|數字八|8️⃣",
+                        "九|ㄐㄧㄡˇ|數字九|9️⃣", "十|ㄕˊ|數字十|🔟", "上|ㄕㄤˋ|上面|⬆️", "下|ㄒㄧㄚˋ|下面|⬇️", "左|ㄗㄨㄛˇ|左邊|⬅️"
                     ]
                 },
                 medium: {
                     en: [
-                        { target: 'cat', hint: '小貓的英文。慢慢打喔！', emoji: '🐱' }, { target: 'dog', hint: '小狗的英文。', emoji: '🐶' },
-                        { target: 'pig', hint: '小豬的英文。', emoji: '🐷' }, { target: 'cow', hint: '乳牛的英文。', emoji: '🐮' },
-                        { target: 'sun', hint: '太陽的英文。', emoji: '☀️' }, { target: 'moon', hint: '月亮的英文。', emoji: '🌙' },
-                        { target: 'star', hint: '星星的英文。', emoji: '⭐' }, { target: 'sky', hint: '天空的英文。', emoji: '☁️' },
-                        { target: 'tree', hint: '樹的英文。', emoji: '🌳' }, { target: 'book', hint: '書的英文。', emoji: '📖' },
-                        { target: 'bird', hint: '小鳥的英文。', emoji: '🐦' }, { target: 'fish', hint: '魚的英文。', emoji: '🐟' },
-                        { target: 'blue', hint: '藍色的英文。', emoji: '🔵' }, { target: 'red', hint: '紅色的英文。', emoji: '🔴' },
-                        { target: 'apple', hint: '蘋果的英文。', emoji: '🍎' }, { target: 'pen', hint: '筆的英文。', emoji: '🖊️' },
-                        { target: 'cup', hint: '杯子的英文。', emoji: '🥤' }, { target: 'hat', hint: '帽子的英文。', emoji: '🧢' },
-                        { target: 'boy', hint: '男孩的英文。', emoji: '👦' }, { target: 'girl', hint: '女孩的英文。', emoji: '👧' }
+                        "book|書|📖", "desk|桌子|🪑", "bird|鳥|🐦", "fish|魚|🐟", "blue|藍色|🔵",
+                        "star|星星|⭐", "moon|月亮|🌙", "tree|樹|🌳", "leaf|葉子|🍃", "girl|女孩|👧",
+                        "jump|跳躍|🏃", "walk|走路|🚶", "milk|牛奶|🥛", "cake|蛋糕|🍰", "door|門|🚪",
+                        "room|房間|🏠", "hand|手|🖐️", "face|臉|🙂", "nose|鼻子|👃", "bear|熊|🐻",
+                        "lion|獅子|🦁", "duck|鴨子|🦆", "frog|青蛙|🐸", "kiwi|奇異果|🥝", "plum|李子|🍑",
+                        "pear|梨子|🍐", "corn|玉米|🌽", "bean|豆子|🫘", "rice|米飯|🍚", "soup|湯|🍲",
+                        "meat|肉|🥩", "beef|牛肉|🥩", "bowl|碗|🥣", "fork|叉子|🍴", "spoon|湯匙|🥄",
+                        "dish|盤子|🍽️", "mug|馬克杯|☕", "glass|玻璃杯|🥛", "juice|果汁|🧃", "water|水|💧",
+                        "tea|茶|🍵", "ice|冰|🧊", "snow|雪|❄️", "rain|雨|🌧️", "wind|風|💨",
+                        "fire|火|🔥", "wood|木頭|🪵", "rock|石頭|🪨", "gold|金子|🥇", "sand|沙子|🏖️"
                     ],
                     zh: [
-                        { target: '學校', zhuyin: ['ㄒㄩㄝˊ', 'ㄒㄧㄠˋ'], hint: '我們都在東湖國小學習。', emoji: '🏫' },
-                        { target: '天氣', zhuyin: ['ㄊㄧㄢ', 'ㄑㄧˋ'], hint: '今天出大太陽。', emoji: '⛅' },
-                        { target: '看書', zhuyin: ['ㄎㄢˋ', 'ㄕㄨ'], hint: '可以學到很多知識。', emoji: '📖' },
-                        { target: '好玩', zhuyin: ['ㄏㄠˇ', 'ㄨㄢˊ'], hint: '打字小冒險真有趣。', emoji: '🎠' },
-                        { target: '遊戲', zhuyin: ['ㄧㄡˊ', 'ㄒㄧˋ'], hint: '打完字就可以玩囉！', emoji: '🎮' },
-                        { target: '吃飯', zhuyin: ['ㄔ', 'ㄈㄢˋ'], hint: '肚子餓了要吃飽。', emoji: '🍚' },
-                        { target: '睡覺', zhuyin: ['ㄕㄨㄟˋ', 'ㄐㄧㄠˋ'], hint: '很晚了要休息。', emoji: '💤' },
-                        { target: '起床', zhuyin: ['ㄑㄧˇ', 'ㄔㄨㄤˊ'], hint: '太陽曬屁股囉。', emoji: '🛏️' },
-                        { target: '星星', zhuyin: ['ㄒㄧㄥ', 'ㄒㄧㄥ'], hint: '一閃一閃亮晶晶。', emoji: '⭐' },
-                        { target: '天空', zhuyin: ['ㄊㄧㄢ', 'ㄎㄨㄥ'], hint: '藍色的很大。', emoji: '☁️' },
-                        { target: '白雲', zhuyin: ['ㄅㄞˊ', 'ㄩㄣˊ'], hint: '像棉花糖一樣。', emoji: '☁️' },
-                        { target: '鉛筆', zhuyin: ['ㄑㄧㄢ', 'ㄅㄧˇ'], hint: '寫字的好幫手。', emoji: '✏️' },
-                        { target: '書包', zhuyin: ['ㄕㄨ', 'ㄅㄠ'], hint: '裝滿課本。', emoji: '🎒' },
-                        { target: '教室', zhuyin: ['ㄐㄧㄠˋ', 'ㄕˋ'], hint: '上課的地方。', emoji: '🏫' },
-                        { target: '可以', zhuyin: ['ㄎㄜˇ', 'ㄧˇ'], hint: '你一定辦得到！', emoji: '⭕' }
+                        "你好|ㄋㄧˇ,ㄏㄠˇ|打招呼|👋", "謝謝|ㄒㄧㄝˋ,ㄒㄧㄝ˙|感謝|🙏", "早安|ㄗㄠˇ,ㄢ|早上好|🌅", "老師|ㄌㄠˇ,ㄕ|教書的人|👩‍🏫", "同學|ㄊㄨㄥˊ,ㄒㄩㄝˊ|一起上課|👦",
+                        "朋友|ㄆㄥˊ,ㄧㄡˇ|好夥伴|🤝", "學校|ㄒㄩㄝˊ,ㄒㄧㄠˋ|上學的地方|🏫", "教室|ㄐㄧㄠˋ,ㄕˋ|上課的地方|🏫", "蘋果|ㄆㄧㄥˊ,ㄍㄨㄛˇ|紅水果|🍎", "香蕉|ㄒㄧㄤ,ㄐㄧㄠ|黃水果|🍌",
+                        "西瓜|ㄒㄧ,ㄍㄨㄚ|夏天吃|🍉", "鉛筆|ㄑㄧㄢ,ㄅㄧˇ|寫字用|✏️", "書包|ㄕㄨ,ㄅㄠ|裝書用|🎒", "小貓|ㄒㄧㄠˇ,ㄇㄠ|喵喵叫|🐱", "小狗|ㄒㄧㄠˇ,ㄍㄡˇ|汪汪叫|🐶",
+                        "小鳥|ㄒㄧㄠˇ,ㄋㄧㄠˇ|天上飛|🐦", "太陽|ㄊㄞˋ,ㄧㄤˊ|白天發光|☀️", "月亮|ㄩㄝˋ,ㄌㄧㄤˋ|晚上發光|🌙", "星星|ㄒㄧㄥ,ㄒㄧㄥ|亮晶晶|⭐", "天空|ㄊㄧㄢ,ㄎㄨㄥ|藍色的|☁️",
+                        "白雲|ㄅㄞˊ,ㄩㄣˊ|棉花糖|☁️", "小草|ㄒㄧㄠˇ,ㄘㄠˇ|綠色的|🌿", "小花|ㄒㄧㄠˇ,ㄏㄨㄚ|香香的|🌸", "快樂|ㄎㄨㄞˋ,ㄌㄜˋ|開心|😄", "開心|ㄎㄞ,ㄒㄧㄣ|快樂|😊",
+                        "唱歌|ㄔㄤˋ,ㄍㄜ|用麥克風|🎤", "跳舞|ㄊㄧㄠˋ,ㄨˇ|活動身體|💃", "畫畫|ㄏㄨㄚˋ,ㄏㄨㄚˋ|用彩色筆|🎨", "看書|ㄎㄢˋ,ㄕㄨ|閱讀|📖", "寫字|ㄒㄧㄝˇ,ㄗˋ|用筆|✍️",
+                        "吃飯|ㄔ,ㄈㄢˋ|吃飽飽|🍚", "喝水|ㄏㄜ,ㄕㄨㄟˇ|解渴|💧", "洗手|ㄒㄧˇ,ㄕㄡˇ|變乾淨|🧼", "起床|ㄑㄧˇ,ㄔㄨㄤˊ|不賴床|🛏️", "睡覺|ㄕㄨㄟˋ,ㄐㄧㄠˋ|休息|💤",
+                        "遊戲|ㄧㄡˊ,ㄒㄧˋ|玩耍|🎮", "操場|ㄘㄠ,ㄔㄤˇ|跑步|🏃", "滑梯|ㄏㄨㄚˊ,ㄊㄧ|溜下去|🛝", "單車|ㄉㄢ,ㄔㄜ|騎腳踏車|🚲", "紅色|ㄏㄨㄥˊ,ㄙㄜˋ|顏色|🔴",
+                        "藍色|ㄌㄢˊ,ㄙㄜˋ|顏色|🔵", "黃色|ㄏㄨㄤˊ,ㄙㄜˋ|顏色|🟡", "綠色|ㄌㄩˋ,ㄙㄜˋ|顏色|🟢", "黑色|ㄏㄟ,ㄙㄜˋ|顏色|⚫", "白色|ㄅㄞˊ,ㄙㄜˋ|顏色|⚪",
+                        "爸爸|ㄅㄚˋ,ㄅㄚ˙|家人|👨", "媽媽|ㄇㄚ,ㄇㄚ˙|家人|👩", "哥哥|ㄍㄜ,ㄍㄜ˙|家人|👦", "姊姊|ㄐㄧㄝˇ,ㄐㄧㄝ˙|家人|👧", "弟弟|ㄉㄧˋ,ㄉㄧ˙|家人|👶"
                     ]
                 },
                 hard: {
                     en: [
-                        { target: 'hello', hint: 'h 在右手食指往左。', emoji: '👋' }, { target: 'world', hint: 'w 在左手無名指往上。', emoji: '🌍' },
-                        { target: 'good', hint: 'g 在左手食指往右。', emoji: '👍' }, { target: 'morning', hint: '早安的英文。', emoji: '🌅' },
-                        { target: 'school', hint: '學校的英文。', emoji: '🏫' }, { target: 'teacher', hint: '老師的英文。', emoji: '👩‍🏫' },
-                        { target: 'student', hint: '學生的英文。', emoji: '🎒' }, { target: 'happy', hint: '開心的英文。', emoji: '😄' },
-                        { target: 'yellow', hint: '黃色的英文。', emoji: '🟨' }, { target: 'friend', hint: '朋友的英文。', emoji: '🤝' },
-                        { target: 'family', hint: '家人的英文。', emoji: '👨‍👩‍👧‍👦' }, { target: 'water', hint: '水的英文。', emoji: '💧' },
-                        { target: 'music', hint: '音樂的英文。', emoji: '🎵' }, { target: 'candy', hint: '糖果的英文。', emoji: '🍬' },
-                        { target: 'color', hint: '顏色的英文。', emoji: '🎨' }
+                        "school|學校|🏫", "teacher|老師|👩‍🏫", "student|學生|🎒", "friend|朋友|🤝", "family|家人|👨‍👩‍👧‍👦",
+                        "animal|動物|🦁", "monkey|猴子|🐒", "rabbit|兔子|🐇", "yellow|黃色|🟨", "green|綠色|🟩",
+                        "purple|紫色|🟪", "orange|橘色|🟧", "black|黑色|⬛", "white|白色|⬜", "mother|媽媽|👩",
+                        "father|爸爸|👨", "sister|姊姊妹妹|👧", "brother|哥哥弟弟|👦", "spring|春天|🌸", "summer|夏天|☀️",
+                        "autumn|秋天|🍁", "winter|冬天|⛄", "morning|早上|🌅", "evening|傍晚|🌇", "flower|花|🌺",
+                        "garden|花園|🏡", "market|市場|🛒", "office|辦公室|🏢", "doctor|醫生|👨‍⚕️", "police|警察|👮",
+                        "driver|司機|🚌", "singer|歌手|🎤", "dancer|舞者|💃", "farmer|農夫|🧑‍🌾", "player|玩家|🎮",
+                        "worker|工人|👷", "cloudy|多雲|☁️", "sunny|晴天|☀️", "rainy|下雨|🌧️", "windy|颳風|💨",
+                        "snowy|下雪|❄️", "warm|溫暖|🌡️", "cold|寒冷|🥶", "tiger|老虎|🐯", "panda|熊貓|🐼",
+                        "horse|馬|🐴", "sheep|綿羊|🐑", "snake|蛇|🐍", "zebra|斑馬|🦓", "camel|駱駝|🐪"
                     ],
                     zh: [
-                        { target: '櫻桃小丸子', zhuyin: ['ㄧㄥ', 'ㄊㄠˊ', 'ㄒㄧㄠˇ', 'ㄨㄢˊ', 'ㄗ˙'], hint: '卡通人物。', emoji: '👧' },
-                        { target: '蔡阿嘎', zhuyin: ['ㄘㄞˋ', 'ㄚ', 'ㄍㄚ'], hint: '搞笑YouTuber。', emoji: '🎥' },
-                        { target: '蔡依林', zhuyin: ['ㄘㄞˋ', 'ㄧ', 'ㄌㄧㄣˊ'], hint: '知名女歌手。', emoji: '💃' },
-                        { target: '阿滴日常', zhuyin: ['ㄚ', 'ㄉㄧ', 'ㄖˋ', 'ㄔㄤˊ'], hint: '教英文的YouTuber。', emoji: '📚' },
-                        { target: '林俊傑', zhuyin: ['ㄌㄧㄣˊ', 'ㄐㄩㄣˋ', 'ㄐㄧㄝˊ'], hint: '唱歌很好聽的歌手。', emoji: '🎹' },
-                        { target: '泰勒絲', zhuyin: ['ㄊㄞˋ', 'ㄌㄜˋ', 'ㄙ'], hint: '外國知名歌手。', emoji: '👱‍♀️' },
-                        { target: '告五人', zhuyin: ['ㄍㄠˋ', 'ㄨˇ', 'ㄖㄣˊ'], hint: '好聽的樂團。', emoji: '🍈' },
-                        { target: '啾啾鞋', zhuyin: ['ㄐㄧㄡ', 'ㄐㄧㄡ', 'ㄒㄧㄝˊ'], hint: '介紹冷知識的YouTuber。', emoji: '👞' },
-                        { target: '星之卡比', zhuyin: ['ㄒㄧㄥ', 'ㄓ', 'ㄎㄚˇ', 'ㄅㄧˇ'], hint: '粉紅色圓圓的。', emoji: '🌟' },
-                        { target: '皮卡丘', zhuyin: ['ㄆㄧˊ', 'ㄎㄚˇ', 'ㄑㄧㄡ'], hint: '十萬伏特！', emoji: '⚡' },
-                        { target: '我愛你', zhuyin: ['ㄨㄛˇ', 'ㄞˋ', 'ㄋㄧˇ'], hint: '溫暖的話。', emoji: '❤️' }
+                        "機器人|ㄐㄧ,ㄑㄧˋ,ㄖㄣˊ|高科技|🤖", "恐龍|ㄎㄨㄥˇ,ㄌㄨㄥˊ|古代生物|🦖", "長頸鹿|ㄔㄤˊ,ㄐㄧㄥˇ,ㄌㄨˋ|脖子很長|🦒", "動物園|ㄉㄨㄥˋ,ㄨˋ,ㄩㄢˊ|看動物|🐘", "遊樂園|ㄧㄡˊ,ㄌㄜˋ,ㄩㄢˊ|玩雲霄飛車|🎢",
+                        "冰淇淋|ㄅㄧㄥ,ㄑㄧˊ,ㄌㄧㄣˊ|夏天吃|🍦", "巧克力|ㄑㄧㄠˇ,ㄎㄜˋ,ㄌㄧˋ|甜點|🍫", "漢堡|ㄏㄢˋ,ㄅㄠˇ|速食|🍔", "薯條|ㄕㄨˇ,ㄊㄧㄠˊ|炸的|🍟", "炸雞|ㄓㄚˋ,ㄐㄧ|脆脆的|🍗",
+                        "披薩|ㄆㄧ,ㄙㄚˋ|圓圓的|🍕", "蛋糕|ㄉㄢˋ,ㄍㄠ|生日吃|🎂", "餅乾|ㄅㄧㄥˇ,ㄍㄢ|零食|🍪", "糖果|ㄊㄤˊ,ㄍㄨㄛˇ|甜甜的|🍬", "果汁|ㄍㄨㄛˇ,ㄓ|喝的|🧃",
+                        "牛奶|ㄋㄧㄡˊ,ㄋㄞˇ|喝的|🥛", "豆漿|ㄉㄡˋ,ㄐㄧㄤ|配油條|🥛", "奶茶|ㄋㄞˇ,ㄔㄚˊ|好喝|🧋", "紅茶|ㄏㄨㄥˊ,ㄔㄚˊ|飲料|☕", "綠茶|ㄌㄩˋ,ㄔㄚˊ|飲料|🍵",
+                        "麥茶|ㄇㄞˋ,ㄔㄚˊ|解渴|🍵", "春天|ㄔㄨㄣ,ㄊㄧㄢ|開花|🌸", "夏天|ㄒㄧㄚˋ,ㄊㄧㄢ|很熱|☀️", "秋天|ㄑㄧㄡ,ㄊㄧㄢ|落葉|🍁", "冬天|ㄉㄨㄥ,ㄊㄧㄢ|很冷|⛄",
+                        "早上|ㄗㄠˇ,ㄕㄤˋ|起床|🌅", "中午|ㄓㄨㄥ,ㄨˇ|吃飯|☀️", "晚上|ㄨㄢˇ,ㄕㄤˋ|睡覺|🌙", "昨天|ㄗㄨㄛˊ,ㄊㄧㄢ|過去|🔙", "今天|ㄐㄧㄣ,ㄊㄧㄢ|現在|🔄",
+                        "明天|ㄇㄧㄥˊ,ㄊㄧㄢ|未來|🔜", "星期一|ㄒㄧㄥ,ㄑㄧˊ,ㄧ|上學第一天|📅", "星期二|ㄒㄧㄥ,ㄑㄧˊ,ㄦˋ|上學|📅", "星期三|ㄒㄧㄥ,ㄑㄧˊ,ㄙㄢ|半天|📅", "星期四|ㄒㄧㄥ,ㄑㄧˊ,ㄙˋ|上學|📅",
+                        "星期五|ㄒㄧㄥ,ㄑㄧˊ,ㄨˇ|快放假了|📅", "星期六|ㄒㄧㄥ,ㄑㄧˊ,ㄌㄧㄡˋ|放假囉|🎉", "星期天|ㄒㄧㄥ,ㄑㄧˊ,ㄊㄧㄢ|準備收心|🎒", "數學|ㄕㄨˋ,ㄒㄩㄝˊ|算數字|🔢", "國語|ㄍㄨㄛˊ,ㄩˇ|讀課文|📖",
+                        "英文|ㄧㄥ,ㄨㄣˊ|ABC|🔤", "音樂|ㄧㄣ,ㄩㄝˋ|唱歌|🎵", "美勞|ㄇㄟˇ,ㄌㄠˊ|畫畫|🎨", "體育|ㄊㄧˇ,ㄩˋ|運動|⚽", "電腦|ㄉㄧㄢˋ,ㄋㄠˇ|打字|💻",
+                        "閱讀|ㄩㄝˋ,ㄉㄨˊ|看書|📚", "畫布|ㄏㄨㄚˋ,ㄅㄨˋ|畫畫用|🖼️", "水彩|ㄕㄨㄟˇ,ㄘㄞˇ|顏料|🎨", "剪刀|ㄐㄧㄢˇ,ㄉㄠ|剪紙|✂️", "膠水|ㄐㄧㄠ,ㄕㄨㄟˇ|黏東西|💧"
                     ]
                 }
             },
-            4: { // 四年級
+            4: { // 四年級 (課本常見圈詞 3 字以內)
                 easy: {
                     en: [
-                        { target: 'mario', hint: '瑪利歐的英文。', emoji: '🍄' }, { target: 'kirby', hint: '星之卡比的英文。', emoji: '🌟' },
-                        { target: 'apple', hint: '蘋果的英文。', emoji: '🍎' }, { target: 'water', hint: '水的英文。', emoji: '💧' },
-                        { target: 'green', hint: '綠色的英文。', emoji: '🟩' }, { target: 'yellow', hint: '黃色的英文。', emoji: '🟨' },
-                        { target: 'happy', hint: '開心的英文。', emoji: '😄' }, { target: 'tiger', hint: '老虎的英文。', emoji: '🐯' },
-                        { target: 'music', hint: '音樂的英文。', emoji: '🎵' }, { target: 'piano', hint: '鋼琴的英文。', emoji: '🎹' },
-                        { target: 'candy', hint: '糖果的英文。', emoji: '🍬' }, { target: 'house', hint: '房子的英文。', emoji: '🏠' },
-                        { target: 'dance', hint: '跳舞的英文。', emoji: '💃' }, { target: 'smile', hint: '微笑的英文。', emoji: '😊' },
-                        { target: 'cloud', hint: '雲朵的英文。', emoji: '☁️' }, { target: 'snake', hint: '蛇的英文。', emoji: '🐍' },
-                        { target: 'zoro', hint: '索隆的英文。', emoji: '⚔️' }, { target: 'luffy', hint: '魯夫的英文。', emoji: '🏴‍☠️' },
-                        { target: 'youtube', hint: '看影片的網站。', emoji: '▶️' }, { target: 'singer', hint: '歌手的英文。', emoji: '🎤' }
+                        "mario|瑪利歐|🍄", "kirby|星之卡比|🌟", "apple|蘋果|🍎", "water|水|💧", "green|綠色|🟩",
+                        "yellow|黃色|🟨", "happy|開心|😄", "tiger|老虎|🐯", "music|音樂|🎵", "piano|鋼琴|🎹",
+                        "candy|糖果|🍬", "house|房子|🏠", "dance|跳舞|💃", "smile|微笑|😊", "cloud|雲朵|☁️",
+                        "snake|蛇|🐍", "zoro|索隆|⚔️", "luffy|魯夫|🏴‍☠️", "youtube|看影片|▶️", "singer|歌手|🎤",
+                        "sonic|音速小子|🦔", "zelda|薩爾達|👑", "peach|碧姬公主|👑", "daisy|黛西公主|🌼", "yoshi|耀西|🦖",
+                        "toad|奇諾比奧|🍄", "luigi|路易吉|👨‍🔧", "bowser|庫巴|🐢", "robot|機器人|🤖", "alien|外星人|👽",
+                        "magic|魔法|🪄", "sword|劍|🗡️", "shield|盾牌|🛡️", "potion|藥水|🧪", "coin|硬幣|🪙",
+                        "level|等級|📈", "stage|關卡|🏁", "boss|魔王|👹", "hero|英雄|🦸", "party|隊伍|🎉",
+                        "clan|公會|🛡️", "guild|公會|🔰", "team|團隊|🤝", "match|比賽|⚔️", "score|分數|💯",
+                        "rank|排名|🏆", "star|星星|⭐", "point|點數|🎯", "time|時間|⏱️", "win|勝利|🏅"
                     ],
                     zh: [
-                        { target: '麥塊', zhuyin: ['ㄇㄞˋ', 'ㄎㄨㄞˋ'], hint: '大家最愛的方塊遊戲。', emoji: '🧱' },
-                        { target: '動森', zhuyin: ['ㄉㄨㄥˋ', 'ㄙㄣ'], hint: '在無人島建村。', emoji: '🏝️' },
-                        { target: '柯南', zhuyin: ['ㄎㄜ', 'ㄋㄢˊ'], hint: '真相永遠只有一個。', emoji: '🕵️' },
-                        { target: '魯夫', zhuyin: ['ㄌㄨˇ', 'ㄈㄨ'], hint: '海賊王！', emoji: '🏴‍☠️' },
-                        { target: '鳴人', zhuyin: ['ㄇㄧㄥˊ', 'ㄖㄣˊ'], hint: '火影忍者！', emoji: '🍥' },
-                        { target: '皮卡丘', zhuyin: ['ㄆㄧˊ', 'ㄎㄚˇ', 'ㄑㄧㄡ'], hint: '黃色電擊鼠。', emoji: '⚡' },
-                        { target: '胖丁', zhuyin: ['ㄆㄤˋ', 'ㄉㄧㄥ'], hint: '愛唱歌的粉紅寶可夢。', emoji: '🎤' },
-                        { target: '卡比', zhuyin: ['ㄎㄚˇ', 'ㄅㄧˇ'], hint: '粉紅色圓圓的。', emoji: '🌟' },
-                        { target: '老高', zhuyin: ['ㄌㄠˇ', 'ㄍㄠ'], hint: '講故事的YouTuber。', emoji: '👽' },
-                        { target: '阿神', zhuyin: ['ㄚ', 'ㄕㄣˊ'], hint: '玩遊戲的YouTuber。', emoji: '🎮' },
-                        { target: '瑪利歐', zhuyin: ['ㄇㄚˇ', 'ㄌㄧˋ', 'ㄡ'], hint: '最紅的水管工。', emoji: '🍄' },
-                        { target: '庫巴', zhuyin: ['ㄎㄨˋ', 'ㄅㄚ'], hint: '瑪利歐的敵人。', emoji: '🐢' },
-                        { target: '吉伊', zhuyin: ['ㄐㄧˊ', 'ㄧ'], hint: '又小又可愛的傢伙！', emoji: '🐹' },
-                        { target: '烏薩奇', zhuyin: ['ㄨ', 'ㄙㄚˋ', 'ㄑㄧˊ'], hint: '呀哈！黃色的兔子。', emoji: '🐰' },
-                        { target: '小八', zhuyin: ['ㄒㄧㄠˇ', 'ㄅㄚ'], hint: '藍白小貓。', emoji: '📷' }
+                        "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|熱門方塊遊戲|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|在無人島建村|🏝️", "柯南|ㄎㄜ,ㄋㄢˊ|真相永遠只有一個|🕵️", "魯夫|ㄌㄨˇ,ㄈㄨ|海賊王|🏴‍☠️", "鳴人|ㄇㄧㄥˊ,ㄖㄣˊ|火影忍者|🍥",
+                        "皮卡丘|ㄆㄧˊ,ㄎㄚˇ,ㄑㄧㄡ|黃色電擊鼠|⚡", "胖丁|ㄆㄤˋ,ㄉㄧㄥ|愛唱歌的寶可夢|🎤", "卡比|ㄎㄚˇ,ㄅㄧˇ|粉紅色圓圓的|🌟", "老高|ㄌㄠˇ,ㄍㄠ|講故事的YouTuber|👽", "阿神|ㄚ,ㄕㄣˊ|玩遊戲的YouTuber|🎮",
+                        "瑪利歐|ㄇㄚˇ,ㄌㄧˋ,ㄡ|最紅的水管工|🍄", "庫巴|ㄎㄨˋ,ㄅㄚ|瑪利歐的敵人|🐢", "吉伊|ㄐㄧˊ,ㄧ|又小又可愛的傢伙|🐹", "烏薩奇|ㄨ,ㄙㄚˋ,ㄑㄧˊ|呀哈！黃色兔子|🐰", "小八|ㄒㄧㄠˇ,ㄅㄚ|藍白小貓|📷",
+                        "索隆|ㄙㄨㄛˇ,ㄌㄨㄥˊ|三刀流|⚔️", "香吉士|ㄒㄧㄤ,ㄐㄧˊ,ㄕˋ|廚師|🍳", "娜美|ㄋㄚˋ,ㄇㄟˇ|航海士|🗺️", "喬巴|ㄑㄧㄠˊ,ㄅㄚ|醫生|🦌", "羅賓|ㄌㄨㄛˊ,ㄅㄧㄣ|考古學家|📖",
+                        "炭治郎|ㄊㄢˋ,ㄓˋ,ㄌㄤˊ|鬼滅之刃主角|🎴", "禰豆子|ㄋㄧˇ,ㄉㄡˋ,ㄗ˙|咬著竹子|🎍", "善逸|ㄕㄢˋ,ㄧˋ|雷之呼吸|⚡", "伊之助|ㄧ,ㄓ,ㄓㄨˋ|豬頭|🐗", "杏壽郎|ㄒㄧㄥˋ,ㄕㄡˋ,ㄌㄤˊ|大哥沒有輸|🔥",
+                        "五條悟|ㄨˇ,ㄊㄧㄠˊ,ㄨˋ|無下限術式|🤞", "虎杖|ㄏㄨˇ,ㄓㄤˋ|吃下宿儺手指|👊", "伏黑|ㄈㄨˊ,ㄏㄟ|召喚玉犬|🐺", "釘崎|ㄉㄧㄥ,ㄑㄧˊ|使用鐵鎚|🔨", "宿儺|ㄙㄨˋ,ㄋㄨㄛˊ|詛咒之王|👹",
+                        "芙莉蓮|ㄈㄨˊ,ㄌㄧˋ,ㄌㄧㄢˊ|千年精靈|🧝‍♀️", "欣梅爾|ㄒㄧㄣ,ㄇㄟˊ,ㄦˇ|帥氣勇者|🗡️", "費倫|ㄈㄟˋ,ㄌㄨㄣˊ|魔法使|🪄", "艾冉|ㄞˋ,ㄖㄢˇ|矮人戰士|🪓", "海綿|ㄏㄞˇ,ㄇㄧㄢˊ|方塊褲|🧽",
+                        "派大星|ㄆㄞˋ,ㄉㄚˋ,ㄒㄧㄥ|海星|⭐", "珊迪|ㄕㄢ,ㄉㄧˊ|松鼠|🐿️", "蟹老闆|ㄒㄧㄝˋ,ㄌㄠˇ,ㄅㄢˇ|愛錢|🦀", "痞老闆|ㄆㄧˇ,ㄌㄠˇ,ㄅㄢˇ|小小的|🦠", "哆啦|ㄉㄨㄛ,ㄌㄚ|A夢|🐱",
+                        "大雄|ㄉㄚˋ,ㄒㄩㄥˊ|愛睡覺|😴", "靜香|ㄐㄧㄥˋ,ㄒㄧㄤ|愛洗澡|🛁", "胖虎|ㄆㄤˋ,ㄏㄨˇ|愛唱歌|🎤", "小夫|ㄒㄧㄠˇ,ㄈㄨ|有錢人|💰", "米奇|ㄇㄧˇ,ㄑㄧˊ|老鼠|🐭",
+                        "米妮|ㄇㄧˇ,ㄋㄧˊ|老鼠|🎀", "唐老鴨|ㄊㄤˊ,ㄌㄠˇ,ㄧㄚ|鴨子|🦆", "高飛|ㄍㄠ,ㄈㄟ|狗|🐕", "史迪奇|ㄕˇ,ㄉㄧˊ,ㄑㄧˊ|藍色外星人|👽", "蜘蛛人|ㄓ,ㄓㄨ,ㄖㄣˊ|超級英雄|🕸️"
                     ]
                 },
                 medium: {
                     en: [
-                        { target: 'computer', hint: '電腦的英文。', emoji: '💻' }, { target: 'keyboard', hint: '鍵盤的英文。', emoji: '⌨️' },
-                        { target: 'beautiful', hint: '美麗的英文。', emoji: '✨' }, { target: 'elephant', hint: '大象的英文。', emoji: '🐘' },
-                        { target: 'strawberry', hint: '草莓的英文。', emoji: '🍓' }, { target: 'chocolate', hint: '巧克力的英文。', emoji: '🍫' },
-                        { target: 'internet', hint: '網路的英文。', emoji: '🌐' }, { target: 'science', hint: '科學的英文。', emoji: '🔬' },
-                        { target: 'weather', hint: '天氣的英文。', emoji: '🌦️' }, { target: 'country', hint: '國家的英文。', emoji: '🗺️' },
-                        { target: 'library', hint: '圖書館的英文。', emoji: '📚' }, { target: 'picture', hint: '圖片的英文。', emoji: '🖼️' },
-                        { target: 'camera', hint: '相機的英文。', emoji: '📷' }, { target: 'window', hint: '窗戶的英文。', emoji: '🪟' },
-                        { target: 'morning', hint: '早上的英文。', emoji: '🌅' }, { target: 'teacher', hint: '老師的英文。', emoji: '👩‍🏫' }
+                        "computer|電腦|💻", "keyboard|鍵盤|⌨️", "beautiful|美麗的|✨", "elephant|大象|🐘", "strawberry|草莓|🍓",
+                        "chocolate|巧克力|🍫", "internet|網路|🌐", "science|科學|🔬", "weather|天氣|🌦️", "country|國家|🗺️",
+                        "library|圖書館|📚", "picture|圖片|🖼️", "camera|相機|📷", "window|窗戶|🪟", "morning|早上|🌅",
+                        "monitor|螢幕|🖥️", "mouse|滑鼠|🖱️", "screen|螢幕|📱", "speaker|喇叭|🔈", "tablet|平板|📱",
+                        "phone|手機|📱", "smart|聰明|🧠", "watch|手錶|⌚", "clock|時鐘|⏰", "board|板子|📋",
+                        "paper|紙張|📄", "pencil|鉛筆|✏️", "eraser|橡皮擦|🧽", "ruler|尺|📏", "marker|麥克筆|🖍️",
+                        "crayon|蠟筆|🖍️", "paint|顏料|🎨", "brush|刷子|🖌️", "color|顏色|🌈", "draw|畫畫|✍️",
+                        "sketch|素描|📝", "design|設計|📐", "photo|照片|📸", "image|圖片|🖼️", "video|影片|🎬",
+                        "audio|音訊|🎵", "sound|聲音|🔊", "record|錄音|⏺️", "play|播放|▶️", "pause|暫停|⏸️",
+                        "stop|停止|⏹️", "next|下一個|⏭️", "prev|上一個|⏮️", "start|開始|🏁", "end|結束|🛑"
                     ],
                     zh: [
-                        { target: '巧克力', zhuyin: ['ㄑㄧㄠˇ', 'ㄎㄜˋ', 'ㄌㄧˋ'], hint: '甜甜的零食。', emoji: '🍫' },
-                        { target: '草莓', zhuyin: ['ㄘㄠˇ', 'ㄇㄟˊ'], hint: '紅色的水果。', emoji: '🍓' },
-                        { target: '冰淇淋', zhuyin: ['ㄅㄧㄥ', 'ㄑㄧˊ', 'ㄌㄧㄣˊ'], hint: '夏天吃最涼快。', emoji: '🍦' },
-                        { target: '溜滑梯', zhuyin: ['ㄌㄧㄡ', 'ㄏㄨㄚˊ', 'ㄊㄧ'], hint: '公園裡好玩的設施。', emoji: '🛝' },
-                        { target: '腳踏車', zhuyin: ['ㄐㄧㄠˇ', 'ㄊㄚˋ', 'ㄔㄜ'], hint: '有兩個輪子。', emoji: '🚲' },
-                        { target: '捷運', zhuyin: ['ㄐㄧㄝˊ', 'ㄩㄣˋ'], hint: '台北很方便的交通工具。', emoji: '🚇' },
-                        { target: '公車', zhuyin: ['ㄍㄨㄥ', 'ㄔㄜ'], hint: '路上很大的車。', emoji: '🚌' },
-                        { target: '飛機', zhuyin: ['ㄈㄟ', 'ㄐㄧ'], hint: '在天空飛。', emoji: '✈️' },
-                        { target: '機器人', zhuyin: ['ㄐㄧ', 'ㄑㄧˋ', 'ㄖㄣˊ'], hint: '未來的科技。', emoji: '🤖' },
-                        { target: '恐龍', zhuyin: ['ㄎㄨㄥˇ', 'ㄌㄨㄥˊ'], hint: '很久以前的動物。', emoji: '🦖' },
-                        { target: '獅子', zhuyin: ['ㄕ', 'ㄗ˙'], hint: '草原上的國王。', emoji: '🦁' },
-                        { target: '老虎', zhuyin: ['ㄌㄠˇ', 'ㄏㄨˇ'], hint: '身上有條紋。', emoji: '🐯' },
-                        { target: '大象', zhuyin: ['ㄉㄚˋ', 'ㄒㄧㄤˋ'], hint: '有長長的鼻子。', emoji: '🐘' },
-                        { target: '長頸鹿', zhuyin: ['ㄔㄤˊ', 'ㄐㄧㄥˇ', 'ㄌㄨˋ'], hint: '脖子很長。', emoji: '🦒' },
-                        { target: '這群人', zhuyin: ['ㄓㄜˋ', 'ㄑㄩㄣˊ', 'ㄖㄣˊ'], hint: '經典YouTuber團體。', emoji: '🎬' }
+                        "鉛筆盒|ㄑㄧㄢ,ㄅㄧˇ,ㄏㄜˊ|裝筆的小盒子|✏️", "圖書館|ㄊㄨˊ,ㄕㄨ,ㄍㄨㄢˇ|借書的好地方|📚", "溜滑梯|ㄌㄧㄡ,ㄏㄨㄚˊ,ㄊㄧ|下課最愛去玩|🛝", "腳踏車|ㄐㄧㄠˇ,ㄊㄚˋ,ㄔㄜ|運動又環保|🚲", "連絡簿|ㄌㄧㄢˊ,ㄌㄨㄛˋ,ㄅㄨˋ|要給家長簽名|📒",
+                        "橡皮擦|ㄒㄧㄤˋ,ㄆㄧˊ,ㄘㄚ|擦掉寫錯的字|🧽", "筆記本|ㄅㄧˇ,ㄐㄧˋ,ㄅㄣˇ|上課寫重點|📓", "水壺|ㄕㄨㄟˇ,ㄏㄨˊ|要多喝水喔|💧", "運動會|ㄩㄣˋ,ㄉㄨㄥˋ,ㄏㄨㄟˋ|大家一起比賽|🏅", "便當盒|ㄅㄧㄢˋ,ㄉㄤ,ㄏㄜˊ|裝營養午餐|🍱",
+                        "彩色筆|ㄘㄞˇ,ㄙㄜˋ,ㄅㄧˇ|畫畫用很多顏色|🎨", "動物園|ㄉㄨㄥˋ,ㄨˋ,ㄩㄢˊ|有很多可愛動物|🐘", "遊樂園|ㄧㄡˊ,ㄌㄜˋ,ㄩㄢˊ|有雲霄飛車|🎢", "看電視|ㄎㄢˋ,ㄉㄧㄢˋ,ㄕˋ|回家休息看節目|📺", "打電腦|ㄉㄚˇ,ㄉㄧㄢˋ,ㄋㄠˇ|上資訊課囉|💻",
+                        "好朋友|ㄏㄠˇ,ㄆㄥˊ,ㄧㄡˇ|下課一起玩|🤝", "大樹|ㄉㄚˋ,ㄕㄨˋ|校園裡綠綠的植物|🌳", "小鳥|ㄒㄧㄠˇ,ㄋㄧㄠˇ|在天空飛的動物|🐦", "蝴蝶|ㄏㄨˊ,ㄉㄧㄝˊ|漂亮的小昆蟲|🦋", "黑板|ㄏㄟ,ㄅㄢˇ|老師寫字的地方|🏫",
+                        "粉筆|ㄈㄣˇ,ㄅㄧˇ|在黑板上寫字用的|🖍️", "操場|ㄘㄠ,ㄔㄤˇ|體育課跑步的地方|🏃", "同學|ㄊㄨㄥˊ,ㄒㄩㄝˊ|一起上課的朋友|👦", "考試|ㄎㄠˇ,ㄕˋ|測試你的學習|📝", "功課|ㄍㄨㄥ,ㄎㄜˋ|回家要認真寫|📖",
+                        "寫字|ㄒㄧㄝˇ,ㄗˋ|用筆記錄下來|✍️", "安靜|ㄢ,ㄐㄧㄥˋ|上課不要講話|🤫", "排隊|ㄆㄞˊ,ㄉㄨㄟˋ|要按照順序|🧍", "洗手|ㄒㄧˇ,ㄕㄡˇ|吃東西前要注意|🧼", "午餐|ㄨˇ,ㄘㄢ|中午吃的飯|🍱",
+                        "早餐|ㄗㄠˇ,ㄘㄢ|早上要吃飽|🍳", "晚餐|ㄨㄢˇ,ㄘㄢ|晚上和家人吃|🍲", "點心|ㄉㄧㄢˇ,ㄒㄧㄣ|下午茶時間|🧁", "宵夜|ㄒㄧㄠ,ㄧㄝˋ|睡前不要吃太多|🍜", "零食|ㄌㄧㄥˊ,ㄕˊ|好吃的東西|🍫",
+                        "餅乾|ㄅㄧㄥˇ,ㄍㄢ|脆脆的|🍪", "糖果|ㄊㄤˊ,ㄍㄨㄛˇ|甜甜的|🍬", "巧克力|ㄑㄧㄠˇ,ㄎㄜˋ,ㄌㄧˋ|甜甜的|🍫", "冰淇淋|ㄅㄧㄥ,ㄑㄧˊ,ㄌㄧㄣˊ|夏天最愛|🍦", "蛋糕|ㄉㄢˋ,ㄍㄠ|生日吃|🎂",
+                        "果汁|ㄍㄨㄛˇ,ㄓ|甜甜的飲料|🧃", "牛奶|ㄋㄧㄡˊ,ㄋㄞˇ|長高高|🥛", "豆漿|ㄉㄡˋ,ㄐㄧㄤ|配油條|🥛", "奶茶|ㄋㄞˇ,ㄔㄚˊ|好喝的飲料|🧋", "紅茶|ㄏㄨㄥˊ,ㄔㄚˊ|飲料|☕",
+                        "綠茶|ㄌㄩˋ,ㄔㄚˊ|飲料|🍵", "麥茶|ㄇㄞˋ,ㄔㄚˊ|解渴|🍵", "烏龍茶|ㄨ,ㄌㄨㄥˊ,ㄔㄚˊ|飲料|🍵", "咖啡|ㄎㄚ,ㄈㄟ|大人喝的|☕", "水壺|ㄕㄨㄟˇ,ㄏㄨˊ|裝水用|💧"
                     ]
                 },
                 hard: {
                     en: [
-                        { target: 'how are you', hint: '你好嗎的英文。', emoji: '❓' }, { target: 'good morning', hint: '早安的英文。', emoji: '🌅' },
-                        { target: 'play games', hint: '玩遊戲的英文。', emoji: '🎮' }, { target: 'thank you', hint: '謝謝的英文。', emoji: '🙏' },
-                        { target: 'see you later', hint: '待會見的英文。', emoji: '👋' }, { target: 'happy birthday', hint: '生日快樂。', emoji: '🎂' },
-                        { target: 'i like apples', hint: '我喜歡蘋果的英文。', emoji: '🍎' }, { target: 'let us play', hint: '我們來玩吧的英文。', emoji: '🏃' },
-                        { target: 'this is fun', hint: '這很有趣的英文。', emoji: '😆' }, { target: 'read a book', hint: '看書的英文。', emoji: '📖' },
-                        { target: 'ride a bike', hint: '騎腳踏車的英文。', emoji: '🚴' }, { target: 'listen to music', hint: '聽音樂的英文。', emoji: '🎧' }
+                        "how are you|你好嗎|❓", "good morning|早安|🌅", "play games|玩遊戲|🎮", "thank you|謝謝|🙏", "see you later|待會見|👋",
+                        "happy birthday|生日快樂|🎂", "let us play|我們來玩吧|🏃", "this is fun|這很有趣|😆", "read a book|看書|📖", "ride a bike|騎車|🚴",
+                        "listen music|聽音樂|🎧", "watch tv|看電視|📺", "do homework|寫功課|📝", "go to school|去上學|🏫", "wake up|起床|🥱",
+                        "go to bed|去睡覺|🛌", "eat food|吃東西|🍽️", "wash hands|洗手|🧼", "brush teeth|刷牙|🪥", "take bath|洗澡|🛁",
+                        "clean room|打掃房間|🧹", "help mother|幫忙媽媽|👩‍👧", "play with|一起玩|🧸", "run fast|跑很快|🏃", "jump high|跳很高|🦘",
+                        "swim well|游得好|🏊", "sing songs|唱歌|🎤", "draw picture|畫畫|🖼️", "write story|寫故事|✍️", "make toys|做玩具|🧩",
+                        "build blocks|堆積木|🧱", "play soccer|踢足球|⚽", "play tennis|打網球|🎾", "play chess|下棋|♟️", "win game|贏得比賽|🏆",
+                        "lose game|輸掉比賽|😭", "try again|再試一次|🔄", "never quit|永不放棄|💪", "do your best|盡全力|⭐", "keep going|繼續前進|🚶",
+                        "stay strong|保持堅強|🏋️", "be happy|要開心|😁", "smile always|總是微笑|😊", "have fun|玩得開心|🥳", "enjoy life|享受生活|🌞",
+                        "good job|做得好|👍", "well done|幹得好|👏", "awesome|太棒了|😎", "fantastic|太神奇了|✨", "amazing|令人驚嘆|😲"
                     ],
                     zh: [
-                        { target: '紅髮艾德', zhuyin: ['ㄏㄨㄥˊ', 'ㄈㄚˇ', 'ㄞˋ', 'ㄉㄜˊ'], hint: '外國知名歌手。', emoji: '🎸' },
-                        { target: '鄧紫棋', zhuyin: ['ㄉㄥˋ', 'ㄗˇ', 'ㄑㄧˊ'], hint: '很會飆高音的歌手。', emoji: '🎤' },
-                        { target: '周興哲', zhuyin: ['ㄓㄡ', 'ㄒㄧㄥ', 'ㄓㄜˊ'], hint: '情歌王子。', emoji: '🎹' },
-                        { target: '張惠妹', zhuyin: ['ㄓㄤ', 'ㄏㄨㄟˋ', 'ㄇㄟˋ'], hint: '天后級歌手。', emoji: '👑' },
-                        { target: '王心凌', zhuyin: ['ㄨㄤˊ', 'ㄒㄧㄣ', 'ㄌㄧㄥˊ'], hint: '愛你~', emoji: '💖' },
-                        { target: '噶嗚古拉', zhuyin: ['ㄍㄚˊ', 'ㄨ', 'ㄍㄨˇ', 'ㄌㄚ'], hint: '超人氣鯊魚VTuber。', emoji: '🦈' },
-                        { target: '寶鐘瑪琳', zhuyin: ['ㄅㄠˇ', 'ㄓㄨㄥ', 'ㄇㄚˇ', 'ㄌㄧㄣˊ'], hint: '船長VTuber。', emoji: '🏴‍☠️' },
-                        { target: '星街彗星', zhuyin: ['ㄒㄧㄥ', 'ㄐㄧㄝ', 'ㄏㄨㄟˋ', 'ㄒㄧㄥ'], hint: '很會唱歌的VTuber。', emoji: '☄️' },
-                        { target: '薩爾達傳說', zhuyin: ['ㄙㄚˋ', 'ㄦˇ', 'ㄉㄚˊ', 'ㄔㄨㄢˊ', 'ㄕㄨㄛ'], hint: '林克的冒險。', emoji: '🛡️' },
-                        { target: '動物森友會', zhuyin: ['ㄉㄨㄥˋ', 'ㄨˋ', 'ㄙㄣ', 'ㄧㄡˇ', 'ㄏㄨㄟˋ'], hint: '在無人島建村。', emoji: '🏝️' },
-                        { target: '迷宮飯', zhuyin: ['ㄇㄧˊ', 'ㄍㄨㄥ', 'ㄈㄢˋ'], hint: '在地下城吃魔物！', emoji: '🍲' }
+                        "警察局|ㄐㄧㄥˇ,ㄔㄚˊ,ㄐㄩˊ|抓壞人的地方|🚓", "消防車|ㄒㄧㄠ,ㄈㄤˊ,ㄔㄜ|會噴水滅火|🚒", "救護車|ㄐㄧㄡˋ,ㄏㄨˋ,ㄔㄜ|載病人去醫院|🚑", "博物館|ㄅㄛˊ,ㄨˋ,ㄍㄨㄢˇ|展出歷史文物|🏛️", "美術館|ㄇㄟˇ,ㄕㄨˋ,ㄍㄨㄢˇ|有很多漂亮畫作|🖼️",
+                        "紅綠燈|ㄏㄨㄥˊ,ㄌㄩˋ,ㄉㄥ|過馬路要注意|🚥", "斑馬線|ㄅㄢ,ㄇㄚˇ,ㄒㄧㄢˋ|走這裡最安全|🦓", "看醫生|ㄎㄢˋ,ㄧ,ㄕㄥ|生病了要去診所|👨‍⚕️", "打針|ㄉㄚˇ,ㄓㄣ|預防感冒|💉", "吃藥|ㄔ,ㄧㄠˋ|生病要乖乖吞下去|💊",
+                        "睡午覺|ㄕㄨㄟˋ,ㄨˇ,ㄐㄧㄠˋ|中午要休息一下|😴", "放假|ㄈㄤˋ,ㄐㄧㄚˋ|不用上學的日子|🎉", "星期天|ㄒㄧㄥ,ㄑㄧˊ,ㄊㄧㄢ|週末最開心|📅", "太陽|ㄊㄞˋ,ㄧㄤˊ|天空上熱熱的星球|☀️", "月亮|ㄩㄝˋ,ㄌㄧㄤˋ|晚上的星球|🌙",
+                        "醫生|ㄧ,ㄕㄥ|幫人治病|👨‍⚕️", "護士|ㄏㄨˋ,ㄕˋ|照顧病人|👩‍⚕️", "警察|ㄐㄧㄥˇ,ㄔㄚˊ|抓壞人|👮", "司機|ㄙ,ㄐㄧ|開車的人|🚌", "廚師|ㄔㄨˊ,ㄕ|煮飯的人|🧑‍🍳",
+                        "歌手|ㄍㄜ,ㄕㄡˇ|唱歌的人|🎤", "演員|ㄧㄢˇ,ㄩㄢˊ|演戲的人|🎭", "老師|ㄌㄠˇ,ㄕ|教書的人|👩‍🏫", "學生|ㄒㄩㄝˊ,ㄕㄥ|讀書的人|🎒", "校長|ㄒㄧㄠˋ,ㄓㄤˇ|學校最大的人|🏫",
+                        "班長|ㄅㄢ,ㄓㄤˇ|管理班級|🗣️", "風紀|ㄈㄥ,ㄐㄧˋ|管秩序|🤫", "學藝|ㄒㄩㄝˊ,ㄧˋ|管作業|📚", "衛生|ㄨㄟˋ,ㄕㄥ|管打掃|🧹", "體育|ㄊㄧˇ,ㄩˋ|管運動|⚽",
+                        "數學|ㄕㄨˋ,ㄒㄩㄝˊ|算數字|🔢", "國語|ㄍㄨㄛˊ,ㄩˇ|讀課文|📖", "英文|ㄧㄥ,ㄨㄣˊ|ABC|🔤", "自然|ㄗˋ,ㄖㄢˊ|做實驗|🔬", "社會|ㄕㄜˋ,ㄏㄨㄟˋ|學歷史地理|🌍",
+                        "歷史|ㄌㄧˋ,ㄕˇ|以前發生的事|⏳", "地理|ㄉㄧˋ,ㄌㄧˇ|認識世界|🗺️", "藝術|ㄧˋ,ㄕㄨˋ|畫畫唱歌|🎨", "音樂|ㄧㄣ,ㄩㄝˋ|聽歌|🎵", "電腦|ㄉㄧㄢˋ,ㄋㄠˇ|打字上網|💻",
+                        "程式|ㄔㄥˊ,ㄕˋ|寫代碼|👨‍💻", "網路|ㄨㄤˇ,ㄌㄨˋ|上網|🌐", "影片|ㄧㄥˇ,ㄆㄧㄢˋ|YouTube|▶️", "直播|ㄓˊ,ㄅㄛ|實況|📡", "頻道|ㄆㄧㄣˊ,ㄉㄠˋ|訂閱|📺",
+                        "訂閱|ㄉㄧㄥˋ,ㄩㄝˋ|喜歡就按|🔔", "按讚|ㄢˋ,ㄗㄢˋ|給愛心|👍", "分享|ㄈㄣ,ㄒㄧㄤˇ|給朋友看|⤴️", "留言|ㄌㄧㄡˊ,ㄧㄢˊ|寫想法|💬", "鈴鐺|ㄌㄧㄥˊ,ㄉㄤ|開啟通知|🔔"
                     ]
                 }
             },
             5: { // 五六年級
                 easy: {
                     en: [
-                        { target: 'minecraft', hint: '麥塊英文原名！', emoji: '⛏️' }, { target: 'creeper', hint: '苦力怕的英文，會爆炸喔！', emoji: '💥' },
-                        { target: 'pokemon', hint: '寶可夢的英文原名！', emoji: '🔴' }, { target: 'roblox', hint: '機器磚塊的英文。', emoji: '🤖' },
-                        { target: 'dragon', hint: '龍的英文。', emoji: '🐉' }, { target: 'zombie', hint: '殭屍的英文！', emoji: '🧟' },
-                        { target: 'forest', hint: '森林的英文。', emoji: '🌲' }, { target: 'ocean', hint: '海洋的英文。', emoji: '🌊' },
-                        { target: 'space', hint: '太空的英文。', emoji: '🌌' }, { target: 'rocket', hint: '火箭的英文。', emoji: '🚀' },
-                        { target: 'robot', hint: '機器人的英文。', emoji: '🦾' }, { target: 'button', hint: '按鈕的英文。', emoji: '🔘' },
-                        { target: 'mouse', hint: '滑鼠的英文。', emoji: '🖱️' }, { target: 'screen', hint: '螢幕的英文。', emoji: '🖥️' },
-                        { target: 'python', hint: 'Python程式語言。', emoji: '🐍' }, { target: 'coding', hint: '寫程式的英文。', emoji: '👨‍💻' },
-                        { target: 'vtuber', hint: '虛擬實況主。', emoji: '🎙️' }, { target: 'stream', hint: '實況直播。', emoji: '📡' },
-                        { target: 'tiktok', hint: '短影音平台。', emoji: '📱' }, { target: 'gamer', hint: '玩家的英文。', emoji: '🎮' }
+                        "minecraft|麥塊|⛏️", "creeper|苦力怕|💥", "pokemon|寶可夢|🔴", "roblox|機器磚塊|🤖", "dragon|龍|🐉",
+                        "zombie|殭屍|🧟", "forest|森林|🌲", "ocean|海洋|🌊", "space|太空|🌌", "rocket|火箭|🚀",
+                        "robot|機器人|🦾", "button|按鈕|🔘", "mouse|滑鼠|🖱️", "screen|螢幕|🖥️", "python|程式語言|🐍",
+                        "coding|寫程式|👨‍💻", "vtuber|虛擬實況主|🎙️", "stream|實況直播|📡", "tiktok|短影音|📱", "gamer|玩家|🎮",
+                        "server|伺服器|🗄️", "client|客戶端|💻", "pixel|像素|👾", "block|方塊|🧱", "craft|合成|🛠️",
+                        "mine|挖礦|⛏️", "build|建築|🏗️", "survive|生存|🏕️", "explore|探索|🧭", "adventure|冒險|🗺️",
+                        "portal|傳送門|🌀", "nether|地獄|🔥", "ender|終界|🌌", "sword|劍|🗡️", "pickaxe|十字鎬|⛏️",
+                        "shovel|鏟子|🪚", "axe|斧頭|🪓", "hoe|鋤頭|🏑", "armor|盔甲|🛡️", "helmet|頭盔|🪖",
+                        "chest|箱子|📦", "legs|護腿|👖", "boots|靴子|🥾", "food|食物|🍖", "health|血量|❤️",
+                        "stamina|體力|⚡", "mana|魔力|✨", "magic|魔法|🪄", "spell|咒語|📜", "level|等級|📈"
                     ],
                     zh: [
-                        { target: '原神', zhuyin: ['ㄩㄢˊ', 'ㄕㄣˊ'], hint: '熱門遊戲啟動！', emoji: '🎮' },
-                        { target: '悟空', zhuyin: ['ㄨˋ', 'ㄎㄨㄥ'], hint: '黑神話天命人！', emoji: '🐒' },
-                        { target: '絕區零', zhuyin: ['ㄐㄩㄝˊ', 'ㄑㄩ', 'ㄌㄧㄥˊ'], hint: '米哈遊的新遊戲。', emoji: '📺' },
-                        { target: '芙莉蓮', zhuyin: ['ㄈㄨˊ', 'ㄌㄧˋ', 'ㄌㄧㄢˊ'], hint: '活了千年的精靈。', emoji: '🧝‍♀️' },
-                        { target: '欣梅爾', zhuyin: ['ㄒㄧㄣ', 'ㄇㄟˊ', 'ㄦˇ'], hint: '帥氣的勇者。', emoji: '🗡️' },
-                        { target: '五條悟', zhuyin: ['ㄨˇ', 'ㄊㄧㄠˊ', 'ㄨˋ'], hint: '無下限術式！', emoji: '🤞' },
-                        { target: '虎杖', zhuyin: ['ㄏㄨˇ', 'ㄓㄤˋ'], hint: '吃下宿儺手指的少年。', emoji: '👊' },
-                        { target: '伏黑', zhuyin: ['ㄈㄨˊ', 'ㄏㄟ'], hint: '召喚玉犬的式神使。', emoji: '🐺' },
-                        { target: '釘崎', zhuyin: ['ㄉㄧㄥ', 'ㄑㄧˊ'], hint: '使用釘子和鐵鎚。', emoji: '🔨' },
-                        { target: '炭治郎', zhuyin: ['ㄊㄢˋ', 'ㄓˋ', 'ㄌㄤˊ'], hint: '鬼滅之刃男主角。', emoji: '🎴' },
-                        { target: '蔡阿嘎', zhuyin: ['ㄘㄞˋ', 'ㄚ', 'ㄍㄚ'], hint: '搞笑YouTuber。', emoji: '🎥' },
-                        { target: '蔡依林', zhuyin: ['ㄘㄞˋ', 'ㄧ', 'ㄌㄧㄣˊ'], hint: '知名女歌手。', emoji: '💃' },
-                        { target: '周杰倫', zhuyin: ['ㄓㄡ', 'ㄐㄧㄝˊ', 'ㄌㄨㄣˊ'], hint: '有名的歌手。', emoji: '🎤' },
-                        { target: '五月天', zhuyin: ['ㄨˇ', 'ㄩㄝˋ', 'ㄊㄧㄢ'], hint: '有名的樂團。', emoji: '🎸' },
-                        { target: '告五人', zhuyin: ['ㄍㄠˋ', 'ㄨˇ', 'ㄖㄣˊ'], hint: '好聽的樂團。', emoji: '🍈' }
+                        "原神|ㄩㄢˊ,ㄕㄣˊ|熱門遊戲啟動|🎮", "悟空|ㄨˋ,ㄎㄨㄥ|黑神話天命人|🐒", "絕區零|ㄐㄩㄝˊ,ㄑㄩ,ㄌㄧㄥˊ|米哈遊的新遊戲|📺", "芙莉蓮|ㄈㄨˊ,ㄌㄧˋ,ㄌㄧㄢˊ|活了千年的精靈|🧝‍♀️", "欣梅爾|ㄒㄧㄣ,ㄇㄟˊ,ㄦˇ|帥氣的勇者|🗡️",
+                        "五條悟|ㄨˇ,ㄊㄧㄠˊ,ㄨˋ|無下限術式|🤞", "虎杖|ㄏㄨˇ,ㄓㄤˋ|吃下宿儺手指|👊", "伏黑|ㄈㄨˊ,ㄏㄟ|召喚玉犬的式神使|🐺", "釘崎|ㄉㄧㄥ,ㄑㄧˊ|使用鐵鎚|🔨", "炭治郎|ㄊㄢˋ,ㄓˋ,ㄌㄤˊ|鬼滅之刃男主角|🎴",
+                        "蔡阿嘎|ㄘㄞˋ,ㄚ,ㄍㄚ|搞笑YouTuber|🎥", "蔡依林|ㄘㄞˋ,ㄧ,ㄌㄧㄣˊ|知名女歌手|💃", "周杰倫|ㄓㄡ,ㄐㄧㄝˊ,ㄌㄨㄣˊ|有名的歌手|🎤", "五月天|ㄨˇ,ㄩㄝˋ,ㄊㄧㄢ|有名的樂團|🎸", "告五人|ㄍㄠˋ,ㄨˇ,ㄖㄣˊ|好聽的樂團|🍈",
+                        "老高|ㄌㄠˇ,ㄍㄠ|講故事的YouTuber|👽", "這群人|ㄓㄜˋ,ㄑㄩㄣˊ,ㄖㄣˊ|經典YouTuber|🎬", "阿滴|ㄚ,ㄉㄧ|教英文的YouTuber|📚", "滴妹|ㄉㄧ,ㄇㄟˋ|愛喝手搖飲|🧋", "啾啾鞋|ㄐㄧㄡ,ㄐㄧㄡ,ㄒㄧㄝˊ|冷知識YouTuber|👞",
+                        "志祺|ㄓˋ,ㄑㄧˊ|時事YouTuber|👓", "酷炫|ㄎㄨˋ,ㄒㄩㄢˋ|反骨男孩|😎", "蕾菈|ㄌㄟˇ,ㄌㄚ|反骨男孩|👩", "孫生|ㄙㄨㄣ,ㄕㄥ|反骨男孩|🕺", "英雄|ㄧㄥ,ㄒㄩㄥˊ|聯盟|🛡️",
+                        "聯盟|ㄌㄧㄢˊ,ㄇㄥˊ|英雄|🛡️", "荒野|ㄏㄨㄤ,ㄧㄝˇ|亂鬥|🔫", "亂鬥|ㄌㄨㄢˋ,ㄉㄡˋ|荒野|🔫", "健身環|ㄐㄧㄢˋ,ㄕㄣ,ㄏㄨㄢˊ|邊運動邊打怪|🏃", "賽車|ㄙㄞˋ,ㄔㄜ|瑪利歐|🏎️",
+                        "朱紫|ㄓㄨ,ㄗˇ|寶可夢|🔴", "漆彈|ㄑㄧ,ㄉㄢˋ|斯普拉遁|🦑", "傳說|ㄔㄨㄢˊ,ㄕㄨㄛ|對決|📱", "貓咪|ㄇㄠ,ㄇㄧ|大戰爭|🐾", "彈珠|ㄉㄢˋ,ㄓㄨ|怪物|🎯",
+                        "薩爾達|ㄙㄚˋ,ㄦˇ,ㄉㄚˊ|公主|👑", "林克|ㄌㄧㄣˊ,ㄎㄜˋ|勇者|🗡️", "曠野|ㄎㄨㄤˋ,ㄧㄝˇ|之息|⛰️", "薩姆斯|ㄙㄚˋ,ㄇㄨˇ,ㄙ|銀河戰士|👩‍🚀", "卡比|ㄎㄚˇ,ㄅㄧˇ|星之|🌟",
+                        "耀西|ㄧㄠˋ,ㄒㄧ|恐龍|🦖", "庫巴|ㄎㄨˋ,ㄅㄚ|魔王|🐢", "碧姬|ㄅㄧˋ,ㄐㄧ|公主|👑", "奇諾|ㄑㄧˊ,ㄋㄨㄛˋ|比奧|🍄", "帕底亞|ㄆㄚˋ,ㄉㄧˇ,ㄧㄚˇ|寶可夢地區|🗺️",
+                        "帕魯|ㄆㄚˋ,ㄌㄨˇ|幻獸|🦄", "幻獸|ㄏㄨㄢˋ,ㄕㄡˋ|帕魯|🦄", "寶可夢|ㄅㄠˇ,ㄎㄜˇ,ㄇㄥˋ|神奇寶貝|🔴", "神奇|ㄕㄣˊ,ㄑㄧˊ|寶貝|🔴", "寶貝|ㄅㄠˇ,ㄅㄟˋ|神奇|🔴"
                     ]
                 },
                 medium: {
                     en: [
-                        { target: 'technology', hint: '科技的英文。', emoji: '📱' }, { target: 'programming', hint: '程式設計的英文。', emoji: '💻' },
-                        { target: 'information', hint: '資訊的英文。', emoji: 'ℹ️' }, { target: 'dictionary', hint: '字典的英文。', emoji: '📔' },
-                        { target: 'yesterday', hint: '昨天的英文。', emoji: '🔙' }, { target: 'tomorrow', hint: '明天的英文。', emoji: '🔜' },
-                        { target: 'breakfast', hint: '早餐的英文。', emoji: '🍳' }, { target: 'afternoon', hint: '下午的英文。', emoji: '☕' },
-                        { target: 'password', hint: '密碼的英文。', emoji: '🔑' }, { target: 'username', hint: '使用者的英文。', emoji: '👤' },
-                        { target: 'security', hint: '安全的英文。', emoji: '🛡️' }, { target: 'software', hint: '軟體的英文。', emoji: '💿' },
-                        { target: 'hardware', hint: '硬體的英文。', emoji: '⚙️' }, { target: 'network', hint: '網路的英文。', emoji: '🕸️' }
+                        "technology|科技|📱", "programming|程式設計|💻", "information|資訊|ℹ️", "dictionary|字典|📔", "yesterday|昨天|🔙",
+                        "tomorrow|明天|🔜", "breakfast|早餐|🍳", "afternoon|下午|☕", "password|密碼|🔑", "username|使用者|👤",
+                        "security|安全|🛡️", "software|軟體|💿", "hardware|硬體|⚙️", "network|網路|🕸️", "database|資料庫|🗄️",
+                        "memory|記憶體|🧠", "storage|儲存空間|💾", "cloud|雲端|☁️", "folder|資料夾|📁", "file|檔案|📄",
+                        "document|文件|📝", "image|圖片|🖼️", "video|影片|🎬", "audio|音訊|🎵", "player|播放器|▶️",
+                        "editor|編輯器|✍️", "browser|瀏覽器|🌐", "search|搜尋|🔍", "engine|引擎|⚙️", "website|網站|🕸️",
+                        "page|網頁|📄", "link|連結|🔗", "url|網址|🌐", "domain|網域|🌍", "host|主機|🖥️",
+                        "online|上線|🟢", "offline|離線|🔴", "connect|連線|🔌", "disconnect|斷線|🚫", "error|錯誤|❌",
+                        "warning|警告|⚠️", "alert|警報|🚨", "info|資訊|ℹ️", "success|成功|✅", "fail|失敗|❌",
+                        "retry|重試|🔄", "cancel|取消|❌", "confirm|確認|✅", "accept|接受|✅", "decline|拒絕|❌"
                     ],
                     zh: [
-                        { target: '網路', zhuyin: ['ㄨㄤˇ', 'ㄌㄨˋ'], hint: '連上世界。', emoji: '🌐' },
-                        { target: '電腦', zhuyin: ['ㄉㄧㄢˋ', 'ㄋㄠˇ'], hint: '資訊課用的機器。', emoji: '💻' },
-                        { target: '鍵盤', zhuyin: ['ㄐㄧㄢˋ', 'ㄆㄢˊ'], hint: '打字用的工具。', emoji: '⌨️' },
-                        { target: '滑鼠', zhuyin: ['ㄏㄨㄚˊ', 'ㄕㄨˇ'], hint: '游標控制。', emoji: '🖱️' },
-                        { target: '螢幕', zhuyin: ['ㄧㄥˊ', 'ㄇㄨˋ'], hint: '看畫面的地方。', emoji: '🖥️' },
-                        { target: '程式', zhuyin: ['ㄔㄥˊ', 'ㄕˋ'], hint: '寫代碼。', emoji: '👨‍💻' },
-                        { target: '手機', zhuyin: ['ㄕㄡˇ', 'ㄐㄧ'], hint: '每天都在用。', emoji: '📱' },
-                        { target: '密碼', zhuyin: ['ㄇㄧˋ', 'ㄇㄚˇ'], hint: '要記好不能給別人。', emoji: '🔑' },
-                        { target: '帳號', zhuyin: ['ㄓㄤˋ', 'ㄏㄠˋ'], hint: '登入用的。', emoji: '👤' },
-                        { target: '遊戲', zhuyin: ['ㄧㄡˊ', 'ㄒㄧˋ'], hint: '打完字就可以玩囉！', emoji: '🎮' },
-                        { target: '實況主', zhuyin: ['ㄕˊ', 'ㄎㄨㄤˋ', 'ㄓㄨˇ'], hint: '開直播的人。', emoji: '🎙️' },
-                        { target: '影片', zhuyin: ['ㄧㄥˇ', 'ㄆㄧㄢˋ'], hint: '在YouTube上看。', emoji: '🎬' },
-                        { target: '訂閱', zhuyin: ['ㄉㄧㄥˋ', 'ㄩㄝˋ'], hint: '喜歡頻道記得按。', emoji: '🔔' },
-                        { target: '按讚', zhuyin: ['ㄢˋ', 'ㄗㄢˋ'], hint: '給個愛心。', emoji: '👍' },
-                        { target: '分享', zhuyin: ['ㄈㄣ', 'ㄒㄧㄤˇ'], hint: '傳給好朋友。', emoji: '⤴️' },
-                        { target: '斯普拉遁', zhuyin: ['ㄙ', 'ㄆㄨˇ', 'ㄌㄚ', 'ㄉㄨㄣˋ'], hint: '漆彈大作戰。', emoji: '🦑' }
+                        "網路|ㄨㄤˇ,ㄌㄨˋ|連上世界|🌐", "電腦|ㄉㄧㄢˋ,ㄋㄠˇ|資訊課用的機器|💻", "鍵盤|ㄐㄧㄢˋ,ㄆㄢˊ|打字用的工具|⌨️", "滑鼠|ㄏㄨㄚˊ,ㄕㄨˇ|游標控制|🖱️", "螢幕|ㄧㄥˊ,ㄇㄨˋ|看畫面的地方|🖥️",
+                        "程式|ㄔㄥˊ,ㄕˋ|寫代碼|👨‍💻", "手機|ㄕㄡˇ,ㄐㄧ|每天都在用|📱", "密碼|ㄇㄧˋ,ㄇㄚˇ|要記好不能給別人|🔑", "帳號|ㄓㄤˋ,ㄏㄠˋ|登入用的|👤", "遊戲|ㄧㄡˊ,ㄒㄧˋ|打完字就可以玩囉|🎮",
+                        "實況主|ㄕˊ,ㄎㄨㄤˋ,ㄓㄨˇ|開直播的人|🎙️", "影片|ㄧㄥˇ,ㄆㄧㄢˋ|在YouTube上看|🎬", "訂閱|ㄉㄧㄥˋ,ㄩㄝˋ|喜歡頻道記得按|🔔", "按讚|ㄢˋ,ㄗㄢˋ|給個愛心|👍", "分享|ㄈㄣ,ㄒㄧㄤˇ|傳給好朋友|⤴️",
+                        "留言|ㄌㄧㄡˊ,ㄧㄢˊ|寫想法|💬", "頻道|ㄆㄧㄣˊ,ㄉㄠˋ|YouTube的|📺", "網頁|ㄨㄤˇ,ㄧㄝˋ|上網看|📄", "網站|ㄨㄤˇ,ㄓㄢˋ|上網看|🕸️", "搜尋|ㄙㄡ,ㄒㄩㄣˊ|找資料|🔍",
+                        "瀏覽器|ㄌㄧㄡˊ,ㄌㄢˇ,ㄑㄧˋ|上網用的軟體|🌐", "視窗|ㄕˋ,ㄔㄨㄤ|電腦上的畫面|🪟", "檔案|ㄉㄤˇ,ㄢˋ|存在電腦裡|📄", "資料|ㄗ,ㄌㄧㄠˋ|很有用|📊", "雲端|ㄩㄣˊ,ㄉㄨㄢ|存在網路上|☁️",
+                        "下載|ㄒㄧㄚˋ,ㄗㄞˋ|存到電腦|⬇️", "上傳|ㄕㄤˋ,ㄔㄨㄢˊ|放到網路上|⬆️", "更新|ㄍㄥ,ㄒㄧㄣ|變新版|🔄", "升級|ㄕㄥ,ㄐㄧˊ|變更強|⭐", "系統|ㄒㄧˋ,ㄊㄨㄥˇ|電腦核心|⚙️",
+                        "軟體|ㄖㄨㄢˇ,ㄊㄧˇ|電腦裡的程式|💿", "硬體|ㄧㄥˋ,ㄊㄧˇ|電腦的零件|🛠️", "記憶|ㄐㄧˋ,ㄧˋ|記住事情|🧠", "空間|ㄎㄨㄥ,ㄐㄧㄢ|存東西的地方|📦", "容量|ㄖㄨㄥˊ,ㄌㄧㄤˋ|可以裝多少|🔋",
+                        "速度|ㄙㄨˋ,ㄉㄨˋ|有多快|🚀", "延遲|ㄧㄢˊ,ㄔˊ|卡卡的|🐢", "斷線|ㄉㄨㄢˋ,ㄒㄧㄢˋ|連不上|🚫", "連線|ㄌㄧㄢˊ,ㄒㄧㄢˋ|接上了|🔌", "錯誤|ㄘㄨㄛˋ,ㄨˋ|有問題|❌",
+                        "警告|ㄐㄧㄥˇ,ㄍㄠˋ|要小心|⚠️", "提示|ㄊㄧˊ,ㄕˋ|給你線索|💡", "成功|ㄔㄥˊ,ㄍㄨㄥ|太棒了|✅", "失敗|ㄕ,ㄅㄞˋ|再試一次|❌", "重試|ㄔㄨㄥˊ,ㄕˋ|再來一次|🔄",
+                        "取消|ㄑㄩˇ,ㄒㄧㄠ|不要了|❌", "確認|ㄑㄩㄝˋ,ㄖㄣˋ|確定是|✅", "返回|ㄈㄢˇ,ㄏㄨㄟˊ|回上頁|🔙", "登入|ㄉㄥ,ㄖㄨˋ|進去|🔑", "登出|ㄉㄥ,ㄔㄨ|出來|🚪"
                     ]
                 },
                 hard: {
                     en: [
-                        { target: 'welcome to school', hint: '歡迎來到學校的英文。', emoji: '🏫' }, { target: 'typing is fun', hint: '打字很有趣的英文。', emoji: '⌨️' },
-                        { target: 'practice makes perfect', hint: '熟能生巧的英文。', emoji: '💪' }, { target: 'play games together', hint: '一起玩遊戲的英文。', emoji: '🎮' },
-                        { target: 'learning new things', hint: '學習新事物的英文。', emoji: '🧠' }, { target: 'hello world', hint: '寫程式的第一句話。', emoji: '🌍' },
-                        { target: 'do your best', hint: '盡你所能的英文。', emoji: '⭐' }, { target: 'never give up', hint: '永不放棄的英文。', emoji: '🔥' },
-                        { target: 'believe in yourself', hint: '相信自己的英文。', emoji: '🌟' }
+                        "welcome to school|歡迎來到學校|🏫", "typing is fun|打字很有趣|⌨️", "practice makes perfect|熟能生巧|💪", "play games together|一起玩遊戲|🎮", "learning new things|學習新事物|🧠",
+                        "hello world|寫程式的第一句話|🌍", "do your best|盡你所能|⭐", "never give up|永不放棄|🔥", "believe in yourself|相信自己|🌟", "keep moving forward|繼續前進|🚶",
+                        "stay positive always|保持積極|🌞", "dream big dreams|夢想遠大|💭", "work hard everyday|每天努力|汗", "be kind to others|友善待人|🤝", "help your friends|幫助朋友|👫",
+                        "respect your teachers|尊敬老師|🙇", "listen to parents|聽父母的話|👂", "clean your room|打掃房間|🧹", "wash your hands|洗手|🧼", "eat healthy food|吃健康食物|🥗",
+                        "drink more water|多喝水|💧", "exercise every day|每天運動|🏃", "read many books|多看書|📚", "sleep well tonight|好好睡覺|😴", "have a good day|祝你有美好的一天|☀️",
+                        "enjoy your meal|享受美食|🍽️", "safe travels home|回家路上小心|🚗", "see you tomorrow|明天見|👋", "happy new year|新年快樂|🎆", "merry christmas|聖誕快樂|🎄",
+                        "happy halloween|萬聖節快樂|🎃", "trick or treat|不給糖就搗蛋|🍬", "happy valentines|情人節快樂|💖", "happy easter|復活節快樂|🐰", "happy thanksgiving|感恩節快樂|🦃",
+                        "happy holidays|佳節愉快|🎉", "best wishes|獻上祝福|🎁", "good luck|祝你好運|🍀", "congratulations|恭喜|🎊", "happy anniversary|週年快樂|🥂",
+                        "happy graduation|畢業快樂|🎓", "happy retirement|退休快樂|🌴", "happy birthday|生日快樂|🎂", "sweet dreams|做個好夢|🌙", "good night|晚安|🌌",
+                        "good evening|晚上好|🌃", "good afternoon|下午好|🌇", "good morning|早安|🌅", "hello everyone|大家好|👋", "goodbye everyone|大家再見|👋"
                     ],
                     zh: [
-                        { target: '白日依山盡', zhuyin: ['ㄅㄞˊ', 'ㄖˋ', 'ㄧ', 'ㄕㄢ', 'ㄐㄧㄣˋ'], hint: '王之渙 登鸛雀樓。', emoji: '🌄' },
-                        { target: '黃河入海流', zhuyin: ['ㄏㄨㄤˊ', 'ㄏㄜˊ', 'ㄖㄨˋ', 'ㄏㄞˇ', 'ㄌㄧㄡˊ'], hint: '王之渙 登鸛雀樓。', emoji: '🌊' },
-                        { target: '欲窮千里目', zhuyin: ['ㄩˋ', 'ㄑㄩㄥˊ', 'ㄑㄧㄢ', 'ㄌㄧˇ', 'ㄇㄨˋ'], hint: '王之渙 登鸛雀樓。', emoji: '👀' },
-                        { target: '更上一層樓', zhuyin: ['ㄍㄥˋ', 'ㄕㄤˋ', 'ㄧˋ', 'ㄘㄥˊ', 'ㄌㄡˊ'], hint: '王之渙 登鸛雀樓。', emoji: '🏢' },
-                        { target: '春眠不覺曉', zhuyin: ['ㄔㄨㄣ', 'ㄇㄧㄢˊ', 'ㄅㄨˋ', 'ㄐㄩㄝˊ', 'ㄒㄧㄠˇ'], hint: '孟浩然的春曉。', emoji: '😴' },
-                        { target: '處處聞啼鳥', zhuyin: ['ㄔㄨˋ', 'ㄔㄨˋ', 'ㄨㄣˊ', 'ㄊㄧˊ', 'ㄋㄧㄠˇ'], hint: '孟浩然的春曉。', emoji: '🐦' },
-                        { target: '夜來風雨聲', zhuyin: ['ㄧㄝˋ', 'ㄌㄞˊ', 'ㄈㄥ', 'ㄩˇ', 'ㄕㄥ'], hint: '孟浩然的春曉。', emoji: '🌧️' },
-                        { target: '花落知多少', zhuyin: ['ㄏㄨㄚ', 'ㄌㄨㄛˋ', 'ㄓ', 'ㄉㄨㄛ', 'ㄕㄠˇ'], hint: '孟浩然的春曉。', emoji: '🌸' },
-                        { target: '資訊課好玩', zhuyin: ['ㄗ', 'ㄒㄩㄣˋ', 'ㄎㄜˋ', 'ㄏㄠˇ', 'ㄨㄢˊ'], hint: '可以學到好多知識！', emoji: '💻' },
-                        { target: '打字小高手', zhuyin: ['ㄉㄚˇ', 'ㄗˋ', 'ㄒㄧㄠˇ', 'ㄍㄠ', 'ㄕㄡˇ'], hint: '你就是最強的打字大師。', emoji: '⌨️' }
+                        "白日依山盡|ㄅㄞˊ,ㄖˋ,ㄧ,ㄕㄢ,ㄐㄧㄣˋ|王之渙 登鸛雀樓|🌄", "黃河入海流|ㄏㄨㄤˊ,ㄏㄜˊ,ㄖㄨˋ,ㄏㄞˇ,ㄌㄧㄡˊ|王之渙 登鸛雀樓|🌊", "欲窮千里目|ㄩˋ,ㄑㄩㄥˊ,ㄑㄧㄢ,ㄌㄧˇ,ㄇㄨˋ|王之渙 登鸛雀樓|👀", "更上一層樓|ㄍㄥˋ,ㄕㄤˋ,ㄧˋ,ㄘㄥˊ,ㄌㄡˊ|王之渙 登鸛雀樓|🏢", "春眠不覺曉|ㄔㄨㄣ,ㄇㄧㄢˊ,ㄅㄨˋ,ㄐㄩㄝˊ,ㄒㄧㄠˇ|孟浩然 春曉|😴",
+                        "處處聞啼鳥|ㄔㄨˋ,ㄔㄨˋ,ㄨㄣˊ,ㄊㄧˊ,ㄋㄧㄠˇ|孟浩然 春曉|🐦", "夜來風雨聲|ㄧㄝˋ,ㄌㄞˊ,ㄈㄥ,ㄩˇ,ㄕㄥ|孟浩然 春曉|🌧️", "花落知多少|ㄏㄨㄚ,ㄌㄨㄛˋ,ㄓ,ㄉㄨㄛ,ㄕㄠˇ|孟浩然 春曉|🌸", "床前明月光|ㄔㄨㄤˊ,ㄑㄧㄢˊ,ㄇㄧㄥˊ,ㄩㄝˋ,ㄍㄨㄤ|李白 靜夜思|🛏️", "疑是地上霜|ㄧˊ,ㄕˋ,ㄉㄧˋ,ㄕㄤˋ,ㄕㄨㄤ|李白 靜夜思|❄️",
+                        "舉頭望明月|ㄐㄩˇ,ㄊㄡˊ,ㄨㄤˋ,ㄇㄧㄥˊ,ㄩㄝˋ|李白 靜夜思|🌝", "低頭思故鄉|ㄉㄧ,ㄊㄡˊ,ㄙ,ㄍㄨˋ,ㄒㄧㄤ|李白 靜夜思|😔", "紅豆生南國|ㄏㄨㄥˊ,ㄉㄡˋ,ㄕㄥ,ㄋㄢˊ,ㄍㄨㄛˊ|王維 相思|🫘", "春來發幾枝|ㄔㄨㄣ,ㄌㄞˊ,ㄈㄚ,ㄐㄧˇ,ㄓ|王維 相思|🌱", "願君多采擷|ㄩㄢˋ,ㄐㄩㄣ,ㄉㄨㄛ,ㄘㄞˇ,ㄐㄧㄝˊ|王維 相思|🤲",
+                        "此物最相思|ㄘˇ,ㄨˋ,ㄗㄨㄟˋ,ㄒㄧㄤ,ㄙ|王維 相思|❤️", "千山鳥飛絕|ㄑㄧㄢ,ㄕㄢ,ㄋㄧㄠˇ,ㄈㄟ,ㄐㄩㄝˊ|柳宗元 江雪|🏔️", "萬徑人蹤滅|ㄨㄢˋ,ㄐㄧㄥˋ,ㄖㄣˊ,ㄗㄨㄥ,ㄇㄧㄝˋ|柳宗元 江雪|❄️", "孤舟簑笠翁|ㄍㄨ,ㄓㄡ,ㄙㄨㄛ,ㄌㄧˋ,ㄨㄥ|柳宗元 江雪|🛶", "獨釣寒江雪|ㄉㄨˊ,ㄉㄧㄠˋ,ㄏㄢˊ,ㄐㄧㄤ,ㄒㄩㄝˇ|柳宗元 江雪|🎣",
+                        "煮豆燃豆萁|ㄓㄨˇ,ㄉㄡˋ,ㄖㄢˊ,ㄉㄡˋ,ㄑㄧˊ|曹植 七步詩|🔥", "豆在釜中泣|ㄉㄡˋ,ㄗㄞˋ,ㄈㄨˇ,ㄓㄨㄥ,ㄑㄧˋ|曹植 七步詩|😭", "本是同根生|ㄅㄣˇ,ㄕˋ,ㄊㄨㄥˊ,ㄍㄣ,ㄕㄥ|曹植 七步詩|🌱", "相煎何太急|ㄒㄧㄤ,ㄐㄧㄢ,ㄏㄜˊ,ㄊㄞˋ,ㄐㄧˊ|曹植 七步詩|🍳", "松下問童子|ㄙㄨㄥ,ㄒㄧㄚˋ,ㄨㄣˋ,ㄊㄨㄥˊ,ㄗ˙|賈島 尋隱者不遇|🌲",
+                        "言師採藥去|ㄧㄢˊ,ㄕ,ㄘㄞˇ,ㄧㄠˋ,ㄑㄩˋ|賈島 尋隱者不遇|🌿", "只在此山中|ㄓˇ,ㄗㄞˋ,ㄘˇ,ㄕㄢ,ㄓㄨㄥ|賈島 尋隱者不遇|⛰️", "雲深不知處|ㄩㄣˊ,ㄕㄣ,ㄅㄨˋ,ㄓ,ㄔㄨˋ|賈島 尋隱者不遇|☁️", "慈母手中線|ㄘˊ,ㄇㄨˇ,ㄕㄡˇ,ㄓㄨㄥ,ㄒㄧㄢˋ|孟郊 遊子吟|🧵", "遊子身上衣|ㄧㄡˊ,ㄗˇ,ㄕㄣ,ㄕㄤˋ,ㄧ|孟郊 遊子吟|👕",
+                        "臨行密密縫|ㄌㄧㄣˊ,ㄒㄧㄥˊ,ㄇㄧˋ,ㄇㄧˋ,ㄈㄥˊ|孟郊 遊子吟|🪡", "意恐遲遲歸|ㄧˋ,ㄎㄨㄥˇ,ㄔˊ,ㄔˊ,ㄍㄨㄟ|孟郊 遊子吟|😟", "誰言寸草心|ㄕㄟˊ,ㄧㄢˊ,ㄘㄨㄣˋ,ㄘㄠˇ,ㄒㄧㄣ|孟郊 遊子吟|🌱", "報得三春暉|ㄅㄠˋ,ㄉㄜˊ,ㄙㄢ,ㄔㄨㄣ,ㄏㄨㄟ|孟郊 遊子吟|☀️", "資訊課好玩|ㄗ,ㄒㄩㄣˋ,ㄎㄜˋ,ㄏㄠˇ,ㄨㄢˊ|可以學到好多知識！|💻",
+                        "打字小高手|ㄉㄚˇ,ㄗˋ,ㄒㄧㄠˇ,ㄍㄠ,ㄕㄡˇ|你就是最強的打字大師|⌨️", "打字速度快|ㄉㄚˇ,ㄗˋ,ㄙㄨˋ,ㄉㄨˋ,ㄎㄨㄞˋ|打字飛快|🚀", "鍵盤小精靈|ㄐㄧㄢˋ,ㄆㄢˊ,ㄒㄧㄠˇ,ㄐㄧㄥ,ㄌㄧㄥˊ|鍵盤打得很順|🧚", "電腦小達人|ㄉㄧㄢˋ,ㄋㄠˇ,ㄒㄧㄠˇ,ㄉㄚˊ,ㄖㄣˊ|很會用電腦|👨‍💻", "網路探險家|ㄨㄤˇ,ㄌㄨˋ,ㄊㄢˋ,ㄒㄧㄢˇ,ㄐㄧㄚ|在網路上找資料|🧭",
+                        "寫程式好玩|ㄒㄧㄝˇ,ㄔㄥˊ,ㄕˋ,ㄏㄠˇ,ㄨㄢˊ|寫代碼很有趣|💻", "學習新知識|ㄒㄩㄝˊ,ㄒㄧˋ,ㄒㄧㄣ,ㄓ,ㄕˋ|學到新東西|🧠", "每天都進步|ㄇㄟˇ,ㄊㄧㄢ,ㄉㄡ,ㄐㄧㄣˋ,ㄅㄨˋ|越來越厲害|📈", "考試得滿分|ㄎㄠˇ,ㄕˋ,ㄉㄜˊ,ㄇㄢˇ,ㄈㄣ|考了一百分|💯", "大家一起玩|ㄉㄚˋ,ㄐㄧㄚ,ㄧˋ,ㄑㄧˇ,ㄨㄢˊ|和好朋友玩|🏃",
+                        "快樂上學去|ㄎㄨㄞˋ,ㄌㄜˋ,ㄕㄤˋ,ㄒㄩㄝˊ,ㄑㄩˋ|開心的去學校|🎒", "努力不懈怠|ㄋㄨˇ,ㄌㄧˋ,ㄅㄨˋ,ㄒㄧㄝˋ,ㄉㄞˋ|一直很認真|💪", "堅持到最後|ㄐㄧㄢ,ㄔˊ,ㄉㄠˋ,ㄗㄨㄟˋ,ㄏㄡˋ|不放棄|🏁", "成功靠自己|ㄔㄥˊ,ㄍㄨㄥ,ㄎㄠˋ,ㄗˋ,ㄐㄧˇ|自己最棒|🏆", "加油你能行|ㄐㄧㄚ,ㄧㄡˊ,ㄋㄧˇ,ㄋㄥˊ,ㄒㄧㄥˊ|為自己打氣|🔥"
                     ]
                 }
             }
         };
 
+        // --- 將原始字串題庫解析為應用程式需要的物件格式 ---
+        window.questionPools = {};
+        for (let grade in rawPools) {
+            window.questionPools[grade] = {};
+            for (let diff in rawPools[grade]) {
+                window.questionPools[grade][diff] = {
+                    en: rawPools[grade][diff].en.map(str => {
+                        const parts = str.split('|');
+                        return { target: parts[0], hint: parts[1], emoji: parts[2], lang: 'en' };
+                    }),
+                    zh: rawPools[grade][diff].zh.map(str => {
+                        const parts = str.split('|');
+                        // 處理只有一個字沒有逗號的注音
+                        const zhuyinArray = parts[1].includes(',') ? parts[1].split(',') : [parts[1]];
+                        return { target: parts[0], zhuyin: zhuyinArray, hint: parts[2], emoji: parts[3], lang: 'zh' };
+                    })
+                };
+            }
+        }
+
+        // --- 輔助函數 ---
         window.getRandomItems = function(array, count) {
             const shuffled = [...array].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
+        };
+
+        // ✨ 時間格式化函數 (轉換成 X分 X秒) ✨
+        window.formatTime = function(totalSeconds) {
+            if (totalSeconds == null || isNaN(totalSeconds)) return "-";
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
+            if (m > 0) {
+                return `${m}分 ${s}秒`;
+            }
+            return `${s}秒`;
         };
 
         window.showScreen = function(screenId) {
@@ -971,9 +988,9 @@
 
             if (detectedGrade === 4) {
                 if(welcomeQCountEl) welcomeQCountEl.innerHTML = '每關有 <strong>15 題</strong>，';
-                if(btnEasyDesc) btnEasyDesc.innerHTML = '常見詞與熱門卡通<br/>(共 15 題)';
-                if(btnMediumDesc) btnMediumDesc.innerHTML = '流行事物與遊戲<br/>(共 15 題)';
-                if(btnHardDesc) btnHardDesc.innerHTML = '大明星與經典成語<br/>(共 15 題)';
+                if(btnEasyDesc) btnEasyDesc.innerHTML = '課本基礎圈詞<br/>(共 15 題)';
+                if(btnMediumDesc) btnMediumDesc.innerHTML = '課本進階圈詞<br/>(共 15 題)';
+                if(btnHardDesc) btnHardDesc.innerHTML = '課本挑戰圈詞<br/>(共 15 題)';
             } else {
                 if(welcomeQCountEl) welcomeQCountEl.innerHTML = '每關有 <strong>15 到 25 題</strong>，';
                 if(btnEasyDesc) btnEasyDesc.innerHTML = '常見詞與熱門卡通<br/>(共 25 題)';
@@ -1013,15 +1030,13 @@
         };
 
         window.startGame = function(level) {
-            const gradePool = questionPools[window.studentInfo.grade];
+            const gradePool = window.questionPools[window.studentInfo.grade];
             
             let enCount, zhCount;
             if (window.studentInfo.grade === 4) {
-                // 四年級一律 15 題 (8 題英文、7 題中文)
                 enCount = 8; 
                 zhCount = 7;
             } else {
-                // 三年級與五年級維持原題數
                 if (level === 'easy') {
                     enCount = 13; 
                     zhCount = 12; 
@@ -1034,8 +1049,8 @@
                 }
             }
             
-            const enList = window.getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
-            const zhList = window.getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
+            const enList = window.getRandomItems(gradePool[level].en, enCount);
+            const zhList = window.getRandomItems(gradePool[level].zh, zhCount);
             
             window.currentDifficulty = level;
             window.questions = [...enList, ...zhList];
@@ -1047,6 +1062,7 @@
             window.currentQIndex = 0;
             window.elapsedTime = 0;
             window.isTransitioning = false;
+            window.isComposing = false;
             
             window.renderQuestion();
             window.startTimer();
@@ -1164,7 +1180,12 @@
             if (!q || !typeInput) return;
 
             const val = typeInput.value;
-            const currentIndex = val.length;
+            
+            // 計算目前打對到哪個字 (如果打錯，游標與鍵盤提示將停留在第一個錯誤的位置)
+            let currentIndex = 0;
+            while (currentIndex < val.length && val[currentIndex] === q.target[currentIndex]) {
+                currentIndex++;
+            }
 
             if (currentIndex >= q.target.length) return;
 
@@ -1209,6 +1230,9 @@
                 window.handleSuccess();
                 return;
             }
+
+            // IME 組合注音中，不要提前判斷錯誤與長度
+            if (window.isComposing) return;
 
             if (val.length > 0) {
                 if (q.lang === 'zh' && /[a-zA-Z]/.test(val)) {
@@ -1277,10 +1301,10 @@
         window.startTimer = function() {
             clearInterval(window.timerInterval);
             window.startTime = Date.now();
-            if (timerText) timerText.innerText = "0";
+            if (timerText) timerText.innerText = "0秒";
             window.timerInterval = setInterval(() => {
                 window.elapsedTime = Math.floor((Date.now() - window.startTime) / 1000);
-                if (timerText) timerText.innerText = window.elapsedTime;
+                if (timerText) timerText.innerText = window.formatTime(window.elapsedTime);
             }, 1000);
         };
 
@@ -1289,7 +1313,7 @@
             clearInterval(window.timerInterval);
             
             const finalTimeEl = document.getElementById('final-time');
-            if (finalTimeEl) finalTimeEl.innerText = window.elapsedTime;
+            if (finalTimeEl) finalTimeEl.innerText = window.formatTime(window.elapsedTime);
             
             const finishNameEl = document.getElementById('finish-student-name');
             if (finishNameEl) {
@@ -1442,7 +1466,7 @@
                 if (myIndex !== -1) {
                     myRankBanner.classList.remove('hidden');
                     document.getElementById('my-rank-num').innerText = myIndex + 1;
-                    document.getElementById('my-rank-time').innerText = uniqueSorted[myIndex].time;
+                    document.getElementById('my-rank-time').innerText = window.formatTime(uniqueSorted[myIndex].time);
                 } else {
                     myRankBanner.classList.add('hidden');
                 }
@@ -1470,7 +1494,7 @@
                     <tr class="border-b border-gray-100 transition-colors ${rowClass}">
                         <td class="py-3 px-4 md:px-6 text-center font-bold text-lg md:text-xl">${rankBadge}</td>
                         <td class="py-3 px-4 md:px-6 font-bold text-gray-700 text-base md:text-lg">${data.className} 班 ${data.seatNumber} 號 ${isMe ? '<span class="text-xs bg-red-500 text-white px-2 py-1 rounded-full ml-2 drop-shadow-sm">我</span>' : ''}</td>
-                        <td class="py-3 px-4 md:px-6 font-black text-blue-600 text-right text-lg md:text-xl">${data.time} <span class="text-sm text-gray-500">秒</span></td>
+                        <td class="py-3 px-4 md:px-6 font-black text-blue-600 text-right text-lg md:text-xl">${window.formatTime(data.time)}</td>
                     </tr>
                 `;
             }).join('');
@@ -1556,7 +1580,7 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                         <td class="py-3 px-6 text-center font-bold text-gray-500">${index + 1}</td>
                         <td class="py-3 px-6 font-bold text-gray-800">${data.className} 班 ${data.seatNumber} 號 <span class="text-xs text-gray-400 font-normal ml-1">(${data.gradePool}年級)</span></td>
-                        <td class="py-3 px-6 font-black text-blue-600 text-right">${data.time} 秒</td>
+                        <td class="py-3 px-6 font-black text-blue-600 text-right">${window.formatTime(data.time)}</td>
                         <td class="py-3 px-6 text-right text-sm text-gray-400 font-mono">${timeString}</td>
                         <td class="py-3 px-4 text-center">
                             <button onclick="window.deleteScore('${data.id}')" class="text-red-400 hover:text-red-600 transition-colors p-2" title="刪除此紀錄">
@@ -1604,7 +1628,7 @@
             if (data) {
                 nameEl.innerText = `${data.seatNumber} 號`;
                 nameEl.className = "text-3xl font-black mb-2 text-gray-800"; 
-                timeEl.innerText = data.time;
+                timeEl.innerText = window.formatTime(data.time);
             } else {
                 nameEl.innerText = "從缺";
                 nameEl.className = "text-3xl font-black mb-2 text-gray-300"; 
