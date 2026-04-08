@@ -186,24 +186,26 @@
                     <div class="flex-1 pt-2">
                         <p class="text-gray-700 text-lg font-medium leading-relaxed">
                             <span class="text-blue-600 font-black" id="welcome-student-name"></span> 同學你好！<br>
-                            偵測到你是 <span class="text-red-500 font-black text-xl" id="welcome-grade"></span> 年級，已經幫你切換到專屬題庫囉！<span id="welcome-q-count">每關有 <strong>15 到 25 題</strong>，</span>打完系統會自動記錄成績，快來挑戰吧！
+                            偵測到你是 <span class="text-red-500 font-black text-xl" id="welcome-grade"></span> 年級，已經幫你切換到專屬題庫囉！<span id="welcome-q-count">每關有 <strong>15 到 25 題</strong>，</span>打完系統會自動記錄成績。<br>
+                            <span class="text-green-600 font-bold"><i class="fa-solid fa-lightbulb"></i> 老師建議：每天先從「新手等級」暖身，再挑戰更難的關卡喔！</span>
                         </p>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button onclick="window.startGame('easy')" class="p-6 bg-green-50 hover:bg-green-100 text-green-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-green-200 flex flex-col items-center gap-2 shadow-sm">
-                        <span class="text-3xl">🌱</span>
-                        <span class="text-xl font-bold">新手等級</span>
-                        <span id="btn-easy-desc" class="text-sm text-center font-medium">常見詞與熱門卡通<br/>(共 25 題)</span>
+                    <button onclick="window.startGame('easy')" class="p-6 bg-green-50 hover:bg-green-100 text-green-800 rounded-2xl transition-all transform hover:-translate-y-1 border-4 border-green-400 flex flex-col items-center gap-2 shadow-md relative overflow-hidden">
+                        <div class="absolute top-0 w-full bg-green-500 text-white font-black text-xs py-1 animate-pulse tracking-widest">✨ 推薦優先挑戰 ✨</div>
+                        <span class="text-4xl mt-3">🌱</span>
+                        <span class="text-2xl font-black">新手等級</span>
+                        <span id="btn-easy-desc" class="text-sm text-center font-bold text-green-700">常見詞與熱門卡通<br/>(共 25 題)</span>
                     </button>
                     <button onclick="window.startGame('medium')" class="p-6 bg-yellow-50 hover:bg-yellow-100 text-yellow-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-yellow-200 flex flex-col items-center gap-2 shadow-sm">
-                        <span class="text-3xl">⭐</span>
+                        <span class="text-3xl mt-3">⭐</span>
                         <span class="text-xl font-bold">進階等級</span>
                         <span id="btn-medium-desc" class="text-sm text-center font-medium">流行事物與遊戲<br/>(共 20 題)</span>
                     </button>
                     <button onclick="window.startGame('hard')" class="p-6 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-2xl transition-all transform hover:-translate-y-1 border-2 border-blue-200 flex flex-col items-center gap-2 shadow-sm">
-                        <span class="text-3xl">🚀</span>
+                        <span class="text-3xl mt-3">🚀</span>
                         <span class="text-xl font-bold">高手等級</span>
                         <span id="btn-hard-desc" class="text-sm text-center font-medium">大明星與經典成語<br/>(共 15 題)</span>
                     </button>
@@ -218,12 +220,12 @@
             <div id="playing-screen" class="screen-section animate-fade-in">
                 <div class="flex flex-wrap justify-between items-center mb-6 text-gray-600 font-bold gap-3">
                     <div class="flex items-center gap-2">
-                       <span id="progress-text" class="bg-blue-100 px-4 py-2 rounded-full text-blue-800 whitespace-nowrap">進度: 1 / ?</span>
-                       <span id="lang-badge" class="px-4 py-2 rounded-full text-white whitespace-nowrap shadow-sm transition-colors duration-500 bg-indigo-500">🔤 英文挑戰</span>
+                       <span id="progress-text" class="bg-blue-100 px-4 py-2 rounded-full text-blue-800 whitespace-nowrap font-black">進度: 1 / ?</span>
+                       <span id="lang-badge" class="px-4 py-2 rounded-full text-white whitespace-nowrap shadow-sm transition-colors duration-500 bg-indigo-500 font-black">🔤 英文挑戰</span>
                     </div>
                     
                     <div class="flex items-center gap-3">
-                        <span class="bg-yellow-100 px-4 py-2 rounded-full flex items-center gap-2 text-yellow-800 shadow-sm font-mono text-lg min-w-[120px] justify-center border border-yellow-300">
+                        <span class="bg-yellow-100 px-4 py-2 rounded-full flex items-center gap-2 text-yellow-800 shadow-sm font-mono text-lg min-w-[120px] justify-center border border-yellow-300 font-black">
                             <i class="fa-regular fa-clock text-yellow-600"></i>
                             時間: <span id="timer-text">0秒</span>
                         </span>
@@ -357,12 +359,26 @@
                 <p class="text-xl text-gray-600 mb-2 font-medium"><span id="finish-student-name" class="text-blue-600 font-bold"></span>，你完成了 <span id="total-q-count"></span> 題挑戰！</p>
                 
                 <!-- 大大展示花費時間 -->
-                <div class="bg-yellow-100 rounded-3xl inline-block px-10 py-6 mb-6 shadow-inner border-4 border-yellow-300 transform hover:scale-105 transition-transform mt-4">
+                <div class="bg-yellow-100 rounded-3xl inline-block px-10 py-6 mb-4 shadow-inner border-4 border-yellow-300 transform hover:scale-105 transition-transform mt-4">
                     <p class="text-2xl text-gray-800 font-bold mb-2">總共花費時間</p>
                     <p class="text-blue-600 font-black text-6xl flex items-center justify-center gap-3">
                         <i class="fa-regular fa-clock text-yellow-600 text-4xl"></i>
                         <span id="final-time">0秒</span>
                     </p>
+                </div>
+
+                <!-- ✨ 新手過關專屬：鼓勵升級橫幅 ✨ -->
+                <div id="next-level-promo" class="hidden bg-purple-50 border-4 border-purple-200 rounded-3xl p-6 mb-6 shadow-sm mx-auto max-w-lg animate-fade-in">
+                    <h3 class="text-2xl font-black text-purple-700 mb-2">🎉 新手任務達成！</h3>
+                    <p class="text-purple-600 font-bold mb-4">你已經熟悉鍵盤囉，要不要挑戰看看更厲害的等級？</p>
+                    <div class="flex justify-center gap-3">
+                        <button onclick="window.startGame('medium')" class="px-5 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black rounded-xl shadow-md transition-all hover:scale-105 flex items-center gap-2">
+                            ⭐ 挑戰進階
+                        </button>
+                        <button onclick="window.startGame('hard')" class="px-5 py-3 bg-blue-400 hover:bg-blue-500 text-white font-black rounded-xl shadow-md transition-all hover:scale-105 flex items-center gap-2">
+                            🚀 挑戰高手
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 自動儲存提示區塊 -->
@@ -375,7 +391,7 @@
                         <i class="fa-solid fa-trophy"></i> 查看排行榜
                     </button>
                     <button onclick="window.showScreen('intro-screen')" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
-                        <i class="fa-solid fa-rotate-right"></i> 再玩一次
+                        <i class="fa-solid fa-house"></i> 回首頁
                     </button>
                 </div>
             </div>
@@ -520,11 +536,11 @@
                     </div>
                 </div>
 
-                <!-- 教師視圖 2：🏆 班級頒獎台 -->
+                <!-- 教師視圖 2：🏆 班級頒獎台 (前三名版) -->
                 <div id="teacher-view-podium" class="hidden">
                     <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-4 border-yellow-200 rounded-3xl p-6 shadow-inner text-center">
                         <h3 class="text-2xl font-black text-yellow-800 mb-2">🎉 下課頒獎典禮 🎉</h3>
-                        <p class="text-gray-600 mb-6 font-medium">選擇剛剛上課的班級，幫各難度打字最快的同學鼓勵一下吧！</p>
+                        <p class="text-gray-600 mb-6 font-medium">選擇剛剛上課的班級，看看各難度的前三名是誰！</p>
                         
                         <div class="flex justify-center items-center gap-4 mb-10">
                             <select id="podium-class-select" class="text-xl font-bold px-6 py-3 rounded-xl border-2 border-yellow-400 focus:outline-none focus:border-orange-400 text-yellow-900 bg-white shadow-sm cursor-pointer">
@@ -543,32 +559,66 @@
                             </button>
                         </div>
 
-                        <!-- 頒獎結果區 -->
+                        <!-- 頒獎結果區 (三欄，每欄前三名) -->
                         <div id="podium-results" class="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-0 transition-opacity duration-500">
-                            <!-- 新手冠軍 -->
-                            <div class="podium-card bg-white rounded-2xl border-4 border-green-200 p-6 flex flex-col items-center shadow-lg relative overflow-hidden">
-                                <div class="absolute top-0 w-full bg-green-500 text-white font-bold py-1 text-sm tracking-widest">🌱 新手等級</div>
-                                <div class="mt-6 mb-2 text-5xl">🏅</div>
-                                <p class="text-gray-500 font-bold mb-1">最速傳說</p>
-                                <p id="podium-easy-name" class="text-3xl font-black text-green-700 mb-2">-</p>
-                                <p class="text-lg font-bold text-gray-600"><span id="podium-easy-time" class="text-2xl text-blue-600">-</span></p>
+                            
+                            <!-- 新手榜 -->
+                            <div class="podium-card bg-white rounded-2xl border-4 border-green-200 p-4 flex flex-col items-center shadow-lg relative overflow-hidden w-full">
+                                <div class="absolute top-0 w-full bg-green-500 text-white font-bold py-1 text-sm tracking-widest text-center">🌱 新手等級</div>
+                                <div class="mt-8 w-full px-2">
+                                    <div class="flex justify-between items-center bg-green-50 rounded-lg p-3 mb-3 border border-green-100 shadow-sm">
+                                        <span class="text-xl">🥇 <span id="podium-easy-1-name" class="font-black text-green-800">-</span></span>
+                                        <span id="podium-easy-1-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b border-gray-200 p-2 mb-2">
+                                        <span class="text-lg">🥈 <span id="podium-easy-2-name" class="font-bold text-gray-600">-</span></span>
+                                        <span id="podium-easy-2-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-2">
+                                        <span class="text-lg">🥉 <span id="podium-easy-3-name" class="font-bold text-gray-600">-</span></span>
+                                        <span id="podium-easy-3-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- 進階冠軍 -->
-                            <div class="podium-card bg-white rounded-2xl border-4 border-yellow-300 p-6 flex flex-col items-center shadow-lg relative overflow-hidden transform md:-translate-y-4">
-                                <div class="absolute top-0 w-full bg-yellow-400 text-yellow-900 font-bold py-1 text-sm tracking-widest">⭐ 進階等級</div>
-                                <div class="mt-6 mb-2 text-6xl">🏆</div>
-                                <p class="text-gray-500 font-bold mb-1">最速傳說</p>
-                                <p id="podium-medium-name" class="text-3xl font-black text-yellow-700 mb-2">-</p>
-                                <p class="text-lg font-bold text-gray-600"><span id="podium-medium-time" class="text-2xl text-blue-600">-</span></p>
+
+                            <!-- 進階榜 -->
+                            <div class="podium-card bg-white rounded-2xl border-4 border-yellow-300 p-4 flex flex-col items-center shadow-lg relative overflow-hidden transform md:-translate-y-4 w-full">
+                                <div class="absolute top-0 w-full bg-yellow-400 text-yellow-900 font-bold py-1 text-sm tracking-widest text-center">⭐ 進階等級</div>
+                                <div class="mt-8 w-full px-2">
+                                    <div class="flex justify-between items-center bg-yellow-50 rounded-lg p-3 mb-3 border border-yellow-200 shadow-sm">
+                                        <span class="text-xl">🥇 <span id="podium-medium-1-name" class="font-black text-yellow-800">-</span></span>
+                                        <span id="podium-medium-1-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b border-gray-200 p-2 mb-2">
+                                        <span class="text-lg">🥈 <span id="podium-medium-2-name" class="font-bold text-gray-600">-</span></span>
+                                        <span id="podium-medium-2-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-2">
+                                        <span class="text-lg">🥉 <span id="podium-medium-3-name" class="font-bold text-gray-600">-</span></span>
+                                        <span id="podium-medium-3-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- 高手冠軍 -->
-                            <div class="podium-card bg-white rounded-2xl border-4 border-blue-300 p-6 flex flex-col items-center shadow-lg relative overflow-hidden">
-                                <div class="absolute top-0 w-full bg-blue-500 text-white font-bold py-1 text-sm tracking-widest">🚀 高手等級</div>
-                                <div class="mt-6 mb-2 text-5xl">🏅</div>
-                                <p class="text-gray-500 font-bold mb-1">最速傳說</p>
-                                <p id="podium-hard-name" class="text-3xl font-black text-blue-700 mb-2">-</p>
-                                <p class="text-lg font-bold text-gray-600"><span id="podium-hard-time" class="text-2xl text-blue-600">-</span></p>
+
+                            <!-- 高手榜 -->
+                            <div class="podium-card bg-white rounded-2xl border-4 border-blue-300 p-4 flex flex-col items-center shadow-lg relative overflow-hidden w-full">
+                                <div class="absolute top-0 w-full bg-blue-500 text-white font-bold py-1 text-sm tracking-widest text-center">🚀 高手等級</div>
+                                <div class="mt-8 w-full px-2">
+                                    <div class="flex justify-between items-center bg-blue-50 rounded-lg p-3 mb-3 border border-blue-200 shadow-sm">
+                                        <span class="text-xl">🥇 <span id="podium-hard-1-name" class="font-black text-blue-800">-</span></span>
+                                        <span id="podium-hard-1-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center border-b border-gray-200 p-2 mb-2">
+                                        <span class="text-lg">🥈 <span id="podium-hard-2-name" class="font-bold text-gray-600">-</span></span>
+                                        <span id="podium-hard-2-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-2">
+                                        <span class="text-lg">🥉 <span id="podium-hard-3-name" class="font-bold text-gray-600">-</span></span>
+                                        <span id="podium-hard-3-time" class="text-blue-600 font-bold">-</span>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -622,7 +672,7 @@
         window.lbScope = 'class'; 
         window.currentTeacherTab = 'easy';
 
-        // --- 重新加上抓取網頁 DOM 元素的宣告 ---
+        // --- 抓取網頁 DOM 元素 ---
         const screens = {
             'login-screen': document.getElementById('login-screen'),
             'teacher-login-screen': document.getElementById('teacher-login-screen'),
@@ -641,17 +691,19 @@
             'ㄅ':'k-1', 'ㄆ':'k-q', 'ㄇ':'k-a', 'ㄈ':'k-z', 'ㄉ':'k-2', 'ㄊ':'k-w', 'ㄋ':'k-s', 'ㄌ':'k-x', 'ㄍ':'k-e', 'ㄎ':'k-d', 'ㄏ':'k-c', 'ㄐ':'k-r', 'ㄑ':'k-f', 'ㄒ':'k-v', 'ㄓ':'k-5', 'ㄔ':'k-t', 'ㄕ':'k-g', 'ㄖ':'k-b', 'ㄗ':'k-y', 'ㄘ':'k-h', 'ㄙ':'k-n', 'ㄧ':'k-u', 'ㄨ':'k-j', 'ㄩ':'k-m', 'ㄚ':'k-8', 'ㄛ':'k-i', 'ㄜ':'k-k', 'ㄝ':'k-,', 'ㄞ':'k-9', 'ㄟ':'k-o', 'ㄠ':'k-l', 'ㄡ':'k-.', 'ㄢ':'k-0', 'ㄣ':'k-p', 'ㄤ':'k-[', 'ㄥ':'k-;', 'ㄦ':'k--', 'ˇ':'k-3', 'ˋ':'k-4', 'ˊ':'k-6', '˙':'k-space', ' ':'k-space'
         };
 
-        // --- 📚 超巨量緊湊字串題庫 (用函數解析以節省空間) 📚 ---
+        // --- 📚 超巨量緊湊字串題庫 📚 ---
+        // 格式 EN: "target|hint|emoji"
+        // 格式 ZH: "target|zhuyin1,zhuyin2|hint|emoji"
         const rawPools = {
             3: {
                 easy: {
                     en: [
-                        "a|左手小指|🍎", "b|f鍵往右下|🐻", "c|d鍵往下|🐱", "d|左手中指|🐶", "e|d鍵往上|🐘", 
-                        "f|左手食指|👆", "g|f鍵往右|🦒", "h|j鍵往左|🐴", "i|k鍵往上|🍦", "j|右手食指|👇", 
-                        "k|右手中指|🪁", "l|右手無名指|🍋", "m|j鍵往右下|🐭", "n|j鍵往左下|🥜", "o|l鍵往上|🐙", 
-                        "p|右手小指往上|🐷", "q|a鍵往上|👑", "r|f鍵往上|🚀", "s|左手無名指|🐍", "t|f鍵往右上|🐢", 
-                        "u|j鍵往上|☂️", "v|f鍵往右下|🚐", "w|s鍵往上|🍉", "x|s鍵往下|✖️", "y|j鍵往左上|🪀", 
-                        "z|a鍵往右下|🦓", "cat|小貓|🐱", "dog|小狗|🐶", "pig|小豬|🐷", "cow|乳牛|🐮",
+                        "a|左手小指放的地方喔！|🍎", "b|f鍵往右下的地方。|🐻", "c|d鍵往下的地方。|🐱", "d|左手中指放的地方喔！|🐶", "e|d鍵往上的地方。|🐘", 
+                        "f|左手食指的家喔！|👆", "g|f鍵往右的地方。|🦒", "h|j鍵往左的地方。|🐴", "i|k鍵往上的地方。|🍦", "j|右手食指的家喔！|👇", 
+                        "k|右手中指放的地方喔！|🪁", "l|右手無名指放的地方喔！|🍋", "m|j鍵往右下的地方。|🐭", "n|j鍵往左下的地方。|🥜", "o|l鍵往上的地方。|🐙", 
+                        "p|右手小指往上按。|🐷", "q|a鍵往上的地方。|👑", "r|f鍵往上的地方。|🚀", "s|左手無名指放的地方喔！|🐍", "t|f鍵往右上的地方。|🐢", 
+                        "u|j鍵往上的地方。|☂️", "v|f鍵往右下的地方。|🚐", "w|s鍵往上的地方。|🍉", "x|s鍵往下的地方。|✖️", "y|j鍵往左上的地方。|🪀", 
+                        "z|a鍵往右下的地方。|🦓", "cat|小貓|🐱", "dog|小狗|🐶", "pig|小豬|🐷", "cow|乳牛|🐮",
                         "sun|太陽|☀️", "toy|玩具|🧸", "box|箱子|📦", "boy|男孩|👦", "car|車子|🚗",
                         "map|地圖|🗺️", "red|紅色|🔴", "pen|筆|🖊️", "cup|杯子|🥤", "hat|帽子|🧢",
                         "run|跑|🏃", "sit|坐下|🪑", "fly|飛|🦅", "bug|蟲子|🐛", "bus|公車|🚌",
@@ -723,7 +775,7 @@
                     ]
                 }
             },
-            4: { // 四年級 (15題特製版：10英文 5中文)
+            4: { // 四年級 (15題特製版)
                 easy: {
                     en: [
                         "mario|瑪利歐|🍄", "kirby|星之卡比|🌟", "apple|蘋果|🍎", "water|水|💧", "green|綠色|🟩",
@@ -803,108 +855,122 @@
                     ]
                 }
             },
-            5: { // 五六年級
+            5: { // 五六年級 (18題特製版：10英文 8中文。超過500題海量題庫)
                 easy: {
                     en: [
-                        "minecraft|麥塊|⛏️", "creeper|苦力怕|💥", "pokemon|寶可夢|🔴", "roblox|機器磚塊|🤖", "dragon|龍|🐉",
-                        "zombie|殭屍|🧟", "forest|森林|🌲", "ocean|海洋|🌊", "space|太空|🌌", "rocket|火箭|🚀",
-                        "robot|機器人|🦾", "button|按鈕|🔘", "mouse|滑鼠|🖱️", "screen|螢幕|🖥️", "python|程式語言|🐍",
-                        "coding|寫程式|👨‍💻", "vtuber|虛擬實況主|🎙️", "stream|實況直播|📡", "tiktok|短影音|📱", "gamer|玩家|🎮",
-                        "server|伺服器|🗄️", "client|客戶端|💻", "pixel|像素|👾", "block|方塊|🧱", "craft|合成|🛠️",
-                        "mine|挖礦|⛏️", "build|建築|🏗️", "survive|生存|🏕️", "explore|探索|🧭", "adventure|冒險|🗺️",
-                        "portal|傳送門|🌀", "nether|地獄|🔥", "ender|終界|🌌", "sword|劍|🗡️", "pickaxe|十字鎬|⛏️",
-                        "shovel|鏟子|🪚", "axe|斧頭|🪓", "hoe|鋤頭|🏑", "armor|盔甲|🛡️", "helmet|頭盔|🪖",
-                        "chest|箱子|📦", "legs|護腿|👖", "boots|靴子|🥾", "food|食物|🍖", "health|血量|❤️",
-                        "stamina|體力|⚡", "mana|魔力|✨", "magic|魔法|🪄", "spell|咒語|📜", "level|等級|📈"
+                        "apple|蘋果|🍎", "banana|香蕉|🍌", "cat|貓咪|🐱", "dog|小狗|🐶", "egg|雞蛋|🥚",
+                        "fish|魚兒|🐟", "goat|山羊|🐐", "hat|帽子|🧢", "ice|冰塊|🧊", "juice|果汁|🧃",
+                        "kite|風箏|🪁", "lion|獅子|🦁", "map|地圖|🗺️", "nut|堅果|🥜", "orange|橘子|🍊",
+                        "pig|小豬|🐷", "queen|皇后|👑", "rat|老鼠|🐀", "sun|太陽|☀️", "tree|樹木|🌳",
+                        "bear|熊|🐻", "car|車子|🚗", "duck|鴨子|🦆", "frog|青蛙|🐸", "girl|女孩|👧",
+                        "hand|手|🖐️", "iron|鐵|⚙️", "jump|跳|🦘", "king|國王|🤴", "leaf|葉子|🍃",
+                        "moon|月亮|🌙", "nest|鳥巢|🪹", "owl|貓頭鷹|🦉", "pen|筆|🖊️", "quiet|安靜|🤫",
+                        "rose|玫瑰|🌹", "star|星星|⭐", "time|時間|⏱️", "unit|單位|📏", "van|箱型車|🚐",
+                        "wood|木頭|🪵", "xray|X光|🦴", "yard|院子|🏡", "zero|零|0️⃣", "ant|螞蟻|🐜",
+                        "bird|小鳥|🐦", "cow|乳牛|🐮", "door|門|🚪", "eye|眼睛|👁️", "foot|腳|🦶",
+                        "game|遊戲|🎮", "hair|頭髮|💇", "idea|點子|💡", "joke|笑話|😂", "key|鑰匙|🔑",
+                        "lake|湖|🏞️", "milk|牛奶|🥛", "nose|鼻子|👃", "oil|油|🛢️", "park|公園|🛝",
+                        "quiz|測驗|📝", "room|房間|🏠", "snow|雪|❄️", "tent|帳篷|⛺", "user|使用者|👤",
+                        "vase|花瓶|🏺", "wall|牆壁|🧱", "box|箱子|📦", "year|年份|📅", "zoo|動物園|🦓",
+                        "art|藝術|🎨", "bat|蝙蝠|🦇", "cup|杯子|🥤", "day|白天|☀️", "ear|耳朵|👂",
+                        "fly|飛|🦅", "gym|體育館|🏋️", "hut|小屋|🛖", "ink|墨水|🖋️", "jam|果醬|🍓",
+                        "kid|小孩|🧒", "lip|嘴唇|👄", "mud|泥巴|🤎", "net|網子|🥅", "oak|橡樹|🌳",
+                        "pan|平底鍋|🍳", "run|跑|🏃", "sea|海|🌊", "toy|玩具|🧸", "use|使用|🖱️"
                     ],
                     zh: [
-                        "原神|ㄩㄢˊ,ㄕㄣˊ|熱門遊戲啟動|🎮", "悟空|ㄨˋ,ㄎㄨㄥ|黑神話天命人|🐒", "絕區零|ㄐㄩㄝˊ,ㄑㄩ,ㄌㄧㄥˊ|米哈遊的新遊戲|📺", "芙莉蓮|ㄈㄨˊ,ㄌㄧˋ,ㄌㄧㄢˊ|活了千年的精靈|🧝‍♀️", "欣梅爾|ㄒㄧㄣ,ㄇㄟˊ,ㄦˇ|帥氣的勇者|🗡️",
-                        "五條悟|ㄨˇ,ㄊㄧㄠˊ,ㄨˋ|無下限術式|🤞", "虎杖|ㄏㄨˇ,ㄓㄤˋ|吃下宿儺手指|👊", "伏黑|ㄈㄨˊ,ㄏㄟ|召喚玉犬的式神使|🐺", "釘崎|ㄉㄧㄥ,ㄑㄧˊ|使用鐵鎚|🔨", "炭治郎|ㄊㄢˋ,ㄓˋ,ㄌㄤˊ|鬼滅之刃男主角|🎴",
-                        "蔡阿嘎|ㄘㄞˋ,ㄚ,ㄍㄚ|搞笑YouTuber|🎥", "蔡依林|ㄘㄞˋ,ㄧ,ㄌㄧㄣˊ|知名女歌手|💃", "周杰倫|ㄓㄡ,ㄐㄧㄝˊ,ㄌㄨㄣˊ|有名的歌手|🎤", "五月天|ㄨˇ,ㄩㄝˋ,ㄊㄧㄢ|有名的樂團|🎸", "告五人|ㄍㄠˋ,ㄨˇ,ㄖㄣˊ|好聽的樂團|🍈",
-                        "老高|ㄌㄠˇ,ㄍㄠ|講故事的YouTuber|👽", "這群人|ㄓㄜˋ,ㄑㄩㄣˊ,ㄖㄣˊ|經典YouTuber|🎬", "阿滴|ㄚ,ㄉㄧ|教英文的YouTuber|📚", "滴妹|ㄉㄧ,ㄇㄟˋ|愛喝手搖飲|🧋", "啾啾鞋|ㄐㄧㄡ,ㄐㄧㄡ,ㄒㄧㄝˊ|冷知識YouTuber|👞",
-                        "志祺|ㄓˋ,ㄑㄧˊ|時事YouTuber|👓", "酷炫|ㄎㄨˋ,ㄒㄩㄢˋ|反骨男孩|😎", "蕾菈|ㄌㄟˇ,ㄌㄚ|反骨男孩|👩", "孫生|ㄙㄨㄣ,ㄕㄥ|反骨男孩|🕺", "英雄|ㄧㄥ,ㄒㄩㄥˊ|聯盟|🛡️",
-                        "聯盟|ㄌㄧㄢˊ,ㄇㄥˊ|英雄|🛡️", "荒野|ㄏㄨㄤ,ㄧㄝˇ|亂鬥|🔫", "亂鬥|ㄌㄨㄢˋ,ㄉㄡˋ|荒野|🔫", "健身環|ㄐㄧㄢˋ,ㄕㄣ,ㄏㄨㄢˊ|邊運動邊打怪|🏃", "賽車|ㄙㄞˋ,ㄔㄜ|瑪利歐|🏎️",
-                        "朱紫|ㄓㄨ,ㄗˇ|寶可夢|🔴", "漆彈|ㄑㄧ,ㄉㄢˋ|斯普拉遁|🦑", "傳說|ㄔㄨㄢˊ,ㄕㄨㄛ|對決|📱", "貓咪|ㄇㄠ,ㄇㄧ|大戰爭|🐾", "彈珠|ㄉㄢˋ,ㄓㄨ|怪物|🎯",
-                        "薩爾達|ㄙㄚˋ,ㄦˇ,ㄉㄚˊ|公主|👑", "林克|ㄌㄧㄣˊ,ㄎㄜˋ|勇者|🗡️", "曠野|ㄎㄨㄤˋ,ㄧㄝˇ|之息|⛰️", "薩姆斯|ㄙㄚˋ,ㄇㄨˇ,ㄙ|銀河戰士|👩‍🚀", "卡比|ㄎㄚˇ,ㄅㄧˇ|星之|🌟",
-                        "耀西|ㄧㄠˋ,ㄒㄧ|恐龍|🦖", "庫巴|ㄎㄨˋ,ㄅㄚ|魔王|🐢", "碧姬|ㄅㄧˋ,ㄐㄧ|公主|👑", "奇諾|ㄑㄧˊ,ㄋㄨㄛˋ|比奧|🍄", "帕底亞|ㄆㄚˋ,ㄉㄧˇ,ㄧㄚˇ|寶可夢地區|🗺️",
-                        "帕魯|ㄆㄚˋ,ㄌㄨˇ|幻獸|🦄", "幻獸|ㄏㄨㄢˋ,ㄕㄡˋ|帕魯|🦄", "寶可夢|ㄅㄠˇ,ㄎㄜˇ,ㄇㄥˋ|神奇寶貝|🔴", "神奇|ㄕㄣˊ,ㄑㄧˊ|寶貝|🔴", "寶貝|ㄅㄠˇ,ㄅㄟˋ|神奇|🔴"
+                        "朋友|ㄆㄥˊ,ㄧㄡˇ|好夥伴|🤝", "老師|ㄌㄠˇ,ㄕ|教導我們的人|👩‍🏫", "學校|ㄒㄩㄝˊ,ㄒㄧㄠˋ|上學的地方|🏫", "讀書|ㄉㄨˊ,ㄕㄨ|看書學習|📖", "寫字|ㄒㄧㄝˇ,ㄗˋ|用筆寫|✍️",
+                        "畫畫|ㄏㄨㄚˋ,ㄏㄨㄚˋ|用彩色筆|🎨", "唱歌|ㄔㄤˋ,ㄍㄜ|用麥克風|🎤", "跳舞|ㄊㄧㄠˋ,ㄨˇ|跟著音樂動|💃", "運動|ㄩㄣˋ,ㄉㄨㄥˋ|活動身體|🏃", "跑步|ㄆㄠˇ,ㄅㄨˋ|在操場上|🏃",
+                        "游泳|ㄧㄡˊ,ㄩㄥˇ|在水裡|🏊", "遊戲|ㄧㄡˊ,ㄒㄧˋ|好玩的|🎮", "快樂|ㄎㄨㄞˋ,ㄌㄜˋ|心情好|😄", "開心|ㄎㄞ,ㄒㄧㄣ|很高興|😊", "勇敢|ㄩㄥˇ,ㄍㄢˇ|不怕困難|🦸",
+                        "聰明|ㄘㄨㄥ,ㄇㄧㄥˊ|頭腦好|🧠", "漂亮|ㄆㄧㄠˋ,ㄌㄧㄤˋ|很好看|✨", "可愛|ㄎㄜˇ,ㄞˋ|討人喜歡|🥰", "發現|ㄈㄚ,ㄒㄧㄢˋ|找到新東西|👀", "觀察|ㄍㄨㄢ,ㄔㄚˊ|仔細看|🔎",
+                        "哆啦A夢|ㄉㄨㄛ,ㄌㄚ,A,ㄇㄥˋ|機智貓|🐱", "柯南|ㄎㄜ,ㄋㄢˊ|小偵探|🕵️", "皮卡丘|ㄆㄧˊ,ㄎㄚˇ,ㄑㄧㄡ|會放電|⚡", "瑪利歐|ㄇㄚˇ,ㄌㄧˋ,ㄡ|戴紅帽|🍄", "卡比|ㄎㄚˇ,ㄅㄧˇ|吃東西|🌟",
+                        "炭治郎|ㄊㄢˋ,ㄓˋ,ㄌㄤˊ|拿著劍|🎴", "禰豆子|ㄋㄧˇ,ㄉㄡˋ,ㄗ˙|咬竹子|🎍", "善逸|ㄕㄢˋ,ㄧˋ|很膽小|⚡", "芙莉蓮|ㄈㄨˊ,ㄌㄧˋ,ㄌㄧㄢˊ|精靈魔法使|🧝‍♀️", "欣梅爾|ㄒㄧㄣ,ㄇㄟˊ,ㄦˇ|人類勇者|🗡️",
+                        "五條悟|ㄨˇ,ㄊㄧㄠˊ,ㄨˋ|最強咒術師|🤞", "虎杖|ㄏㄨˇ,ㄓㄤˋ|力氣很大|👊", "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|蓋房子|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|抓蟲釣魚|🏝️", "原神|ㄩㄢˊ,ㄕㄣˊ|開放世界|🗺️",
+                        "絕區零|ㄐㄩㄝˊ,ㄑㄩ,ㄌㄧㄥˊ|最新遊戲|📺", "史迪奇|ㄕˇ,ㄉㄧˊ,ㄑㄧˊ|外星人|👽", "米老鼠|ㄇㄧˇ,ㄌㄠˇ,ㄕㄨˇ|迪士尼|🐭", "蜘蛛人|ㄓ,ㄓㄨ,ㄖㄣˊ|吐絲|🕸️", "鋼鐵人|ㄍㄤ,ㄊㄧㄝˇ,ㄖㄣˊ|紅金盔甲|🤖",
+                        "蝙蝠俠|ㄅㄧㄢ,ㄈㄨˊ,ㄒㄧㄚˊ|黑漆漆|🦇", "艾莎|ㄞˋ,ㄕㄚ|冰雪魔法|❄️", "安娜|ㄢ,ㄋㄚˋ|勇敢妹妹|👧", "雪寶|ㄒㄩㄝˇ,ㄅㄠˇ|喜歡夏天|⛄", "胡迪|ㄏㄨˊ,ㄉㄧˊ|玩具牛仔|🤠",
+                        "巴斯|ㄅㄚ,ㄙ|太空騎警|🚀", "佩佩豬|ㄆㄟˋ,ㄆㄟˋ,ㄓㄨ|喜歡泥巴|🐷", "史努比|ㄕˇ,ㄋㄨˇ,ㄅㄧˇ|躺在屋頂|🐶", "龍貓|ㄌㄨㄥˊ,ㄇㄠ|毛茸茸|🐾", "維尼|ㄨㄟˊ,ㄋㄧˊ|黃色小熊|🍯",
+                        "蘋果|ㄆㄧㄥˊ,ㄍㄨㄛˇ|紅水果|🍎", "香蕉|ㄒㄧㄤ,ㄐㄧㄠ|黃水果|🍌", "西瓜|ㄒㄧ,ㄍㄨㄚ|綠水果|🍉", "太陽|ㄊㄞˋ,ㄧㄤˊ|很熱|☀️", "月亮|ㄩㄝˋ,ㄌㄧㄤˋ|晚上出來|🌙",
+                        "星星|ㄒㄧㄥ,ㄒㄧㄥ|一閃一閃|⭐", "雲朵|ㄩㄣˊ,ㄉㄨㄛˇ|白白的|☁️", "海洋|ㄏㄞˇ,ㄧㄤˊ|很大|🌊", "高山|ㄍㄠ,ㄕㄢ|很高|⛰️", "河流|ㄏㄜˊ,ㄌㄧㄡˊ|水在跑|🏞️",
+                        "動物|ㄉㄨㄥˋ,ㄨˋ|有生命|🦁", "植物|ㄓˊ,ㄨˋ|綠綠的|🌿", "昆蟲|ㄎㄨㄣ,ㄔㄨㄥˊ|有六隻腳|🐛", "蝴蝶|ㄏㄨˊ,ㄉㄧㄝˊ|很漂亮|🦋", "蜜蜂|ㄇㄧˋ,ㄈㄥ|採花蜜|🐝",
+                        "螞蟻|ㄇㄚˇ,ㄧˇ|很團結|🐜", "飛鳥|ㄈㄟ,ㄋㄧㄠˇ|有翅膀|🐦", "魚兒|ㄩˊ,ㄦˊ|會游泳|🐟", "花朵|ㄏㄨㄚ,ㄉㄨㄛˇ|香香的|🌸", "樹木|ㄕㄨˋ,ㄇㄨˋ|有樹幹|🌳",
+                        "宇宙|ㄩˇ,ㄓㄡˋ|浩瀚無垠|🌌", "探險|ㄊㄢˋ,ㄒㄧㄢˇ|找寶藏|🧭", "森林|ㄙㄣ,ㄌㄧㄣˊ|很多樹|🌲", "挑戰|ㄊㄧㄠˇ,ㄓㄢˋ|不怕難|💪", "勝利|ㄕㄥˋ,ㄌㄧˋ|贏了|🏆"
                     ]
                 },
                 medium: {
                     en: [
-                        "technology|科技|📱", "programming|程式設計|💻", "information|資訊|ℹ️", "dictionary|字典|📔", "yesterday|昨天|🔙",
-                        "tomorrow|明天|🔜", "breakfast|早餐|🍳", "afternoon|下午|☕", "password|密碼|🔑", "username|使用者|👤",
-                        "security|安全|🛡️", "software|軟體|💿", "hardware|硬體|⚙️", "network|網路|🕸️", "database|資料庫|🗄️",
-                        "memory|記憶體|🧠", "storage|儲存空間|💾", "cloud|雲端|☁️", "folder|資料夾|📁", "file|檔案|📄",
-                        "document|文件|📝", "image|圖片|🖼️", "video|影片|🎬", "audio|音訊|🎵", "player|播放器|▶️",
-                        "editor|編輯器|✍️", "browser|瀏覽器|🌐", "search|搜尋|🔍", "engine|引擎|⚙️", "website|網站|🕸️",
-                        "page|網頁|📄", "link|連結|🔗", "url|網址|🌐", "domain|網域|🌍", "host|主機|🖥️",
-                        "online|上線|🟢", "offline|離線|🔴", "connect|連線|🔌", "disconnect|斷線|🚫", "error|錯誤|❌",
-                        "warning|警告|⚠️", "alert|警報|🚨", "info|資訊|ℹ️", "success|成功|✅", "fail|失敗|❌",
-                        "retry|重試|🔄", "cancel|取消|❌", "confirm|確認|✅", "accept|接受|✅", "decline|拒絕|❌"
+                        "animal|動物|🦁", "basket|籃子|🧺", "castle|城堡|🏰", "doctor|醫生|👨‍⚕️", "elephant|大象|🐘",
+                        "farmer|農夫|🧑‍🌾", "garden|花園|🏡", "hospital|醫院|🏥", "island|島嶼|🏝️", "jungle|叢林|🌴",
+                        "kitchen|廚房|🍳", "library|圖書館|📚", "monkey|猴子|🐒", "nature|自然|🌿", "ocean|海洋|🌊",
+                        "pencil|鉛筆|✏️", "rabbit|兔子|🐇", "school|學校|🏫", "teacher|老師|👩‍🏫", "window|窗戶|🪟",
+                        "action|行動|🎬", "bridge|橋樑|🌉", "circle|圓形|⭕", "danger|危險|⚠️", "energy|能量|⚡",
+                        "family|家人|👨‍👩‍👧‍👦", "ground|地面|🌍", "health|健康|❤️", "insect|昆蟲|🐞", "jacket|外套|🧥",
+                        "knight|騎士|🤺", "letter|信件|✉️", "market|市場|🛒", "number|數字|🔢", "office|辦公室|🏢",
+                        "person|人|🧑", "record|紀錄|⏺️", "season|季節|🌸", "ticket|票|🎫", "useful|有用的|🛠️",
+                        "valley|山谷|⛰️", "weight|重量|⚖️", "yellow|黃色|🟨", "active|活躍的|🏃", "branch|樹枝|🌿",
+                        "camera|相機|📷", "design|設計|📐", "engine|引擎|⚙️", "future|未來|🚀", "gentle|溫柔的|😊",
+                        "honest|誠實的|🤝", "invite|邀請|💌", "joyful|快樂的|😁", "little|小的|🤏", "modern|現代的|🏙️",
+                        "narrow|狹窄的|🛤️", "object|物體|📦", "planet|星球|🪐", "reason|原因|🤔", "simple|簡單的|✅",
+                        "target|目標|🎯", "unique|獨特的|🌟", "village|村莊|🏘️", "wonder|奇蹟|✨", "author|作者|✍️",
+                        "button|按鈕|🔘", "center|中心|🎯", "detail|細節|🔍", "effect|效果|💥", "figure|圖形|📊",
+                        "gather|收集|🤲", "hungry|飢餓的|🤤", "impact|影響|☄️", "lumber|木材|🪵", "member|成員|👤",
+                        "notice|通知|🔔", "option|選項|☑️", "parent|父母|👪", "reward|獎勵|🎁", "silver|銀色|🥈"
                     ],
                     zh: [
-                        "網路|ㄨㄤˇ,ㄌㄨˋ|連上世界|🌐", "電腦|ㄉㄧㄢˋ,ㄋㄠˇ|資訊課用的機器|💻", "鍵盤|ㄐㄧㄢˋ,ㄆㄢˊ|打字用的工具|⌨️", "滑鼠|ㄏㄨㄚˊ,ㄕㄨˇ|游標控制|🖱️", "螢幕|ㄧㄥˊ,ㄇㄨˋ|看畫面的地方|🖥️",
-                        "程式|ㄔㄥˊ,ㄕˋ|寫代碼|👨‍💻", "手機|ㄕㄡˇ,ㄐㄧ|每天都在用|📱", "密碼|ㄇㄧˋ,ㄇㄚˇ|要記好不能給別人|🔑", "帳號|ㄓㄤˋ,ㄏㄠˋ|登入用的|👤", "遊戲|ㄧㄡˊ,ㄒㄧˋ|打完字就可以玩囉|🎮",
-                        "實況主|ㄕˊ,ㄎㄨㄤˋ,ㄓㄨˇ|開直播的人|🎙️", "影片|ㄧㄥˇ,ㄆㄧㄢˋ|在YouTube上看|🎬", "訂閱|ㄉㄧㄥˋ,ㄩㄝˋ|喜歡頻道記得按|🔔", "按讚|ㄢˋ,ㄗㄢˋ|給個愛心|👍", "分享|ㄈㄣ,ㄒㄧㄤˇ|傳給好朋友|⤴️",
-                        "留言|ㄌㄧㄡˊ,ㄧㄢˊ|寫想法|💬", "頻道|ㄆㄧㄣˊ,ㄉㄠˋ|YouTube的|📺", "網頁|ㄨㄤˇ,ㄧㄝˋ|上網看|📄", "網站|ㄨㄤˇ,ㄓㄢˋ|上網看|🕸️", "搜尋|ㄙㄡ,ㄒㄩㄣˊ|找資料|🔍",
-                        "瀏覽器|ㄌㄧㄡˊ,ㄌㄢˇ,ㄑㄧˋ|上網用的軟體|🌐", "視窗|ㄕˋ,ㄔㄨㄤ|電腦上的畫面|🪟", "檔案|ㄉㄤˇ,ㄢˋ|存在電腦裡|📄", "資料|ㄗ,ㄌㄧㄠˋ|很有用|📊", "雲端|ㄩㄣˊ,ㄉㄨㄢ|存在網路上|☁️",
-                        "下載|ㄒㄧㄚˋ,ㄗㄞˋ|存到電腦|⬇️", "上傳|ㄕㄤˋ,ㄔㄨㄢˊ|放到網路上|⬆️", "更新|ㄍㄥ,ㄒㄧㄣ|變新版|🔄", "升級|ㄕㄥ,ㄐㄧˊ|變更強|⭐", "系統|ㄒㄧˋ,ㄊㄨㄥˇ|電腦核心|⚙️",
-                        "軟體|ㄖㄨㄢˇ,ㄊㄧˇ|電腦裡的程式|💿", "硬體|ㄧㄥˋ,ㄊㄧˇ|電腦的零件|🛠️", "記憶|ㄐㄧˋ,ㄧˋ|記住事情|🧠", "空間|ㄎㄨㄥ,ㄐㄧㄢ|存東西的地方|📦", "容量|ㄖㄨㄥˊ,ㄌㄧㄤˋ|可以裝多少|🔋",
-                        "速度|ㄙㄨˋ,ㄉㄨˋ|有多快|🚀", "延遲|ㄧㄢˊ,ㄔˊ|卡卡的|🐢", "斷線|ㄉㄨㄢˋ,ㄒㄧㄢˋ|連不上|🚫", "連線|ㄌㄧㄢˊ,ㄒㄧㄢˋ|接上了|🔌", "錯誤|ㄘㄨㄛˋ,ㄨˋ|有問題|❌",
-                        "警告|ㄐㄧㄥˇ,ㄍㄠˋ|要小心|⚠️", "提示|ㄊㄧˊ,ㄕˋ|給你線索|💡", "成功|ㄔㄥˊ,ㄍㄨㄥ|太棒了|✅", "失敗|ㄕ,ㄅㄞˋ|再試一次|❌", "重試|ㄔㄨㄥˊ,ㄕˋ|再來一次|🔄",
-                        "取消|ㄑㄩˇ,ㄒㄧㄠ|不要了|❌", "確認|ㄑㄩㄝˋ,ㄖㄣˋ|確定是|✅", "返回|ㄈㄢˇ,ㄏㄨㄟˊ|回上頁|🔙", "登入|ㄉㄥ,ㄖㄨˋ|進去|🔑", "登出|ㄉㄥ,ㄔㄨ|出來|🚪"
+                        "腳踏車|ㄐㄧㄠˇ,ㄊㄚˋ,ㄔㄜ|環保交通|🚲", "溜滑梯|ㄌㄧㄡ,ㄏㄨㄚˊ,ㄊㄧ|公園設施|🛝", "捉迷藏|ㄓㄨㄛ,ㄇㄧˊ,ㄘㄤˊ|下課遊戲|🙈", "盪鞦韆|ㄉㄤˋ,ㄑㄧㄡ,ㄑㄧㄢ|飛高高|🪁", "營養午餐|ㄧㄥˊ,ㄧㄤˇ,ㄨˇ,ㄘㄢ|在學校吃|🍱",
+                        "打掃時間|ㄉㄚˇ,ㄙㄠˇ,ㄕˊ,ㄐㄧㄢ|維持整潔|🧹", "資源回收|ㄗ,ㄩㄢˊ,ㄏㄨㄟˊ,ㄕㄡ|保護地球|♻️", "圖書館|ㄊㄨˊ,ㄕㄨ,ㄍㄨㄢˇ|借閱書籍|📚", "博物館|ㄅㄛˊ,ㄨˋ,ㄍㄨㄢˇ|認識歷史|🏛️", "美術館|ㄇㄟˇ,ㄕㄨˋ,ㄍㄨㄢˇ|欣賞名畫|🖼️",
+                        "動物園|ㄉㄨㄥˋ,ㄨˋ,ㄩㄢˊ|觀察生態|🐘", "遊樂園|ㄧㄡˊ,ㄌㄜˋ,ㄩㄢˊ|玩雲霄飛車|🎢", "看電視|ㄎㄢˋ,ㄉㄧㄢˋ,ㄕˋ|休閒娛樂|📺", "打電腦|ㄉㄚˇ,ㄉㄧㄢˋ,ㄋㄠˇ|資訊課|💻", "寫功課|ㄒㄧㄝˇ,ㄍㄨㄥ,ㄎㄜˋ|回家任務|📝",
+                        "考試|ㄎㄠˇ,ㄕˋ|測驗實力|💯", "滿分|ㄇㄢˇ,ㄈㄣ|全部答對|💯", "第一名|ㄉㄧˋ,ㄧ,ㄇㄧㄥˊ|最厲害|🥇", "冠軍|ㄍㄨㄢˋ,ㄐㄩㄣ|最高榮譽|🏆", "勝利|ㄕㄥˋ,ㄌㄧˋ|贏得比賽|✌️",
+                        "周杰倫|ㄓㄡ,ㄐㄧㄝˊ,ㄌㄨㄣˊ|流行歌手|🎤", "蔡依林|ㄘㄞˋ,ㄧ,ㄌㄧㄣˊ|唱跳天后|💃", "林俊傑|ㄌㄧㄣˊ,ㄐㄩㄣˋ,ㄐㄧㄝˊ|情歌王子|🎹", "泰勒絲|ㄊㄞˋ,ㄌㄜˋ,ㄙ|國際巨星|👱‍♀️", "五月天|ㄨˇ,ㄩㄝˋ,ㄊㄧㄢ|知名樂團|🎸",
+                        "老高|ㄌㄠˇ,ㄍㄠ|說故事頻道|👽", "這群人|ㄓㄜˋ,ㄑㄩㄣˊ,ㄖㄣˊ|搞笑短片|🎬", "阿滴英文|ㄚ,ㄉㄧ,ㄧㄥ,ㄨㄣˊ|學習頻道|📚", "蔡阿嘎|ㄘㄞˋ,ㄚ,ㄍㄚ|百萬網紅|🎥", "木曜四|ㄇㄨˋ,ㄧㄠˋ,ㄙˋ|網路節目|🪵",
+                        "自然科學|ㄗˋ,ㄖㄢˊ,ㄎㄜ,ㄒㄩㄝˊ|探索真理|🔬", "社會歷史|ㄕㄜˋ,ㄏㄨㄟˋ,ㄌㄧˋ,ㄕˇ|了解過去|🌍", "數學計算|ㄕㄨˋ,ㄒㄩㄝˊ,ㄐㄧˋ,ㄙㄨㄢˋ|邏輯思考|🔢", "國語閱讀|ㄍㄨㄛˊ,ㄩˇ,ㄩㄝˋ,ㄉㄨˊ|培養語感|📖", "英文單字|ㄧㄥ,ㄨㄣˊ,ㄉㄢ,ㄗˋ|背誦記憶|🔤",
+                        "音樂欣賞|ㄧㄣ,ㄩㄝˋ,ㄒㄧㄣ,ㄕㄤˇ|陶冶性情|🎵", "美術創作|ㄇㄟˇ,ㄕㄨˋ,ㄘㄨㄤˋ,ㄗㄨㄛˋ|發揮創意|🎨", "體育活動|ㄊㄧˇ,ㄩˋ,ㄏㄨㄛˊ,ㄉㄨㄥˋ|強健體魄|🏀", "升旗典禮|ㄕㄥ,ㄑㄧˊ,ㄉㄧㄢˇ,ㄌㄧˇ|莊嚴肅穆|🇹🇼", "校外教學|ㄒㄧㄠˋ,ㄨㄞˋ,ㄐㄧㄠ,ㄒㄩㄝˊ|增廣見聞|🚌",
+                        "畢業旅行|ㄅㄧˋ,ㄧㄝˋ,ㄌㄩˇ,ㄒㄧㄥˊ|美好回憶|🧳", "期中考|ㄑㄧˊ,ㄓㄨㄥ,ㄎㄠˇ|學期一半|📝", "期末考|ㄑㄧˊ,ㄇㄛˋ,ㄎㄠˇ|學期結束|💯", "暑假作業|ㄕㄨˇ,ㄐㄧㄚˋ,ㄗㄨㄛˋ,ㄧㄝˋ|夏天放假|☀️", "寒假生活|ㄏㄢˊ,ㄐㄧㄚˋ,ㄕㄥ,ㄏㄨㄛˊ|冬天放假|⛄",
+                        "兒童節|ㄦˊ,ㄊㄨㄥˊ,ㄐㄧㄝˊ|專屬節日|🎈", "母親節|ㄇㄨˇ,ㄑㄧㄣ,ㄐㄧㄝˊ|感恩母愛|👩", "父親節|ㄈㄨˋ,ㄑㄧㄣ,ㄐㄧㄝˊ|感恩父愛|👨", "教師節|ㄐㄧㄠˋ,ㄕ,ㄐㄧㄝˊ|尊師重道|🍎", "中秋節|ㄓㄨㄥ,ㄑㄧㄡ,ㄐㄧㄝˊ|月圓人團圓|🌕",
+                        "端午節|ㄉㄨㄢ,ㄨˇ,ㄐㄧㄝˊ|吃粽子|🐉", "農曆新年|ㄋㄨㄥˊ,ㄌㄧˋ,ㄒㄧㄣ,ㄋㄧㄢˊ|除舊佈新|🧨", "除夕夜|ㄔㄨˊ,ㄒㄧˋ,ㄧㄝˋ|全家團圓|🍲", "壓歲錢|ㄧㄚ,ㄙㄨㄟˋ,ㄑㄧㄢˊ|長輩祝福|🧧", "便利商店|ㄅㄧㄢˋ,ㄌㄧˋ,ㄕㄤ,ㄉㄧㄢˋ|買東西方便|🏪",
+                        "超級市場|ㄔㄠ,ㄐㄧˊ,ㄕˋ,ㄔㄤˇ|採買日常|🛒", "捷運站|ㄐㄧㄝˊ,ㄩㄣˋ,ㄓㄢˋ|大眾運輸|🚇", "火車站|ㄏㄨㄛˇ,ㄔㄜ,ㄓㄢˋ|遠途旅行|🚉", "高鐵站|ㄍㄠ,ㄊㄧㄝˇ,ㄓㄢˋ|快速移動|🚄", "飛機場|ㄈㄟ,ㄐㄧ,ㄔㄤˇ|出國搭乘|✈️"
                     ]
                 },
                 hard: {
                     en: [
-                        "welcome to school|歡迎來到學校|🏫", "typing is fun|打字很有趣|⌨️", "practice makes perfect|熟能生巧|💪", "play games together|一起玩遊戲|🎮", "learning new things|學習新事物的|🧠",
-                        "hello world|寫程式的第一句話|🌍", "do your best|盡你所能|⭐", "never give up|永不放棄|🔥", "believe in yourself|相信自己|🌟", "keep moving forward|繼續前進|🚶",
-                        "stay positive always|保持積極|🌞", "dream big dreams|夢想遠大|💭", "work hard everyday|每天努力|汗", "be kind to others|友善待人|🤝", "help your friends|幫助朋友|👫",
-                        "respect your teachers|尊敬老師|🙇", "listen to parents|聽父母的話|👂", "clean your room|打掃房間|🧹", "wash your hands|洗手|🧼", "eat healthy food|吃健康食物|🥗",
-                        "drink more water|多喝水|💧", "exercise every day|每天運動|🏃", "read many books|多看書|📚", "sleep well tonight|好好睡覺|😴", "have a good day|祝你有美好的一天|☀️",
-                        "enjoy your meal|享受美食|🍽️", "safe travels home|回家路上小心|🚗", "see you tomorrow|明天見|👋", "happy new year|新年快樂|🎆", "merry christmas|聖誕快樂|🎄",
-                        "happy halloween|萬聖節快樂|🎃", "trick or treat|不給糖就搗蛋|🍬", "happy valentines|情人節快樂|💖", "happy easter|復活節快樂|🐰", "happy thanksgiving|感恩節快樂|🦃",
-                        "happy holidays|佳節愉快|🎉", "best wishes|獻上祝福|🎁", "good luck|祝你好運|🍀", "congratulations|恭喜|🎊", "happy anniversary|週年快樂|🥂",
-                        "happy graduation|畢業快樂|🎓", "happy retirement|退休快樂|🌴", "happy birthday|生日快樂|🎂", "sweet dreams|做個好夢|🌙", "good night|晚安|🌌",
-                        "good evening|晚上好|🌃", "good afternoon|下午好|🌇", "good morning|早安|🌅", "hello everyone|大家好|👋", "goodbye everyone|大家再見|👋"
+                        "adventure|冒險|🗺️", "beautiful|美麗的|✨", "chocolate|巧克力|🍫", "dinosaur|恐龍|🦖", "engineer|工程師|👷",
+                        "festival|節慶|🎉", "grandfather|爺爺|👴", "helicopter|直升機|🚁", "internet|網際網路|🌐", "jellyfish|水母|🪼",
+                        "kangaroo|袋鼠|🦘", "language|語言|🗣️", "mountain|山脈|⛰️", "neighbor|鄰居|🏘️", "octopus|章魚|🐙",
+                        "pineapple|鳳梨|🍍", "question|問題|❓", "restaurant|餐廳|🍽️", "strawberry|草莓|🍓", "umbrella|雨傘|☂️",
+                        "vegetable|蔬菜|🥬", "wonderful|極好的|🌟", "xylophone|木琴|🎼", "yesterday|昨天|🔙", "zoologist|動物學家|🦓",
+                        "astronaut|太空人|👨‍🚀", "butterfly|蝴蝶|🦋", "crocodile|鱷魚|🐊", "detective|偵探|🕵️", "education|教育|📚",
+                        "furniture|家具|🛋️", "geography|地理|🗺️", "hamburger|漢堡|🍔", "important|重要的|❗", "knowledge|知識|🧠",
+                        "landscape|風景|🏞️", "machinery|機械|⚙️", "newspaper|報紙|📰", "operation|操作|🛠️", "passenger|乘客|💺",
+                        "satellite|衛星|🛰️", "telephone|電話|☎️", "university|大學|🏫", "vacation|假期|🏖️", "waterfall|瀑布|🌊",
+                        "xylophone|木琴|🎶", "yardstick|碼尺|📏", "zeppelin|齊柏林飛船|🛩️", "apartment|公寓|🏢", "bookshelf|書架|📚",
+                        "character|角色|🎭", "delicious|美味的|😋", "expensive|昂貴的|💰", "frequent|頻繁的|🔄", "guitarist|吉他手|🎸",
+                        "highlight|亮點|✨", "invention|發明|💡", "journal|日誌|📓", "keyboard|鍵盤|⌨️", "limestone|石灰岩|🪨",
+                        "magician|魔術師|🎩", "notebook|筆記本|📔", "organize|組織|📂", "paintings|畫作|🖼️", "quarterly|季度的|📅",
+                        "scientist|科學家|🧑‍🔬", "telescope|望遠鏡|🔭", "universe|宇宙|🌌", "volunteer|志工|🙋", "whirlpool|漩渦|🌀"
                     ],
                     zh: [
-                        "白日依山盡|ㄅㄞˊ,ㄖˋ,ㄧ,ㄕㄢ,ㄐㄧㄣˋ|王之渙 登鸛雀樓|🌄", "黃河入海流|ㄏㄨㄤˊ,ㄏㄜˊ,ㄖㄨˋ,ㄏㄞˇ,ㄌㄧㄡˊ|王之渙 登鸛雀樓|🌊", "欲窮千里目|ㄩˋ,ㄑㄩㄥˊ,ㄑㄧㄢ,ㄌㄧˇ,ㄇㄨˋ|王之渙 登鸛雀樓|👀", "更上一層樓|ㄍㄥˋ,ㄕㄤˋ,ㄧˋ,ㄘㄥˊ,ㄌㄡˊ|王之渙 登鸛雀樓|🏢", "春眠不覺曉|ㄔㄨㄣ,ㄇㄧㄢˊ,ㄅㄨˋ,ㄐㄩㄝˊ,ㄒㄧㄠˇ|孟浩然 春曉|😴",
-                        "處處聞啼鳥|ㄔㄨˋ,ㄔㄨˋ,ㄨㄣˊ,ㄊㄧˊ,ㄋㄧㄠˇ|孟浩然 春曉|🐦", "夜來風雨聲|ㄧㄝˋ,ㄌㄞˊ,ㄈㄥ,ㄩˇ,ㄕㄥ|孟浩然 春曉|🌧️", "花落知多少|ㄏㄨㄚ,ㄌㄨㄛˋ,ㄓ,ㄉㄨㄛ,ㄕㄠˇ|孟浩然 春曉|🌸", "資訊課好玩|ㄗ,ㄒㄩㄣˋ,ㄎㄜˋ,ㄏㄠˇ,ㄨㄢˊ|可以學到好多知識！|💻", "打字小高手|ㄉㄚˇ,ㄗˋ,ㄒㄧㄠˇ,ㄍㄠ,ㄕㄡˇ|你就是最強的打字大師|⌨️"
+                        "一石二鳥|ㄧˋ,ㄕˊ,ㄦˋ,ㄋㄧㄠˇ|做一件事得到兩個好處|🪨", "守株待兔|ㄕㄡˇ,ㄓㄨ,ㄉㄞˋ,ㄊㄨˋ|妄想不勞而獲|🐇", "畫蛇添足|ㄏㄨㄚˋ,ㄕㄜˊ,ㄊㄧㄢ,ㄗㄨˊ|多此一舉|🐍", "亡羊補牢|ㄨㄤˊ,ㄧㄤˊ,ㄅㄨˇ,ㄌㄠˊ|犯錯後及時補救|🐑", "掩耳盜鈴|ㄧㄢˇ,ㄦˇ,ㄉㄠˋ,ㄌㄧㄥˊ|自欺欺人|🔔",
+                        "狐假虎威|ㄏㄨˊ,ㄐㄧㄚˇ,ㄏㄨˇ,ㄨㄟ|藉著別人的勢力欺壓人|🦊", "對牛彈琴|ㄉㄨㄟˋ,ㄋㄧㄡˊ,ㄊㄢˊ,ㄑㄧㄣˊ|講不聽、白費口舌|🐮", "畫龍點睛|ㄏㄨㄚˋ,ㄌㄨㄥˊ,ㄉㄧㄢˇ,ㄐㄧㄥ|加上最重要的部分|🐉", "望梅止渴|ㄨㄤˋ,ㄇㄟˊ,ㄓˇ,ㄎㄜˇ|用空想來安慰自己|🍋", "走馬看花|ㄗㄡˇ,ㄇㄚˇ,ㄎㄢˋ,ㄏㄨㄚ|大略觀看沒有仔細|🌸",
+                        "九牛一毛|ㄐㄧㄡˇ,ㄋㄧㄡˊ,ㄧˋ,ㄇㄠˊ|形容極少數|🐮", "十全十美|ㄕˊ,ㄑㄩㄢˊ,ㄕˊ,ㄇㄟˇ|非常完美|💯", "百發百中|ㄅㄞˇ,ㄈㄚ,ㄅㄞˇ,ㄓㄨㄥˋ|形容射擊技術高超|🎯", "千軍萬馬|ㄑㄧㄢ,ㄐㄩㄣ,ㄨㄢˋ,ㄇㄚˇ|形容兵馬眾多|🐎", "五顏六色|ㄨˇ,ㄧㄢˊ,ㄌㄧㄡˋ,ㄙㄜˋ|色彩繁多|🌈",
+                        "七上八下|ㄑㄧ,ㄕㄤˋ,ㄅㄚ,ㄒㄧㄚˋ|心情不安|😰", "四面八方|ㄙˋ,ㄇㄧㄢˋ,ㄅㄚ,ㄈㄤ|周圍各地|🧭", "三心二意|ㄙㄢ,ㄒㄧㄣ,ㄦˋ,ㄧˋ|猶豫不決|💔", "一心一意|ㄧˋ,ㄒㄧㄣ,ㄧˋ,ㄧˋ|專心致志|❤️", "半途而廢|ㄅㄢˋ,ㄊㄨˊ,ㄦˊ,ㄈㄟˋ|做事沒有堅持到底|🛑",
+                        "拔苗助長|ㄅㄚˊ,ㄇㄧㄠˊ,ㄓㄨˋ,ㄓㄤˇ|急於求成反而壞事|🌱", "井底之蛙|ㄐㄧㄥˇ,ㄉㄧˇ,ㄓ,ㄨㄚ|見識淺薄的人|🐸", "刻舟求劍|ㄎㄜˋ,ㄓㄡ,ㄑㄧㄡˊ,ㄐㄧㄢˋ|不知變通|🛶", "盲人摸象|ㄇㄤˊ,ㄖㄣˊ,ㄇㄛ,ㄒㄧㄤˋ|只了解一部分|🐘", "畫餅充飢|ㄏㄨㄚˋ,ㄅㄧㄥˇ,ㄔㄨㄥ,ㄐㄧ|用空想安慰自己|🍋",
+                        "走火入魔|ㄗㄡˇ,ㄏㄨㄛˇ,ㄖㄨˋ,ㄇㄛˊ|過分沉迷|🔥", "順手牽羊|ㄕㄨㄣˋ,ㄕㄡˇ,ㄑㄧㄢ,ㄧㄤˊ|趁機拿走別人東西|🐏", "殺雞取卵|ㄕㄚ,ㄐㄧ,ㄑㄩˇ,ㄌㄨㄢˇ|貪圖眼前微小利益|🐔", "雞飛狗跳|ㄐㄧ,ㄈㄟ,ㄍㄡˇ,ㄊㄧㄠˋ|形容非常混亂|🐶", "狗急跳牆|ㄍㄡˇ,ㄐㄧˊ,ㄊㄧㄠˋ,ㄑㄧㄤˊ|被逼急了不顧一切|🧱",
+                        "狼吞虎嚥|ㄌㄤˊ,ㄊㄨㄣ,ㄏㄨˇ,ㄧㄢˋ|吃東西又猛又急|🐺", "虎頭蛇尾|ㄏㄨˇ,ㄊㄡˊ,ㄕㄜˊ,ㄨㄟˇ|做事有始無終|🐅", "龍飛鳳舞|ㄌㄨㄥˊ,ㄈㄟ,ㄈㄥˋ,ㄨˇ|形容氣勢奔放|🐉", "馬到成功|ㄇㄚˇ,ㄉㄠˋ,ㄔㄥˊ,ㄍㄨㄥ|一開始就獲得成功|🐎", "羊入虎口|ㄧㄤˊ,ㄖㄨˋ,ㄏㄨˇ,ㄎㄡˇ|處於極度危險|🐯",
+                        "猴年馬月|ㄏㄡˊ,ㄋㄧㄢˊ,ㄇㄚˇ,ㄩㄝˋ|指不可知的未來|🐒", "雞犬不寧|ㄐㄧ,ㄑㄩㄢˇ,ㄅㄨˋ,ㄋㄧㄥˊ|形容騷擾得厲害|🐕", "狗尾續貂|ㄍㄡˇ,ㄨㄟˇ,ㄒㄩˋ,ㄉㄧㄠ|事物首尾不相稱|🐶", "牛鬼蛇神|ㄋㄧㄡˊ,ㄍㄨㄟˇ,ㄕㄜˊ,ㄕㄣˊ|泛指各種壞人|🐍", "兔死狐悲|ㄊㄨˋ,ㄙˇ,ㄏㄨˊ,ㄅㄟ|因同類死亡而悲傷|🦊",
+                        "龍馬精神|ㄌㄨㄥˊ,ㄇㄚˇ,ㄐㄧㄥ,ㄕㄣˊ|形容精神健旺|🐲", "馬耳東風|ㄇㄚˇ,ㄦˇ,ㄉㄨㄥ,ㄈㄥ|把別人的話當耳邊風|🐴", "驚弓之鳥|ㄐㄧㄥ,ㄍㄨㄥ,ㄓ,ㄋㄧㄠˇ|比喻受過驚嚇的人|🏹", "鳥語花香|ㄋㄧㄠˇ,ㄩˇ,ㄏㄨㄚ,ㄒㄧㄤ|形容春天景色美好|🌺", "鴉雀無聲|ㄧㄚ,ㄑㄩㄝˋ,ㄨˊ,ㄕㄥ|形容非常安靜|🐦",
+                        "飛蛾撲火|ㄈㄟ,ㄜˊ,ㄆㄨ,ㄏㄨㄛˇ|比喻自尋死路|🔥", "蜂擁而至|ㄈㄥ,ㄩㄥˇ,ㄦˊ,ㄓˋ|形容許多人聚集|🐝", "螳臂當車|ㄊㄤˊ,ㄅㄧˋ,ㄉㄤ,ㄔㄜ|比喻不自量力|🦗", "車水馬龍|ㄔㄜ,ㄕㄨㄟˇ,ㄇㄚˇ,ㄌㄨㄥˊ|形容繁華熱鬧|🚗", "門庭若市|ㄇㄣˊ,ㄊㄧㄥˊ,ㄖㄨㄛˋ,ㄕˋ|形容來往人客很多|🏠",
+                        "打字速度快|ㄉㄚˇ,ㄗˋ,ㄙㄨˋ,ㄉㄨˋ,ㄎㄨㄞˋ|手指飛舞|🚀", "鍵盤小精靈|ㄐㄧㄢˋ,ㄆㄢˊ,ㄒㄧㄠˇ,ㄐㄧㄥ,ㄌㄧㄥˊ|鍵盤打得很順|🧚", "電腦小達人|ㄉㄧㄢˋ,ㄋㄠˇ,ㄒㄧㄠˇ,ㄉㄚˊ,ㄖㄣˊ|很會用電腦|👨‍💻", "網路探險家|ㄨㄤˇ,ㄌㄨˋ,ㄊㄢˋ,ㄒㄧㄢˇ,ㄐㄧㄚ|在網路上找資料|🧭", "寫程式好玩|ㄒㄧㄝˇ,ㄔㄥˊ,ㄕˋ,ㄏㄠˇ,ㄨㄢˊ|寫代碼很有趣|💻",
+                        "學習新知識|ㄒㄩㄝˊ,ㄒㄧˋ,ㄒㄧㄣ,ㄓ,ㄕˋ|學到新東西|🧠", "每天都進步|ㄇㄟˇ,ㄊㄧㄢ,ㄉㄡ,ㄐㄧㄣˋ,ㄅㄨˋ|越來越厲害|📈", "考試得滿分|ㄎㄠˇ,ㄕˋ,ㄉㄜˊ,ㄇㄢˇ,ㄈㄣ|考了一百分|💯", "大家一起玩|ㄉㄚˋ,ㄐㄧㄚ,ㄧˋ,ㄑㄧˇ,ㄨㄢˊ|和好朋友玩|🏃", "快樂上學去|ㄎㄨㄞˋ,ㄌㄜˋ,ㄕㄤˋ,ㄒㄩㄝˊ,ㄑㄩˋ|開心的去學校|🎒",
+                        "努力不懈怠|ㄋㄨˇ,ㄌㄧˋ,ㄅㄨˋ,ㄒㄧㄝˋ,ㄉㄞˋ|一直很認真|💪", "堅持到最後|ㄐㄧㄢ,ㄔˊ,ㄉㄠˋ,ㄗㄨㄟˋ,ㄏㄡˋ|絕不放棄|🏁", "成功靠自己|ㄔㄥˊ,ㄍㄨㄥ,ㄎㄠˋ,ㄗˋ,ㄐㄧˇ|自己最棒|🏆", "加油你能行|ㄐㄧㄚ,ㄧㄡˊ,ㄋㄧˇ,ㄋㄥˊ,ㄒㄧㄥˊ|為自己打氣|🔥", "未來無限好|ㄨㄟˋ,ㄌㄞˊ,ㄨˊ,ㄒㄧㄢˋ,ㄏㄠˇ|前途光明|🌟"
                     ]
                 }
             }
         };
 
-        // --- 將原始字串題庫解析為應用程式需要的物件格式 ---
-        window.questionPools = {};
-        for (let grade in rawPools) {
-            window.questionPools[grade] = {};
-            for (let diff in rawPools[grade]) {
-                window.questionPools[grade][diff] = {
-                    en: rawPools[grade][diff].en.map(str => {
-                        const parts = str.split('|');
-                        return { target: parts[0], hint: parts[1], emoji: parts[2], lang: 'en' };
-                    }),
-                    zh: rawPools[grade][diff].zh.map(str => {
-                        const parts = str.split('|');
-                        const zhuyinArray = parts[1].includes(',') ? parts[1].split(',') : [parts[1]];
-                        return { target: parts[0], zhuyin: zhuyinArray, hint: parts[2], emoji: parts[3], lang: 'zh' };
-                    })
-                };
-            }
-        }
-
-        // --- 輔助函數 ---
         window.getRandomItems = function(array, count) {
-            // 安全保護：如果題庫不夠抽，就回傳全部打亂
             const maxCount = Math.min(array.length, count);
             const shuffled = [...array].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, maxCount);
         };
 
-        // ✨ 時間格式化函數 (轉換成 X分 X秒) ✨
         window.formatTime = function(totalSeconds) {
             if (totalSeconds == null || isNaN(totalSeconds)) return "-";
             const m = Math.floor(totalSeconds / 60);
@@ -977,7 +1043,12 @@
             const btnMediumDesc = document.getElementById('btn-medium-desc');
             const btnHardDesc = document.getElementById('btn-hard-desc');
 
-            if (detectedGrade === 4) {
+            if (detectedGrade === 5) {
+                if(welcomeQCountEl) welcomeQCountEl.innerHTML = '每關有 <strong>18 題</strong>，';
+                if(btnEasyDesc) btnEasyDesc.innerHTML = '基礎國語圈詞<br/>(共 18 題)';
+                if(btnMediumDesc) btnMediumDesc.innerHTML = '進階國語圈詞<br/>(共 18 題)';
+                if(btnHardDesc) btnHardDesc.innerHTML = '挑戰國語圈詞<br/>(共 18 題)';
+            } else if (detectedGrade === 4) {
                 if(welcomeQCountEl) welcomeQCountEl.innerHTML = '每關有 <strong>15 題</strong>，';
                 if(btnEasyDesc) btnEasyDesc.innerHTML = '熱門卡通人物<br/>(共 15 題)';
                 if(btnMediumDesc) btnMediumDesc.innerHTML = '校園生活圈詞<br/>(共 15 題)';
@@ -1024,8 +1095,10 @@
             const gradePool = window.questionPools[window.studentInfo.grade];
             
             let enCount, zhCount;
-            if (window.studentInfo.grade === 4) {
-                // 四年級一律 10 題英文、5 題中文
+            if (window.studentInfo.grade === 5) {
+                enCount = 10; 
+                zhCount = 8;
+            } else if (window.studentInfo.grade === 4) {
                 enCount = 10; 
                 zhCount = 5;
             } else {
@@ -1041,8 +1114,8 @@
                 }
             }
             
-            const enList = window.getRandomItems(gradePool[level].en, enCount).map(q => ({ ...q, lang: 'en' }));
-            const zhList = window.getRandomItems(gradePool[level].zh, zhCount).map(q => ({ ...q, lang: 'zh' }));
+            const enList = window.getRandomItems(gradePool[level].en, enCount);
+            const zhList = window.getRandomItems(gradePool[level].zh, zhCount);
             
             window.currentDifficulty = level;
             window.questions = [...enList, ...zhList];
@@ -1086,10 +1159,10 @@
             const badge = document.getElementById('lang-badge');
             if (badge) {
                 if (q.lang === 'en') {
-                    badge.className = "px-4 py-2 rounded-full text-white whitespace-nowrap shadow-sm transition-colors duration-500 bg-indigo-500";
+                    badge.className = "px-4 py-2 rounded-full text-white whitespace-nowrap shadow-sm transition-colors duration-500 bg-indigo-500 font-black";
                     badge.innerText = '🔤 英文挑戰';
                 } else {
-                    badge.className = "px-4 py-2 rounded-full text-white whitespace-nowrap shadow-sm transition-colors duration-500 bg-emerald-500";
+                    badge.className = "px-4 py-2 rounded-full text-white whitespace-nowrap shadow-sm transition-colors duration-500 bg-emerald-500 font-black";
                     badge.innerText = '🇹🇼 中文挑戰';
                 }
             }
@@ -1173,7 +1246,6 @@
 
             const val = typeInput.value;
             
-            // 計算目前打對到哪個字 (如果打錯，游標與鍵盤提示將停留在第一個錯誤的位置)
             let currentIndex = 0;
             while (currentIndex < val.length && val[currentIndex] === q.target[currentIndex]) {
                 currentIndex++;
@@ -1223,7 +1295,6 @@
                 return;
             }
 
-            // IME 組合注音中，不要提前判斷錯誤與長度
             if (window.isComposing) return;
 
             if (val.length > 0) {
@@ -1300,7 +1371,6 @@
             }, 1000);
         };
 
-        // --- 遊戲結束與自動上傳 ---
         window.finishGame = async function() {
             clearInterval(window.timerInterval);
             
@@ -1314,6 +1384,16 @@
             
             const totalCountEl = document.getElementById('total-q-count');
             if (totalCountEl) totalCountEl.innerText = window.questions.length;
+
+            // 判斷是否顯示「進階/高手挑戰」橫幅 (僅限過關新手等級)
+            const promoEl = document.getElementById('next-level-promo');
+            if (promoEl) {
+                if (window.currentDifficulty === 'easy') {
+                    promoEl.classList.remove('hidden');
+                } else {
+                    promoEl.classList.add('hidden');
+                }
+            }
 
             const autoSaveStatus = document.getElementById('auto-save-status');
             if (autoSaveStatus) {
@@ -1340,12 +1420,10 @@
                     }
                 } catch (err) {
                     console.error("成績自動上傳失敗:", err);
-                    
                     let errorMsg = '網路連線失敗，成績未上傳。';
                     if (err.message && err.message.includes("Missing or insufficient permissions")) {
                         errorMsg = '資料庫權限不足！請老師確認 Firebase 的 Rules 設定。';
                     }
-
                     if (autoSaveStatus) {
                         autoSaveStatus.innerHTML = `<i class="fa-solid fa-circle-exclamation text-red-500 text-2xl"></i> ${errorMsg}`;
                         autoSaveStatus.className = "bg-red-50 border-2 border-red-200 text-red-800 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
@@ -1591,13 +1669,13 @@
             const targetClass = selectEl.value;
             const classScores = window.allScoresData.filter(d => d.className === targetClass);
 
-            const bestEasy = window.getBestForClassAndDiff(classScores, 'easy');
-            const bestMedium = window.getBestForClassAndDiff(classScores, 'medium');
-            const bestHard = window.getBestForClassAndDiff(classScores, 'hard');
+            const topEasy = window.getTop3ForClassAndDiff(classScores, 'easy');
+            const topMedium = window.getTop3ForClassAndDiff(classScores, 'medium');
+            const topHard = window.getTop3ForClassAndDiff(classScores, 'hard');
 
-            window.updatePodiumCard('podium-easy', bestEasy);
-            window.updatePodiumCard('podium-medium', bestMedium);
-            window.updatePodiumCard('podium-hard', bestHard);
+            window.updatePodiumSection('podium-easy', topEasy);
+            window.updatePodiumSection('podium-medium', topMedium);
+            window.updatePodiumSection('podium-hard', topHard);
 
             const resultsContainer = document.getElementById('podium-results');
             if(resultsContainer) {
@@ -1606,51 +1684,34 @@
             window.shootConfetti();
         };
 
-        window.getBestForClassAndDiff = function(scoresArray, diff) {
+        window.getTop3ForClassAndDiff = function(scoresArray, diff) {
             const filtered = scoresArray.filter(d => d.difficulty === diff);
-            if (filtered.length === 0) return null;
-            filtered.sort((a, b) => a.time - b.time);
-            return filtered[0];
+            const bestScoresMap = new Map();
+            filtered.forEach(d => {
+                const key = `${d.className}-${d.seatNumber}`;
+                if (!bestScoresMap.has(key) || d.time < bestScoresMap.get(key).time) {
+                    bestScoresMap.set(key, d);
+                }
+            });
+            const uniqueSorted = Array.from(bestScoresMap.values()).sort((a, b) => a.time - b.time);
+            return uniqueSorted.slice(0, 3);
         };
 
-        window.updatePodiumCard = function(prefix, data) {
-            const nameEl = document.getElementById(`${prefix}-name`);
-            const timeEl = document.getElementById(`${prefix}-time`);
-            
-            if (data) {
-                nameEl.innerText = `${data.seatNumber} 號`;
-                nameEl.className = "text-3xl font-black mb-2 text-gray-800"; 
-                timeEl.innerText = window.formatTime(data.time);
-            } else {
-                nameEl.innerText = "從缺";
-                nameEl.className = "text-3xl font-black mb-2 text-gray-300"; 
-                timeEl.innerText = "-";
-            }
-        };
-
-        window.shootConfetti = function() {
-            const colors = ['#fde047', '#3b82f6', '#ef4444', '#10b981', '#a855f7', '#f97316'];
-            for(let i=0; i<80; i++) {
-                let confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.top = '-20px';
-                confetti.style.width = (Math.random() * 10 + 5) + 'px';
-                confetti.style.height = (Math.random() * 10 + 5) + 'px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.zIndex = '9999';
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                confetti.style.transition = `top ${Math.random() * 1.5 + 1.5}s ease-in, left 2s ease-in-out, transform 2s linear`;
-                document.body.appendChild(confetti);
-
-                setTimeout(() => {
-                    confetti.style.top = '100vh';
-                    confetti.style.left = (parseFloat(confetti.style.left) + (Math.random() * 20 - 10)) + 'vw';
-                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-                }, 50);
-
-                setTimeout(() => confetti.remove(), 3500);
+        window.updatePodiumSection = function(prefix, sortedData) {
+            for (let i = 1; i <= 3; i++) {
+                const nameEl = document.getElementById(`${prefix}-${i}-name`);
+                const timeEl = document.getElementById(`${prefix}-${i}-time`);
+                if (nameEl && timeEl) {
+                    if (sortedData.length >= i) {
+                        nameEl.innerText = `${sortedData[i-1].seatNumber} 號`;
+                        nameEl.className = i === 1 ? "font-black text-gray-800" : "font-bold text-gray-700";
+                        timeEl.innerText = window.formatTime(sortedData[i-1].time);
+                    } else {
+                        nameEl.innerText = "從缺";
+                        nameEl.className = "text-gray-300 font-bold";
+                        timeEl.innerText = "-";
+                    }
+                }
             }
         };
 
@@ -1716,12 +1777,10 @@
         // --- 啟動函式 ---
         window.initFirebase = async function() {
             try {
-                // 動態載入 Firebase 模組
                 const appModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
                 const authModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
                 const fsModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
                 
-                // 將需要的 Firebase 函數綁定到全域
                 window.addDoc = fsModule.addDoc;
                 window.collection = fsModule.collection;
                 window.doc = fsModule.doc;
