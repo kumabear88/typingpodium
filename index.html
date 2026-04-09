@@ -109,6 +109,16 @@
 
     <div class="max-w-5xl w-full bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-blue-200 relative" onclick="event.stopPropagation()">
         
+        <!-- ✨ 全畫面的暫停遮罩 ✨ -->
+        <div id="pause-overlay" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center animate-fade-in">
+            <div class="text-7xl mb-6 animate-bounce">⏸️</div>
+            <h2 class="text-4xl font-black text-gray-800 mb-4">遊戲暫停中</h2>
+            <p class="text-xl text-gray-600 mb-8 font-medium">休息一下，準備好再繼續！</p>
+            <button onclick="window.resumeGame()" class="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition-transform transform hover:scale-105 text-xl flex items-center gap-3">
+                <i class="fa-solid fa-play"></i> 繼續遊戲
+            </button>
+        </div>
+
         <!-- 排行榜按鈕 (放在右上角) -->
         <div class="absolute top-4 right-4 z-20">
             <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
@@ -229,6 +239,12 @@
                             <i class="fa-regular fa-clock text-yellow-600"></i>
                             時間: <span id="timer-text">0秒</span>
                         </span>
+                        
+                        <!-- ✨ 暫停按鈕 ✨ -->
+                        <button onclick="window.pauseGame()" class="bg-blue-100 hover:bg-blue-200 text-blue-600 px-4 py-2 rounded-full flex items-center gap-1 transition-colors text-sm shadow-sm border border-blue-200 font-bold" title="暫停">
+                            <i class="fa-solid fa-pause"></i> 暫停
+                        </button>
+                        
                         <button onclick="window.showScreen('intro-screen')" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-full flex items-center gap-1 transition-colors text-sm shadow-sm border border-gray-200 font-bold" title="放棄重來">
                             <i class="fa-solid fa-xmark"></i> 放棄
                         </button>
@@ -367,6 +383,11 @@
                     </p>
                 </div>
 
+                <!-- ✨ 個人進步比較區塊 ✨ -->
+                <div id="comparison-message" class="hidden mb-6 max-w-lg mx-auto p-4 rounded-2xl animate-bounce-in">
+                    <!-- JS 動態插入比較文字 -->
+                </div>
+
                 <!-- ✨ 新手過關專屬：鼓勵升級橫幅 ✨ -->
                 <div id="next-level-promo" class="hidden bg-purple-50 border-4 border-purple-200 rounded-3xl p-6 mb-6 shadow-sm mx-auto max-w-lg animate-fade-in">
                     <h3 class="text-2xl font-black text-purple-700 mb-2">🎉 新手任務達成！</h3>
@@ -466,7 +487,7 @@
                 </div>
             </div>
 
-            <!-- 畫面 7：教師專屬後台畫面 (含頒獎台與管理功能) -->
+            <!-- 畫面 7：教師專屬後台畫面 (含高低頒獎台與管理功能) -->
             <div id="teacher-dashboard-screen" class="screen-section animate-fade-in py-4">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-black text-gray-700 flex items-center gap-3">
@@ -536,14 +557,15 @@
                     </div>
                 </div>
 
-                <!-- 教師視圖 2：🏆 班級頒獎台 (前三名版) -->
+                <!-- 教師視圖 2：🏆 實體高低頒獎台 -->
                 <div id="teacher-view-podium" class="hidden">
-                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-4 border-yellow-200 rounded-3xl p-6 shadow-inner text-center">
-                        <h3 class="text-2xl font-black text-yellow-800 mb-2">🎉 下課頒獎典禮 🎉</h3>
-                        <p class="text-gray-600 mb-6 font-medium">選擇剛剛上課的班級，看看各難度的前三名是誰！</p>
+                    <div class="bg-gradient-to-b from-blue-50 to-indigo-100 border-4 border-indigo-200 rounded-3xl p-6 shadow-inner text-center relative overflow-hidden">
                         
-                        <div class="flex justify-center items-center gap-4 mb-10">
-                            <select id="podium-class-select" class="text-xl font-bold px-6 py-3 rounded-xl border-2 border-yellow-400 focus:outline-none focus:border-orange-400 text-yellow-900 bg-white shadow-sm cursor-pointer">
+                        <h3 class="text-3xl font-black text-indigo-900 mb-2 mt-4">🏆 班級榮譽頒獎台 🏆</h3>
+                        <p class="text-gray-700 mb-6 font-bold">選擇班級，看看各難度的前三名以及誰進步最多！</p>
+                        
+                        <div class="flex justify-center items-center gap-4 mb-8">
+                            <select id="podium-class-select" class="text-xl font-bold px-6 py-3 rounded-xl border-4 border-indigo-300 focus:outline-none focus:border-indigo-500 text-indigo-900 bg-white shadow-md cursor-pointer transition-colors">
                                 <optgroup label="三年級">
                                     <option value="301">301班</option><option value="302">302班</option><option value="303">303班</option><option value="304">304班</option><option value="305">305班</option><option value="306">306班</option><option value="307">307班</option><option value="308">308班</option>
                                 </optgroup>
@@ -554,69 +576,130 @@
                                     <option value="503">503班</option><option value="504">504班</option><option value="505">505班</option><option value="506">506班</option>
                                 </optgroup>
                             </select>
-                            <button onclick="window.renderPodium()" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-black text-xl shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2">
-                                <i class="fa-solid fa-gift"></i> 舉行頒獎
+                            <button onclick="window.renderPodium()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-black text-xl shadow-lg transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-indigo-800">
+                                <i class="fa-solid fa-medal"></i> 舉行頒獎
                             </button>
                         </div>
 
-                        <!-- 頒獎結果區 (三欄，每欄前三名) -->
-                        <div id="podium-results" class="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-0 transition-opacity duration-500">
+                        <!-- 頒獎結果區 -->
+                        <div id="podium-results" class="opacity-0 transition-opacity duration-500">
                             
-                            <!-- 新手榜 -->
-                            <div class="podium-card bg-white rounded-2xl border-4 border-green-200 p-4 flex flex-col items-center shadow-lg relative overflow-hidden w-full">
-                                <div class="absolute top-0 w-full bg-green-500 text-white font-bold py-1 text-sm tracking-widest text-center">🌱 新手等級</div>
-                                <div class="mt-8 w-full px-2">
-                                    <div class="flex justify-between items-center bg-green-50 rounded-lg p-3 mb-3 border border-green-100 shadow-sm">
-                                        <span class="text-xl">🥇 <span id="podium-easy-1-name" class="font-black text-green-800">-</span></span>
-                                        <span id="podium-easy-1-time" class="text-blue-600 font-bold">-</span>
+                            <!-- ✨ 最佳進步獎 Banner ✨ -->
+                            <div class="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 p-1 rounded-2xl shadow-xl mb-10 transform hover:scale-[1.01] transition-transform">
+                                <div class="bg-white rounded-xl p-4 md:p-6 flex flex-col md:flex-row items-center justify-between border-2 border-transparent">
+                                    <div class="flex items-center gap-4 mb-4 md:mb-0">
+                                        <div class="text-6xl animate-bounce">🚀</div>
+                                        <div class="text-left">
+                                            <div class="text-sm font-black text-red-500 tracking-widest mb-1">超越自我極限</div>
+                                            <div class="text-3xl font-black text-gray-800">最佳進步獎</div>
+                                        </div>
                                     </div>
-                                    <div class="flex justify-between items-center border-b border-gray-200 p-2 mb-2">
-                                        <span class="text-lg">🥈 <span id="podium-easy-2-name" class="font-bold text-gray-600">-</span></span>
-                                        <span id="podium-easy-2-time" class="text-blue-600 font-bold">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-center p-2">
-                                        <span class="text-lg">🥉 <span id="podium-easy-3-name" class="font-bold text-gray-600">-</span></span>
-                                        <span id="podium-easy-3-time" class="text-blue-600 font-bold">-</span>
+                                    <div class="text-center md:text-right bg-red-50 px-6 py-3 rounded-xl border-2 border-red-100">
+                                        <div id="podium-improver-name" class="text-4xl font-black text-blue-700 mb-1">-</div>
+                                        <div id="podium-improver-time" class="text-lg font-bold text-red-600">快來挑戰超越自己！</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 進階榜 -->
-                            <div class="podium-card bg-white rounded-2xl border-4 border-yellow-300 p-4 flex flex-col items-center shadow-lg relative overflow-hidden transform md:-translate-y-4 w-full">
-                                <div class="absolute top-0 w-full bg-yellow-400 text-yellow-900 font-bold py-1 text-sm tracking-widest text-center">⭐ 進階等級</div>
-                                <div class="mt-8 w-full px-2">
-                                    <div class="flex justify-between items-center bg-yellow-50 rounded-lg p-3 mb-3 border border-yellow-200 shadow-sm">
-                                        <span class="text-xl">🥇 <span id="podium-medium-1-name" class="font-black text-yellow-800">-</span></span>
-                                        <span id="podium-medium-1-time" class="text-blue-600 font-bold">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-center border-b border-gray-200 p-2 mb-2">
-                                        <span class="text-lg">🥈 <span id="podium-medium-2-name" class="font-bold text-gray-600">-</span></span>
-                                        <span id="podium-medium-2-time" class="text-blue-600 font-bold">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-center p-2">
-                                        <span class="text-lg">🥉 <span id="podium-medium-3-name" class="font-bold text-gray-600">-</span></span>
-                                        <span id="podium-medium-3-time" class="text-blue-600 font-bold">-</span>
+                            <!-- 實體高低頒獎台 -->
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                
+                                <!-- 新手榜 -->
+                                <div class="bg-white rounded-2xl border-4 border-green-200 p-4 shadow-lg relative flex flex-col h-full mt-8 lg:mt-0">
+                                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-4/5 bg-green-500 text-white font-bold py-1 rounded-full text-center shadow-sm tracking-widest text-sm">🌱 新手等級</div>
+                                    <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
+                                        <!-- 2nd Place -->
+                                        <div class="flex flex-col items-center w-1/3">
+                                            <div id="podium-easy-2-name" class="text-sm md:text-base font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
+                                            <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
+                                                <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
+                                            </div>
+                                        </div>
+                                        <!-- 1st Place -->
+                                        <div class="flex flex-col items-center w-1/3 z-10">
+                                            <div class="text-2xl mb-1 drop-shadow-md">👑</div>
+                                            <div id="podium-easy-1-name" class="text-base md:text-lg font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
+                                            <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
+                                                <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
+                                            </div>
+                                        </div>
+                                        <!-- 3rd Place -->
+                                        <div class="flex flex-col items-center w-1/3">
+                                            <div id="podium-easy-3-name" class="text-sm md:text-base font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
+                                            <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
+                                                <span class="text-lg md:text-xl font-black text-orange-400">3</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- 高手榜 -->
-                            <div class="podium-card bg-white rounded-2xl border-4 border-blue-300 p-4 flex flex-col items-center shadow-lg relative overflow-hidden w-full">
-                                <div class="absolute top-0 w-full bg-blue-500 text-white font-bold py-1 text-sm tracking-widest text-center">🚀 高手等級</div>
-                                <div class="mt-8 w-full px-2">
-                                    <div class="flex justify-between items-center bg-blue-50 rounded-lg p-3 mb-3 border border-blue-200 shadow-sm">
-                                        <span class="text-xl">🥇 <span id="podium-hard-1-name" class="font-black text-blue-800">-</span></span>
-                                        <span id="podium-hard-1-time" class="text-blue-600 font-bold">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-center border-b border-gray-200 p-2 mb-2">
-                                        <span class="text-lg">🥈 <span id="podium-hard-2-name" class="font-bold text-gray-600">-</span></span>
-                                        <span id="podium-hard-2-time" class="text-blue-600 font-bold">-</span>
-                                    </div>
-                                    <div class="flex justify-between items-center p-2">
-                                        <span class="text-lg">🥉 <span id="podium-hard-3-name" class="font-bold text-gray-600">-</span></span>
-                                        <span id="podium-hard-3-time" class="text-blue-600 font-bold">-</span>
+                                <!-- 進階榜 -->
+                                <div class="bg-white rounded-2xl border-4 border-yellow-300 p-4 shadow-lg relative flex flex-col h-full mt-8 lg:mt-0 transform lg:-translate-y-4">
+                                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-4/5 bg-yellow-400 text-yellow-900 font-bold py-1 rounded-full text-center shadow-sm tracking-widest text-sm">⭐ 進階等級</div>
+                                    <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
+                                        <!-- 2nd Place -->
+                                        <div class="flex flex-col items-center w-1/3">
+                                            <div id="podium-medium-2-name" class="text-sm md:text-base font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
+                                            <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
+                                                <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
+                                            </div>
+                                        </div>
+                                        <!-- 1st Place -->
+                                        <div class="flex flex-col items-center w-1/3 z-10">
+                                            <div class="text-2xl mb-1 drop-shadow-md">👑</div>
+                                            <div id="podium-medium-1-name" class="text-base md:text-lg font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
+                                            <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
+                                                <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
+                                            </div>
+                                        </div>
+                                        <!-- 3rd Place -->
+                                        <div class="flex flex-col items-center w-1/3">
+                                            <div id="podium-medium-3-name" class="text-sm md:text-base font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
+                                            <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
+                                                <span class="text-lg md:text-xl font-black text-orange-400">3</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- 高手榜 -->
+                                <div class="bg-white rounded-2xl border-4 border-blue-300 p-4 shadow-lg relative flex flex-col h-full mt-8 lg:mt-0">
+                                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-4/5 bg-blue-500 text-white font-bold py-1 rounded-full text-center shadow-sm tracking-widest text-sm">🚀 高手等級</div>
+                                    <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
+                                        <!-- 2nd Place -->
+                                        <div class="flex flex-col items-center w-1/3">
+                                            <div id="podium-hard-2-name" class="text-sm md:text-base font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
+                                            <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
+                                                <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
+                                            </div>
+                                        </div>
+                                        <!-- 1st Place -->
+                                        <div class="flex flex-col items-center w-1/3 z-10">
+                                            <div class="text-2xl mb-1 drop-shadow-md">👑</div>
+                                            <div id="podium-hard-1-name" class="text-base md:text-lg font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
+                                            <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
+                                                <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
+                                            </div>
+                                        </div>
+                                        <!-- 3rd Place -->
+                                        <div class="flex flex-col items-center w-1/3">
+                                            <div id="podium-hard-3-name" class="text-sm md:text-base font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
+                                            <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
+                                                <span class="text-lg md:text-xl font-black text-orange-400">3</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -658,6 +741,7 @@
         window.elapsedTime = 0;
         window.isTransitioning = false;
         window.isComposing = false;
+        window.isPaused = false;
 
         // 學生身分
         window.studentInfo = { classCode: '', seatCode: '', grade: 3 };
@@ -716,14 +800,14 @@
                         "meet|遇見|🤝", "jeep|吉普車|🚙", "seed|種子|🌱", "kit|工具箱|🧰", "kite|風箏|🪁"
                     ],
                     zh: [
-                        "ㄅ|左上角|🍞", "ㄆ|q位置|🍇", "ㄇ|a鍵的上面|🐱", "ㄈ|z的位置|🚁", "ㄉ|數字2|🎂",
-                        "ㄊ|w的位置|🍑", "ㄋ|s的位置|🐦", "ㄌ|x的位置|🎁", "ㄍ|e的位置|🐶", "ㄎ|d的位置|👖",
-                        "ㄏ|c的位置|🐵", "ㄐ|r的位置|🐔", "ㄑ|f的位置|🐧", "ㄒ|v的位置|🍉", "ㄓ|數字5|🕷️",
-                        "ㄔ|t的位置|🚗", "ㄕ|g的位置|🦁", "ㄖ|b的位置|🌞", "ㄗ|y的位置|🪀", "ㄘ|h的位置|🧲",
-                        "ㄙ|n的位置|🧵", "ㄧ|u的位置|🦆", "ㄨ|j的位置|🐢", "ㄩ|m的位置|🐟", "ㄚ|數字8|🦆",
-                        "ㄛ|i的位置|🍩", "ㄜ|k的位置|🦢", "ㄝ|,的位置|🍃", "ㄞ|數字9|❤️", "ㄟ|o的位置|🛸",
-                        "ㄠ|l的位置|🐈", "ㄡ|.的位置|🧅", "ㄢ|數字0|🐜", "ㄣ|p的位置|🪱", "ㄤ|[的位置|🦅",
-                        "ㄥ|;的位置|🦅", "ㄦ|-的位置|👂", "一|ㄧ|數字一|1️⃣", "二|ㄦˋ|數字二|2️⃣", "三|ㄙㄢ|數字三|3️⃣",
+                        "ㄅ|ㄅ|左上角|🍞", "ㄆ|ㄆ|q位置|🍇", "ㄇ|ㄇ|a鍵的上面|🐱", "ㄈ|ㄈ|z的位置|🚁", "ㄉ|ㄉ|數字2|🎂",
+                        "ㄊ|ㄊ|w的位置|🍑", "ㄋ|ㄋ|s的位置|🐦", "ㄌ|ㄌ|x的位置|🎁", "ㄍ|ㄍ|e的位置|🐶", "ㄎ|ㄎ|d的位置|👖",
+                        "ㄏ|ㄏ|c的位置|🐵", "ㄐ|ㄐ|r的位置|🐔", "ㄑ|ㄑ|f的位置|🐧", "ㄒ|ㄒ|v的位置|🍉", "ㄓ|ㄓ|數字5|🕷️",
+                        "ㄔ|ㄔ|t的位置|🚗", "ㄕ|ㄕ|g的位置|🦁", "ㄖ|ㄖ|b的位置|🌞", "ㄗ|ㄗ|y的位置|🪀", "ㄘ|ㄘ|h的位置|🧲",
+                        "ㄙ|ㄙ|n的位置|🧵", "ㄧ|ㄧ|u的位置|🦆", "ㄨ|ㄨ|j的位置|🐢", "ㄩ|ㄩ|m的位置|🐟", "ㄚ|ㄚ|數字8|🦆",
+                        "ㄛ|ㄛ|i的位置|🍩", "ㄜ|ㄜ|k的位置|🦢", "ㄝ|ㄝ|,的位置|🍃", "ㄞ|ㄞ|數字9|❤️", "ㄟ|ㄟ|o的位置|🛸",
+                        "ㄠ|ㄠ|l的位置|🐈", "ㄡ|ㄡ|.的位置|🧅", "ㄢ|ㄢ|數字0|🐜", "ㄣ|ㄣ|p的位置|🪱", "ㄤ|ㄤ|[的位置|🦅",
+                        "ㄥ|ㄥ|;的位置|🦅", "ㄦ|ㄦ|-的位置|👂", "一|ㄧ|數字一|1️⃣", "二|ㄦˋ|數字二|2️⃣", "三|ㄙㄢ|數字三|3️⃣",
                         "四|ㄙˋ|數字四|4️⃣", "五|ㄨˇ|數字五|5️⃣", "六|ㄌㄧㄡˋ|數字六|6️⃣", "七|ㄑㄧ|數字七|7️⃣", "八|ㄅㄚ|數字八|8️⃣",
                         "九|ㄐㄧㄡˇ|數字九|9️⃣", "十|ㄕˊ|數字十|🔟", "上|ㄕㄤˋ|上面|⬆️", "下|ㄒㄧㄚˋ|下面|⬇️", "左|ㄗㄨㄛˇ|左邊|⬅️",
                         "蛋|ㄉㄢˋ|雞蛋|🥚", "魚|ㄩˊ|水裡游|🐟", "豬|ㄓㄨ|胖嘟嘟|🐷", "牛|ㄋㄧㄡˊ|哞哞叫|🐮", "瘦|ㄕㄡˋ|不胖|🧍", 
@@ -998,47 +1082,36 @@
                         "witch|女巫|🧙‍♀️", "reduce|減少|📉", "reuse|重複使用|♻️", "recycle|回收|♻️"
                     ],
                     zh: [
-                        "腳踏車|ㄐㄧㄠˇ,ㄊㄚˋ,ㄔㄜ|環保交通|🚲", "溜滑梯|ㄌㄧㄡ,ㄏㄨㄚˊ,ㄊㄧ|公園設施|🛝", "捉迷藏|ㄓㄨㄛ,ㄇㄧˊ,ㄘㄤˊ|下課遊戲|🙈", "盪鞦韆|ㄉㄤˋ,ㄑㄧㄡ,ㄑㄧㄢ|飛高高|🪁", "營養午餐|ㄧㄥˊ,ㄧㄤˇ,ㄨˇ,ㄘㄢ|在學校吃|🍱",
-                        "打掃時間|ㄉㄚˇ,ㄙㄠˇ,ㄕˊ,ㄐㄧㄢ|維持整潔|🧹", "資源回收|ㄗ,ㄩㄢˊ,ㄏㄨㄟˊ,ㄕㄡ|保護地球|♻️", "圖書館|ㄊㄨˊ,ㄕㄨ,ㄍㄨㄢˇ|借閱書籍|📚", "博物館|ㄅㄛˊ,ㄨˋ,ㄍㄨㄢˇ|認識歷史|🏛️", "美術館|ㄇㄟˇ,ㄕㄨˋ,ㄍㄨㄢˇ|欣賞名畫|🖼️",
-                        "動物園|ㄉㄨㄥˋ,ㄨˋ,ㄩㄢˊ|觀察生態|🐘", "遊樂園|ㄧㄡˊ,ㄌㄜˋ,ㄩㄢˊ|玩雲霄飛車|🎢", "看電視|ㄎㄢˋ,ㄉㄧㄢˋ,ㄕˋ|休閒娛樂|📺", "打電腦|ㄉㄚˇ,ㄉㄧㄢˋ,ㄋㄠˇ|資訊課|💻", "寫功課|ㄒㄧㄝˇ,ㄍㄨㄥ,ㄎㄜˋ|回家任務|📝",
-                        "考試|ㄎㄠˇ,ㄕˋ|測驗實力|💯", "滿分|ㄇㄢˇ,ㄈㄣ|全部答對|💯", "第一名|ㄉㄧˋ,ㄧ,ㄇㄧㄥˊ|最厲害|🥇", "冠軍|ㄍㄨㄢˋ,ㄐㄩㄣ|最高榮譽|🏆", "勝利|ㄕㄥˋ,ㄌㄧˋ|贏得比賽|✌️",
-                        "周杰倫|ㄓㄡ,ㄐㄧㄝˊ,ㄌㄨㄣˊ|流行歌手|🎤", "蔡依林|ㄘㄞˋ,ㄧ,ㄌㄧㄣˊ|唱跳天后|💃", "林俊傑|ㄌㄧㄣˊ,ㄐㄩㄣˋ,ㄐㄧㄝˊ|情歌王子|🎹", "泰勒絲|ㄊㄞˋ,ㄌㄜˋ,ㄙ|國際巨星|👱‍♀️", "五月天|ㄨˇ,ㄩㄝˋ,ㄊㄧㄢ|知名樂團|🎸",
-                        "老高|ㄌㄠˇ,ㄍㄠ|說故事頻道|👽", "這群人|ㄓㄜˋ,ㄑㄩㄣˊ,ㄖㄣˊ|搞笑短片|🎬", "阿滴英文|ㄚ,ㄉㄧ,ㄧㄥ,ㄨㄣˊ|學習頻道|📚", "蔡阿嘎|ㄘㄞˋ,ㄚ,ㄍㄚ|百萬網紅|🎥", "木曜四|ㄇㄨˋ,ㄧㄠˋ,ㄙˋ|網路節目|🪵",
-                        "自然科學|ㄗˋ,ㄖㄢˊ,ㄎㄜ,ㄒㄩㄝˊ|探索真理|🔬", "社會歷史|ㄕㄜˋ,ㄏㄨㄟˋ,ㄌㄧˋ,ㄕˇ|了解過去|🌍", "數學計算|ㄕㄨˋ,ㄒㄩㄝˊ,ㄐㄧˋ,ㄙㄨㄢˋ|邏輯思考|🔢", "國語閱讀|ㄍㄨㄛˊ,ㄩˇ,ㄩㄝˋ,ㄉㄨˊ|培養語感|📖", "英文單字|ㄧㄥ,ㄨㄣˊ,ㄉㄢ,ㄗˋ|背誦記憶|🔤",
-                        "音樂欣賞|ㄧㄣ,ㄩㄝˋ,ㄒㄧㄣ,ㄕㄤˇ|陶冶性情|🎵", "美術創作|ㄇㄟˇ,ㄕㄨˋ,ㄘㄨㄤˋ,ㄗㄨㄛˋ|發揮創意|🎨", "體育活動|ㄊㄧˇ,ㄩˋ,ㄏㄨㄛˊ,ㄉㄨㄥˋ|強健體魄|🏀", "升旗典禮|ㄕㄥ,ㄑㄧˊ,ㄉㄧㄢˇ,ㄌㄧˇ|莊嚴肅穆|🇹🇼", "校外教學|ㄒㄧㄠˋ,ㄨㄞˋ,ㄐㄧㄠ,ㄒㄩㄝˊ|增廣見聞|🚌",
-                        "畢業旅行|ㄅㄧˋ,ㄧㄝˋ,ㄌㄩˇ,ㄒㄧㄥˊ|美好回憶|🧳", "期中考|ㄑㄧˊ,ㄓㄨㄥ,ㄎㄠˇ|學期一半|📝", "期末考|ㄑㄧˊ,ㄇㄛˋ,ㄎㄠˇ|學期結束|💯", "暑假作業|ㄕㄨˇ,ㄐㄧㄚˋ,ㄗㄨㄛˋ,ㄧㄝˋ|夏天放假|☀️", "寒假生活|ㄏㄢˊ,ㄐㄧㄚˋ,ㄕㄥ,ㄏㄨㄛˊ|冬天放假|⛄",
-                        "兒童節|ㄦˊ,ㄊㄨㄥˊ,ㄐㄧㄝˊ|專屬節日|🎈", "母親節|ㄇㄨˇ,ㄑㄧㄣ,ㄐㄧㄝˊ|感恩母愛|👩", "父親節|ㄈㄨˋ,ㄑㄧㄣ,ㄐㄧㄝˊ|感恩父愛|👨", "教師節|ㄐㄧㄠˋ,ㄕ,ㄐㄧㄝˊ|尊師重道|🍎", "中秋節|ㄓㄨㄥ,ㄑㄧㄡ,ㄐㄧㄝˊ|月圓人團圓|🌕",
-                        "端午節|ㄉㄨㄢ,ㄨˇ,ㄐㄧㄝˊ|吃粽子|🐉", "農曆新年|ㄋㄨㄥˊ,ㄌㄧˋ,ㄒㄧㄣ,ㄋㄧㄢˊ|除舊佈新|🧨", "除夕夜|ㄔㄨˊ,ㄒㄧˋ,ㄧㄝˋ|全家團圓|🍲", "壓歲錢|ㄧㄚ,ㄙㄨㄟˋ,ㄑㄧㄢˊ|長輩祝福|🧧", "便利商店|ㄅㄧㄢˋ,ㄌㄧˋ,ㄕㄤ,ㄉㄧㄢˋ|買東西方便|🏪",
-                        "超級市場|ㄔㄠ,ㄐㄧˊ,ㄕˋ,ㄔㄤˇ|採買日常|🛒", "捷運站|ㄐㄧㄝˊ,ㄩㄣˋ,ㄓㄢˋ|大眾運輸|🚇", "火車站|ㄏㄨㄛˇ,ㄔㄜ,ㄓㄢˋ|遠途旅行|🚉", "高鐵站|ㄍㄠ,ㄊㄧㄝˇ,ㄓㄢˋ|快速移動|🚄", "飛機場|ㄈㄟ,ㄐㄧ,ㄔㄤˇ|出國搭乘|✈️"
+                        "自然科學|ㄗˋ,ㄖㄢˊ,ㄎㄜ,ㄒㄩㄝˊ|做實驗|🔬", "社會課本|ㄕㄜˋ,ㄏㄨㄟˋ,ㄎㄜˋ,ㄅㄣˇ|學歷史|🌍", "數學作業|ㄕㄨˋ,ㄒㄩㄝˊ,ㄗㄨㄛˋ,ㄧㄝˋ|算數字|🔢", "國語習作|ㄍㄨㄛˊ,ㄩˇ,ㄒㄧˊ,ㄗㄨㄛˋ|寫國字|📖", "英文單字|ㄧㄥ,ㄨㄣˊ,ㄉㄢ,ㄗˋ|背ABC|🔤",
+                        "音樂教室|ㄧㄣ,ㄩㄝˋ,ㄐㄧㄠˋ,ㄕˋ|唱歌|🎵", "美術作品|ㄇㄟˇ,ㄕㄨˋ,ㄗㄨㄛˋ,ㄆㄧㄣˇ|畫畫|🎨", "體育活動|ㄊㄧˇ,ㄩˋ,ㄏㄨㄛˊ,ㄉㄨㄥˋ|打球|🏀", "操場跑步|ㄘㄠ,ㄔㄤˇ,ㄆㄠˇ,ㄅㄨˋ|運動|🏃", "升旗典禮|ㄕㄥ,ㄑㄧˊ,ㄉㄧㄢˇ,ㄌㄧˇ|唱國歌|🇹🇼",
+                        "營養午餐|ㄧㄥˊ,ㄧㄤˇ,ㄨˇ,ㄘㄢ|吃飯|🍱", "資源回收|ㄗ,ㄩㄢˊ,ㄏㄨㄟˊ,ㄕㄡ|愛地球|♻️", "打掃時間|ㄉㄚˇ,ㄙㄠˇ,ㄕˊ,ㄐㄧㄢ|掃地|🧹", "導師時間|ㄉㄠˇ,ㄕ,ㄕˊ,ㄐㄧㄢ|聽老師說|👩‍🏫", "校外教學|ㄒㄧㄠˋ,ㄨㄞˋ,ㄐㄧㄠ,ㄒㄩㄝˊ|出去玩|🚌",
+                        "畢業旅行|ㄅㄧˋ,ㄧㄝˋ,ㄌㄩˇ,ㄒㄧㄥˊ|去玩|🧳", "期中考試|ㄑㄧˊ,ㄓㄨㄥ,ㄎㄠˇ,ㄕˋ|要看書|📝", "期末考試|ㄑㄧˊ,ㄇㄛˋ,ㄎㄠˇ,ㄕˋ|要複習|💯", "暑假作業|ㄕㄨˇ,ㄐㄧㄚˋ,ㄗㄨㄛˋ,ㄧㄝˋ|放假寫|☀️", "寒假生活|ㄏㄢˊ,ㄐㄧㄚˋ,ㄕㄥ,ㄏㄨㄛˊ|放寒假|⛄",
+                        "兒童節|ㄦˊ,ㄊㄨㄥˊ,ㄐㄧㄝˊ|小孩節日|🎈", "母親節|ㄇㄨˇ,ㄑㄧㄣ,ㄐㄧㄝˊ|感謝媽媽|👩", "父親節|ㄈㄨˋ,ㄑㄧㄣ,ㄐㄧㄝˊ|感謝爸爸|👨", "教師節|ㄐㄧㄠˋ,ㄕ,ㄐㄧㄝˊ|感謝老師|🍎", "中秋節|ㄓㄨㄥ,ㄑㄧㄡ,ㄐㄧㄝˊ|吃月餅|🌕",
+                        "端午節|ㄉㄨㄢ,ㄨˇ,ㄐㄧㄝˊ|吃粽子|🐉", "農曆新年|ㄋㄨㄥˊ,ㄌㄧˋ,ㄒㄧㄣ,ㄋㄧㄢˊ|過年|🧨", "除夕夜|ㄔㄨˊ,ㄒㄧˋ,ㄧㄝˋ|吃團圓飯|🍲", "壓歲錢|ㄧㄚ,ㄙㄨㄟˋ,ㄑㄧㄢˊ|紅包|🧧", "麥當勞|ㄇㄞˋ,ㄉㄤ,ㄌㄠˊ|吃漢堡|🍟",
+                        "肯德基|ㄎㄣˇ,ㄉㄜˊ,ㄐㄧ|吃炸雞|🍗", "摩斯漢堡|ㄇㄛˊ,ㄙ,ㄏㄢˋ,ㄅㄠˇ|吃漢堡|🍔", "必勝客|ㄅㄧˋ,ㄕㄥˋ,ㄎㄜˋ|吃披薩|🍕", "達美樂|ㄉㄚˊ,ㄇㄟˇ,ㄌㄜˋ|吃披薩|🍕", "便利商店|ㄅㄧㄢˋ,ㄌㄧˋ,ㄕㄤ,ㄉㄧㄢˋ|買東西|🏪",
+                        "超級市場|ㄔㄠ,ㄐㄧˊ,ㄕˋ,ㄔㄤˇ|買菜|🛒", "捷運站|ㄐㄧㄝˊ,ㄩㄣˋ,ㄓㄢˋ|搭捷運|🚇", "火車站|ㄏㄨㄛˇ,ㄔㄜ,ㄓㄢˋ|搭火車|🚉", "高鐵站|ㄍㄠ,ㄊㄧㄝˇ,ㄓㄢˋ|搭高鐵|🚄", "飛機場|ㄈㄟ,ㄐㄧ,ㄔㄤˇ|搭飛機|✈️",
+                        "警察局|ㄐㄧㄥˇ,ㄔㄚˊ,ㄐㄩˊ|報案|🚓", "消防局|ㄒㄧㄠ,ㄈㄤˊ,ㄐㄩˊ|救火|🚒", "救護車|ㄐㄧㄡˋ,ㄏㄨˋ,ㄔㄜ|送醫院|🚑", "醫院診所|ㄧ,ㄩㄢˋ,ㄓㄣˇ,ㄙㄨㄛˇ|看病|🏥", "郵局寄信|ㄧㄡˊ,ㄐㄩˊ,ㄐㄧˋ,ㄒㄧㄣˋ|寄包裹|📮",
+                        "銀行存錢|ㄧㄣˊ,ㄏㄤˊ,ㄘㄨㄣˊ,ㄑㄧㄢˊ|存錢|🏦", "百貨公司|ㄅㄞˇ,ㄏㄨㄛˋ,ㄍㄨㄥ,ㄙ|逛街|🏬", "電影院|ㄉㄧㄢˋ,ㄧㄥˇ,ㄩㄢˋ|看電影|🍿", "咖啡廳|ㄎㄚ,ㄈㄟ,ㄊㄧㄥ|喝飲料|☕", "麵包店|ㄅㄧㄥˇ,ㄍㄢ,ㄉㄧㄢˋ|買麵包|🥐",
+                        "噴射機|ㄆㄣ,ㄕㄜˋ,ㄐㄧ|天上飛|✈️", "溜溜球|ㄌㄧㄡ,ㄌㄧㄡ,ㄑㄧㄡˊ|玩具|🪀", "耶誕樹|ㄧㄝ,ㄉㄢˋ,ㄕㄨˋ|裝飾|🎄", "水龍頭|ㄕㄨㄟˇ,ㄌㄨㄥˊ,ㄊㄡˊ|洗手|🚰", "馬克杯|ㄇㄚˇ,ㄎㄜˋ,ㄅㄟ|喝水|☕", 
+                        "原子筆|ㄩㄢˊ,ㄗˇ,ㄅㄧˇ|寫字|🖊️", "耶誕老人|ㄧㄝ,ㄉㄢˋ,ㄌㄠˇ,ㄖㄣˊ|送禮|🎅", "大頭針|ㄉㄚˋ,ㄊㄡˊ,ㄓㄣ|刺刺的|📍", "口香糖|ㄎㄡˇ,ㄒㄧㄤ,ㄊㄤˊ|泡泡|🍬", "箱型車|ㄒㄧㄤ,ㄒㄧㄥˊ,ㄔㄜ|大車|🚐", 
+                        "電風扇|ㄉㄧㄢˋ,ㄈㄥ,ㄕㄢˋ|吹風|🌬️", "麻布袋|ㄇㄚˊ,ㄅㄨˋ,ㄉㄞˋ|裝東西|🥔", "南瓜燈|ㄋㄢˊ,ㄍㄨㄚ,ㄉㄥ|萬聖節|🎃"
                     ]
                 },
                 hard: {
                     en: [
-                        "adventure|冒險|🗺️", "beautiful|美麗的|✨", "chocolate|巧克力|🍫", "dinosaur|恐龍|🦖", "engineer|工程師|👷",
-                        "festival|節慶|🎉", "grandfather|爺爺|👴", "helicopter|直升機|🚁", "internet|網際網路|🌐", "jellyfish|水母|🪼",
-                        "kangaroo|袋鼠|🦘", "language|語言|🗣️", "mountain|山脈|⛰️", "neighbor|鄰居|🏘️", "octopus|章魚|🐙",
-                        "pineapple|鳳梨|🍍", "question|問題|❓", "restaurant|餐廳|🍽️", "strawberry|草莓|🍓", "umbrella|雨傘|☂️",
-                        "vegetable|蔬菜|🥬", "wonderful|極好的|🌟", "xylophone|木琴|🎼", "yesterday|昨天|🔙", "zoologist|動物學家|🦓",
-                        "astronaut|太空人|👨‍🚀", "butterfly|蝴蝶|🦋", "crocodile|鱷魚|🐊", "detective|偵探|🕵️", "education|教育|📚",
-                        "furniture|家具|🛋️", "geography|地理|🗺️", "hamburger|漢堡|🍔", "important|重要的|❗", "knowledge|知識|🧠",
-                        "landscape|風景|🏞️", "machinery|機械|⚙️", "newspaper|報紙|📰", "operation|操作|🛠️", "passenger|乘客|💺",
-                        "satellite|衛星|🛰️", "telephone|電話|☎️", "university|大學|🏫", "vacation|假期|🏖️", "waterfall|瀑布|🌊",
-                        "xylophone|木琴|🎶", "yardstick|碼尺|📏", "zeppelin|齊柏林飛船|🛩️", "apartment|公寓|🏢", "bookshelf|書架|📚",
-                        "character|角色|🎭", "delicious|美味的|😋", "expensive|昂貴的|💰", "frequent|頻繁的|🔄", "guitarist|吉他手|🎸",
-                        "highlight|亮點|✨", "invention|發明|💡", "journal|日誌|📓", "keyboard|鍵盤|⌨️", "limestone|石灰岩|🪨",
-                        "magician|魔術師|🎩", "notebook|筆記本|📔", "organize|組織|📂", "paintings|畫作|🖼️", "quarterly|季度的|📅",
-                        "scientist|科學家|🧑‍🔬", "telescope|望遠鏡|🔭", "universe|宇宙|🌌", "volunteer|志工|🙋", "whirlpool|漩渦|🌀",
-                        "smartphone|智慧型手機|📱", "waterbottle|水壺|🫙", "thirteen|十三|1️⃣", "fourteen|十四|1️⃣", "fifteen|十五|1️⃣", 
-                        "twentyfive|二十五|2️⃣", "onehundred|一百|💯", "bathroom|浴室|🛁", "bedroom|臥室|🛏️", "diningroom|飯廳|🍽️", 
-                        "kitchen|廚房|🍳", "livingroom|客廳|🛋️", "hotdog|熱狗|🌭", "icecream|冰淇淋|🍦", "bubbletea|珍珠奶茶|🧋", 
-                        "hotchocolate|熱巧克力|☕", "lemonade|檸檬水|🍋", "soymilk|豆漿|🥛", "tuesday|星期二|📅", "wednesday|星期三|📅", 
-                        "thursday|星期四|📅", "saturday|星期六|📅", "chinese|國語|📖", "english|英語|🔤", "socialstudies|社會|🌍", 
-                        "bookstore|書店|📚", "postoffice|郵局|📮", "supermarket|超市|🛒", "scooter|機車|🛵", "sneakers|運動鞋|👟", 
-                        "christmas|耶誕節|🎄", "christmastree|耶誕樹|🎄", "santaclaus|耶誕老人|🎅", "snowman|雪人|⛄", "stocking|長筒襪|🧦", 
-                        "mothersday|母親節|👩", "halloween|萬聖節|🎃", "jackolantern|南瓜燈|🎃", "vampire|吸血鬼|🧛", "dragonboat|端午節|🐉", 
-                        "sachet|香包|👝", "ricedumpling|粽子|🍙", "standanegg|立蛋|🥚", "chinesenewyear|中國新年|🧨", "firecrackers|鞭炮|🧨", 
-                        "liondance|舞獅|🦁", "luckymoney|壓歲錢|🧧", "ricecake|年糕|🥮", "springcouplet|春聯|🧧", "tangerine|橘子|🍊", 
-                        "earthday|地球日|🌍"
+                        "how are you|你好嗎|❓", "good morning|早安|🌅", "play games|玩遊戲|🎮", "thank you|謝謝|🙏", "see you later|待會見|👋",
+                        "happy birthday|生日快樂|🎂", "let us play|我們來玩吧|🏃", "this is fun|這很有趣|😆", "read a book|看書|📖", "ride a bike|騎車|🚴",
+                        "listen music|聽音樂|🎧", "watch tv|看電視|📺", "do homework|寫功課|📝", "go to school|去上學|🏫", "wake up|起床|🥱",
+                        "go to bed|去睡覺|🛌", "eat food|吃東西|🍽️", "wash hands|洗手|🧼", "brush teeth|刷牙|🪥", "take bath|洗澡|🛁",
+                        "clean room|打掃房間|🧹", "help mother|幫忙媽媽|👩‍👧", "play with|一起玩|🧸", "run fast|跑很快|🏃", "jump high|跳很高|🦘",
+                        "swim well|游得好|🏊", "sing songs|唱歌|🎤", "draw picture|畫畫|🖼️", "write story|寫故事|✍️", "make toys|做玩具|🧩",
+                        "build blocks|堆積木|🧱", "play soccer|踢足球|⚽", "play tennis|打網球|🎾", "play chess|下棋|♟️", "win game|贏得比賽|🏆",
+                        "lose game|輸掉比賽|😭", "try again|再試一次|🔄", "never quit|永不放棄|💪", "do your best|盡全力|⭐", "keep going|繼續前進|🚶",
+                        "stay strong|保持堅強|🏋️", "be happy|要開心|😁", "smile always|總是微笑|😊", "have fun|玩得開心|🥳", "enjoy life|享受生活|🌞",
+                        "good job|做得好|👍", "well done|幹得好|👏", "awesome|太棒了|😎", "fantastic|太神奇了|✨", "amazing|令人驚嘆|😲",
+                        "christmas tree|耶誕樹|🎄", "santa claus|耶誕老人|🎅", "stocking|長襪|🧦", "gift|禮物|🎁", "grandfather|祖父|👴", 
+                        "grandmother|祖母|👵", "seventeen|十七|1️⃣", "eighteen|十八|1️⃣", "nineteen|十九|1️⃣", "what is your name|你叫什麼名字|❓", 
+                        "how old are you|你幾歲|❓", "i am ten years old|我十歲|🔟", "jackolantern|南瓜燈|🎃"
                     ],
                     zh: [
                         "一石二鳥|ㄧˋ,ㄕˊ,ㄦˋ,ㄋㄧㄠˇ|一次做兩件事|🪨", "守株待兔|ㄕㄡˇ,ㄓㄨ,ㄉㄞˋ,ㄊㄨˋ|妄想不勞而獲|🐇", "畫蛇添足|ㄏㄨㄚˋ,ㄕㄜˊ,ㄊㄧㄢ,ㄗㄨˊ|多此一舉|🐍", "亡羊補牢|ㄨㄤˊ,ㄧㄤˊ,ㄅㄨˇ,ㄌㄠˊ|犯錯後及時補救|🐑", "掩耳盜鈴|ㄧㄢˇ,ㄦˇ,ㄉㄠˋ,ㄌㄧㄥˊ|自欺欺人|🔔",
@@ -1105,7 +1178,7 @@
             }
             window.currentGameState = screenId;
             
-            if (screenId === 'playing-screen' && typeInput) {
+            if (screenId === 'playing-screen' && typeInput && !window.isPaused) {
                 setTimeout(() => typeInput.focus(), 100);
             }
             
@@ -1119,6 +1192,23 @@
                 window.renderLeaderboard();
             }
             if (screenId === 'teacher-dashboard-screen') window.renderTeacherDashboard();
+        };
+
+        // ✨ 暫停相關功能 ✨
+        window.pauseGame = function() {
+            window.isPaused = true;
+            const pauseOverlay = document.getElementById('pause-overlay');
+            if (pauseOverlay) pauseOverlay.classList.remove('hidden');
+            if (typeInput) typeInput.blur();
+        };
+
+        window.resumeGame = function() {
+            window.isPaused = false;
+            const pauseOverlay = document.getElementById('pause-overlay');
+            if (pauseOverlay) pauseOverlay.classList.add('hidden');
+            if (typeInput) {
+                setTimeout(() => typeInput.focus(), 100);
+            }
         };
 
         window.loginStudent = function() {
@@ -1243,6 +1333,10 @@
             window.elapsedTime = 0;
             window.isTransitioning = false;
             window.isComposing = false;
+            window.isPaused = false;
+            
+            const pauseOverlay = document.getElementById('pause-overlay');
+            if (pauseOverlay) pauseOverlay.classList.add('hidden');
             
             window.renderQuestion();
             window.startTimer();
@@ -1397,6 +1491,7 @@
         };
 
         window.checkInput = function() {
+            if (window.isPaused) return;
             if (window.isTransitioning || window.currentQIndex >= window.questions.length || !typeInput) return;
 
             const q = window.questions[window.currentQIndex];
@@ -1441,7 +1536,7 @@
                     window.currentQIndex++;
                     window.isTransitioning = false;
                     window.renderQuestion();
-                    if (typeInput) setTimeout(() => typeInput.focus(), 50);
+                    if (typeInput && !window.isPaused) setTimeout(() => typeInput.focus(), 50);
                 } else {
                     window.finishGame();
                 }
@@ -1478,11 +1573,14 @@
 
         window.startTimer = function() {
             clearInterval(window.timerInterval);
-            window.startTime = Date.now();
+            window.elapsedTime = 0;
             if (timerText) timerText.innerText = "0秒";
+            
             window.timerInterval = setInterval(() => {
-                window.elapsedTime = Math.floor((Date.now() - window.startTime) / 1000);
-                if (timerText) timerText.innerText = window.formatTime(window.elapsedTime);
+                if (!window.isPaused && !window.isTransitioning) {
+                    window.elapsedTime++;
+                    if (timerText) timerText.innerText = window.formatTime(window.elapsedTime);
+                }
             }, 1000);
         };
 
@@ -1499,6 +1597,42 @@
             
             const totalCountEl = document.getElementById('total-q-count');
             if (totalCountEl) totalCountEl.innerText = window.questions.length;
+
+            // --- 個人進步比較邏輯 ---
+            const comparisonEl = document.getElementById('comparison-message');
+            if (comparisonEl) {
+                // 從 allScoresData 找出該學生「目前難度」的所有歷史成績
+                const studentScores = window.allScoresData.filter(d => 
+                    d.className === window.studentInfo.classCode && 
+                    d.seatNumber === window.studentInfo.seatCode &&
+                    d.difficulty === window.currentDifficulty
+                );
+
+                if (studentScores.length === 0) {
+                    // 第一次玩
+                    comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-blue-50 border-2 border-blue-200 text-blue-700 animate-bounce-in shadow-sm";
+                    comparisonEl.innerHTML = `<p class="text-xl font-bold"><i class="fa-solid fa-seedling"></i> 這是你第一次完成這個難度，建立了新標竿！</p>`;
+                } else {
+                    // 找出歷史最佳紀錄 (數字越小越好)
+                    const previousBest = Math.min(...studentScores.map(s => s.time));
+                    
+                    if (window.elapsedTime < previousBest) {
+                        // 進步了
+                        const diff = previousBest - window.elapsedTime;
+                        comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-green-50 border-4 border-green-400 text-green-700 animate-bounce-in shadow-md transform hover:scale-105 transition-transform";
+                        comparisonEl.innerHTML = `<p class="text-2xl font-black"><i class="fa-solid fa-arrow-trend-up"></i> 破紀錄啦！</p><p class="text-lg font-bold mt-1">比上次最佳紀錄進步了 <span class="text-red-500 text-xl">${window.formatTime(diff)}</span>！太神啦！</p>`;
+                    } else if (window.elapsedTime === previousBest) {
+                        // 平手
+                        comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-yellow-50 border-2 border-yellow-300 text-yellow-800 animate-bounce-in shadow-sm";
+                        comparisonEl.innerHTML = `<p class="text-xl font-bold"><i class="fa-solid fa-equals"></i> 哇！跟你的最佳紀錄一模一樣耶！</p>`;
+                    } else {
+                        // 尚未打破紀錄
+                        comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-orange-50 border-2 border-orange-300 text-orange-800 animate-bounce-in shadow-sm";
+                        comparisonEl.innerHTML = `<p class="text-lg font-bold"><i class="fa-solid fa-fire"></i> 加油！你的最佳紀錄是 <span class="text-red-500 text-xl">${window.formatTime(previousBest)}</span>，多練幾次一定能打破它！</p>`;
+                    }
+                }
+                comparisonEl.classList.remove('hidden');
+            }
 
             // 判斷是否顯示「進階/高手挑戰」橫幅 (僅限過關新手等級)
             const promoEl = document.getElementById('next-level-promo');
@@ -1558,13 +1692,13 @@
         };
 
         window.handleGlobalClick = function() {
-            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
+            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && !window.isPaused && typeInput) {
                 typeInput.focus();
             }
         };
 
         window.handleInputBlur = function() {
-            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && typeInput) {
+            if (window.currentGameState === 'playing-screen' && !window.isTransitioning && !window.isPaused && typeInput) {
                 setTimeout(() => typeInput.focus(), 150);
             }
         };
@@ -1656,7 +1790,7 @@
                     myRankBanner.classList.add('hidden');
                 }
             } else {
-                if(myRankBanner) myRankBanner.classList.add('hidden');
+                myRankBanner.classList.add('hidden');
             }
 
             if (uniqueSorted.length === 0) {
@@ -1784,6 +1918,45 @@
             const targetClass = selectEl.value;
             const classScores = window.allScoresData.filter(d => d.className === targetClass);
 
+            // --- 計算最佳進步獎 ---
+            const studentRecords = {};
+            classScores.forEach(score => {
+                if (!studentRecords[score.seatNumber]) {
+                    studentRecords[score.seatNumber] = [];
+                }
+                studentRecords[score.seatNumber].push(score);
+            });
+
+            let bestImprover = null;
+            let maxImprovement = 0;
+
+            for (const seatNumber in studentRecords) {
+                const records = studentRecords[seatNumber];
+                if (records.length > 1) {
+                    records.sort((a, b) => a.timestamp - b.timestamp);
+                    const firstTime = records[0].time;
+                    const bestTime = Math.min(...records.map(r => r.time));
+                    const improvement = firstTime - bestTime;
+
+                    if (improvement > maxImprovement) {
+                        maxImprovement = improvement;
+                        bestImprover = { seatNumber, improvement, firstTime, bestTime };
+                    }
+                }
+            }
+
+            const improverNameEl = document.getElementById('podium-improver-name');
+            const improverTimeEl = document.getElementById('podium-improver-time');
+            
+            if (bestImprover && maxImprovement > 0) {
+                improverNameEl.innerText = `${bestImprover.seatNumber} 號`;
+                improverTimeEl.innerHTML = `狂飆進步了 <span class="text-3xl text-yellow-500 font-black px-1">${window.formatTime(bestImprover.improvement)}</span>！`;
+            } else {
+                improverNameEl.innerText = "從缺";
+                improverTimeEl.innerText = "快來挑戰超越自己！";
+            }
+
+            // --- 渲染前三名高低頒獎台榜單 ---
             const topEasy = window.getTop3ForClassAndDiff(classScores, 'easy');
             const topMedium = window.getTop3ForClassAndDiff(classScores, 'medium');
             const topHard = window.getTop3ForClassAndDiff(classScores, 'hard');
@@ -1819,11 +1992,11 @@
                 if (nameEl && timeEl) {
                     if (sortedData.length >= i) {
                         nameEl.innerText = `${sortedData[i-1].seatNumber} 號`;
-                        nameEl.className = i === 1 ? "font-black text-gray-800" : "font-bold text-gray-700";
+                        nameEl.className = i === 1 ? "text-base md:text-lg font-black text-yellow-600 truncate w-full text-center px-1" : "text-sm md:text-base font-bold text-gray-700 truncate w-full text-center px-1";
                         timeEl.innerText = window.formatTime(sortedData[i-1].time);
                     } else {
                         nameEl.innerText = "從缺";
-                        nameEl.className = "text-gray-300 font-bold";
+                        nameEl.className = "text-gray-300 font-bold truncate w-full text-center";
                         timeEl.innerText = "-";
                     }
                 }
