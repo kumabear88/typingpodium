@@ -122,7 +122,7 @@
         <!-- 排行榜按鈕 (放在右上角) -->
         <div class="absolute top-4 right-4 z-20">
             <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
-                <i class="fa-solid fa-trophy"></i> 排行榜
+                <i class="fa-solid fa-trophy"></i> 本週英雄榜
             </button>
         </div>
 
@@ -185,7 +185,7 @@
                 <!-- 排行榜按鈕 -->
                 <div class="flex justify-end mb-2">
                     <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
-                        <i class="fa-solid fa-trophy"></i> 英雄排行榜
+                        <i class="fa-solid fa-trophy"></i> 本週英雄榜
                     </button>
                 </div>
 
@@ -281,7 +281,6 @@
                     
                     <!-- 輸入區 -->
                     <div class="relative w-full max-w-lg mb-6">
-                        <!-- 加入 oncomposition 確保注音輸入中不會誤判 -->
                         <input type="text" id="type-input" class="w-full text-center bg-transparent outline-none text-4xl md:text-5xl text-gray-800 font-bold border-b-4 border-blue-400 focus:border-blue-600 transition-colors py-2 mb-2 placeholder-blue-300/30" placeholder=" " autocomplete="off" oninput="window.checkInput()" onblur="window.handleInputBlur()" oncompositionstart="window.isComposing = true" oncompositionend="window.isComposing = false; window.checkInput()">
                         
                         <div id="cursor-hint" class="absolute inset-0 flex items-center justify-center pointer-events-none mb-2">
@@ -421,7 +420,7 @@
             <div id="leaderboard-screen" class="screen-section animate-fade-in py-4">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                     <h2 class="text-3xl font-black text-yellow-600 flex items-center gap-3">
-                        <i class="fa-solid fa-crown"></i> 英雄排行榜
+                        <i class="fa-solid fa-crown"></i> 本週英雄榜
                     </h2>
                     <button onclick="window.showScreen('intro-screen')" class="text-gray-500 hover:text-gray-700 bg-gray-100 px-4 py-2 rounded-full font-bold transition-colors shadow-sm">
                         <i class="fa-solid fa-arrow-left"></i> 返回選單
@@ -494,12 +493,22 @@
                         <i class="fa-solid fa-chalkboard-user"></i> 教師即時管理後台
                     </h2>
                     <div class="flex gap-2">
-                        <button onclick="window.clearAllScores()" class="text-red-600 hover:text-white bg-red-100 hover:bg-red-600 px-4 py-2 rounded-full font-bold transition-colors border border-red-200 flex items-center gap-1" title="依下方選擇的班級進行清空">
+                        <button onclick="window.clearAllScores()" class="text-red-600 hover:text-white bg-red-100 hover:bg-red-600 px-4 py-2 rounded-full font-bold transition-colors border border-red-200 flex items-center gap-1" title="依下方選擇的條件進行清空">
                             <i class="fa-solid fa-trash-can"></i> 批次清空成績
                         </button>
                         <button onclick="window.logoutTeacher()" class="text-gray-500 hover:text-gray-700 bg-gray-200 px-4 py-2 rounded-full font-bold transition-colors border border-gray-300 flex items-center gap-1">
                             <i class="fa-solid fa-right-from-bracket"></i> 登出
                         </button>
+                    </div>
+                </div>
+
+                <!-- ✨ 教師後台：新增過濾器 (週別) ✨ -->
+                <div class="flex justify-end gap-3 mb-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-200">
+                    <div class="flex items-center gap-2">
+                        <label class="font-bold text-gray-700"><i class="fa-solid fa-calendar-week"></i> 選擇週別：</label>
+                        <select id="teacher-week-filter" onchange="window.renderTeacherDashboard(); window.renderPodium();" class="px-3 py-1 rounded-lg border-2 border-indigo-300 font-bold text-indigo-800 outline-none focus:border-indigo-500 cursor-pointer">
+                            <option value="all">所有歷史紀錄</option>
+                        </select>
                     </div>
                 </div>
 
@@ -797,6 +806,18 @@
         const symbolToKey = {
             'a':'k-a', 'b':'k-b', 'c':'k-c', 'd':'k-d', 'e':'k-e', 'f':'k-f', 'g':'k-g', 'h':'k-h', 'i':'k-i', 'j':'k-j', 'k':'k-k', 'l':'k-l', 'm':'k-m', 'n':'k-n', 'o':'k-o', 'p':'k-p', 'q':'k-q', 'r':'k-r', 's':'k-s', 't':'k-t', 'u':'k-u', 'v':'k-v', 'w':'k-w', 'x':'k-x', 'y':'k-y', 'z':'k-z',
             'ㄅ':'k-1', 'ㄆ':'k-q', 'ㄇ':'k-a', 'ㄈ':'k-z', 'ㄉ':'k-2', 'ㄊ':'k-w', 'ㄋ':'k-s', 'ㄌ':'k-x', 'ㄍ':'k-e', 'ㄎ':'k-d', 'ㄏ':'k-c', 'ㄐ':'k-r', 'ㄑ':'k-f', 'ㄒ':'k-v', 'ㄓ':'k-5', 'ㄔ':'k-t', 'ㄕ':'k-g', 'ㄖ':'k-b', 'ㄗ':'k-y', 'ㄘ':'k-h', 'ㄙ':'k-n', 'ㄧ':'k-u', 'ㄨ':'k-j', 'ㄩ':'k-m', 'ㄚ':'k-8', 'ㄛ':'k-i', 'ㄜ':'k-k', 'ㄝ':'k-,', 'ㄞ':'k-9', 'ㄟ':'k-o', 'ㄠ':'k-l', 'ㄡ':'k-.', 'ㄢ':'k-0', 'ㄣ':'k-p', 'ㄤ':'k-[', 'ㄥ':'k-;', 'ㄦ':'k--', 'ˇ':'k-3', 'ˋ':'k-4', 'ˊ':'k-6', '˙':'k-space', ' ':'k-space'
+        };
+
+        // --- ✨ 取得週別 ID ✨ ---
+        window.getWeekId = function(timestamp) {
+            const d = new Date(timestamp);
+            d.setHours(0, 0, 0, 0);
+            const day = d.getDay() || 7; 
+            d.setDate(d.getDate() - day + 1); 
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const date = String(d.getDate()).padStart(2, '0');
+            return `${y}/${m}/${date}`; 
         };
 
         // --- 📚 超巨量緊湊字串題庫 📚 ---
@@ -1191,6 +1212,18 @@
                 return `${m}分 ${s}秒`;
             }
             return `${s}秒`;
+        };
+
+        // --- ✨ 取得週別 ID ✨ ---
+        window.getWeekId = function(timestamp) {
+            const d = new Date(timestamp);
+            d.setHours(0, 0, 0, 0);
+            const day = d.getDay() || 7; 
+            d.setDate(d.getDate() - day + 1); 
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const date = String(d.getDate()).padStart(2, '0');
+            return `${y}/${m}/${date}`; 
         };
 
         window.showScreen = function(screenId) {
@@ -1631,10 +1664,9 @@
             const totalCountEl = document.getElementById('total-q-count');
             if (totalCountEl) totalCountEl.innerText = window.questions.length;
 
-            // --- 個人進步比較邏輯 ---
+            // --- 個人進步比較邏輯 (歷史全時段比較) ---
             const comparisonEl = document.getElementById('comparison-message');
             if (comparisonEl) {
-                // 從 allScoresData 找出該學生「目前難度」的所有歷史成績
                 const studentScores = window.allScoresData.filter(d => 
                     d.className === window.studentInfo.classCode && 
                     d.seatNumber === window.studentInfo.seatCode &&
@@ -1642,32 +1674,26 @@
                 );
 
                 if (studentScores.length === 0) {
-                    // 第一次玩
                     comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-blue-50 border-2 border-blue-200 text-blue-700 animate-bounce-in shadow-sm";
                     comparisonEl.innerHTML = `<p class="text-xl font-bold"><i class="fa-solid fa-seedling"></i> 這是你第一次完成這個難度，建立了新標竿！</p>`;
                 } else {
-                    // 找出歷史最佳紀錄 (數字越小越好)
                     const previousBest = Math.min(...studentScores.map(s => s.time));
                     
                     if (window.elapsedTime < previousBest) {
-                        // 進步了
                         const diff = previousBest - window.elapsedTime;
                         comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-green-50 border-4 border-green-400 text-green-700 animate-bounce-in shadow-md transform hover:scale-105 transition-transform";
-                        comparisonEl.innerHTML = `<p class="text-2xl font-black"><i class="fa-solid fa-arrow-trend-up"></i> 破紀錄啦！</p><p class="text-lg font-bold mt-1">比上次最佳紀錄進步了 <span class="text-red-500 text-xl">${window.formatTime(diff)}</span>！太神啦！</p>`;
+                        comparisonEl.innerHTML = `<p class="text-2xl font-black"><i class="fa-solid fa-arrow-trend-up"></i> 破紀錄啦！</p><p class="text-lg font-bold mt-1">比歷史最佳紀錄進步了 <span class="text-red-500 text-xl">${window.formatTime(diff)}</span>！太神啦！</p>`;
                     } else if (window.elapsedTime === previousBest) {
-                        // 平手
                         comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-yellow-50 border-2 border-yellow-300 text-yellow-800 animate-bounce-in shadow-sm";
-                        comparisonEl.innerHTML = `<p class="text-xl font-bold"><i class="fa-solid fa-equals"></i> 哇！跟你的最佳紀錄一模一樣耶！</p>`;
+                        comparisonEl.innerHTML = `<p class="text-xl font-bold"><i class="fa-solid fa-equals"></i> 哇！跟你的歷史最佳紀錄一模一樣耶！</p>`;
                     } else {
-                        // 尚未打破紀錄
                         comparisonEl.className = "mb-6 max-w-lg mx-auto p-4 rounded-2xl bg-orange-50 border-2 border-orange-300 text-orange-800 animate-bounce-in shadow-sm";
-                        comparisonEl.innerHTML = `<p class="text-lg font-bold"><i class="fa-solid fa-fire"></i> 加油！你的最佳紀錄是 <span class="text-red-500 text-xl">${window.formatTime(previousBest)}</span>，多練幾次一定能打破它！</p>`;
+                        comparisonEl.innerHTML = `<p class="text-lg font-bold"><i class="fa-solid fa-fire"></i> 加油！你的歷史最佳紀錄是 <span class="text-red-500 text-xl">${window.formatTime(previousBest)}</span>，多練幾次一定能打破它！</p>`;
                     }
                 }
                 comparisonEl.classList.remove('hidden');
             }
 
-            // 判斷是否顯示「進階/高手挑戰」橫幅 (僅限過關新手等級)
             const promoEl = document.getElementById('next-level-promo');
             if (promoEl) {
                 if (window.currentDifficulty === 'easy') {
@@ -1693,11 +1719,12 @@
                         time: window.elapsedTime,
                         difficulty: window.currentDifficulty,
                         gradePool: window.studentInfo.grade,
-                        timestamp: Date.now()
+                        timestamp: Date.now(),
+                        weekId: window.getWeekId(Date.now()) // ✨ 寫入週別 ID ✨
                     });
                     
                     if (autoSaveStatus) {
-                        autoSaveStatus.innerHTML = '<i class="fa-solid fa-check-circle text-green-500 text-2xl"></i> 成績上傳成功！已加入排行榜。';
+                        autoSaveStatus.innerHTML = '<i class="fa-solid fa-check-circle text-green-500 text-2xl"></i> 成績上傳成功！已加入本週排行榜。';
                         autoSaveStatus.className = "bg-green-50 border-2 border-green-200 text-green-800 p-4 rounded-2xl max-w-md mx-auto shadow-sm font-bold text-lg mb-6 flex flex-col items-center justify-center gap-2";
                     }
                 } catch (err) {
@@ -1788,7 +1815,12 @@
                 return;
             }
 
-            let filteredData = window.allScoresData.filter(d => d.difficulty === window.currentLeaderboardTab);
+            // ✨ 學生端只顯示「本週」的成績 ✨
+            const currentWeekId = window.getWeekId(Date.now());
+            let filteredData = window.allScoresData.filter(d => 
+                d.difficulty === window.currentLeaderboardTab && 
+                d.weekId === currentWeekId 
+            );
             
             if (window.lbScope === 'class') {
                 const selClass = document.getElementById('lb-class-select');
@@ -1827,7 +1859,7 @@
             }
 
             if (uniqueSorted.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-gray-400 font-medium"><i class="fa-solid fa-ghost text-2xl mb-2"></i><br>目前還沒有人挑戰，快來搶第一名！</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-gray-400 font-medium"><i class="fa-solid fa-ghost text-2xl mb-2"></i><br>本週還沒有人挑戰，快來搶下第一名！</td></tr>`;
                 return;
             }
 
@@ -1842,7 +1874,6 @@
                 const isMe = (data.className === window.studentInfo.classCode && data.seatNumber === window.studentInfo.seatCode);
                 const rowClass = isMe ? "bg-yellow-100 hover:bg-yellow-200" : "hover:bg-yellow-50";
 
-                // 取得名字
                 const sId = data.className + data.seatNumber;
                 const sName = window.studentNames[sId] || '';
                 const displayName = sName ? `${sId} ${sName}` : `${data.className} 班 ${data.seatNumber} 號`;
@@ -1898,6 +1929,7 @@
 
             const tbody = document.getElementById('teacher-dashboard-body');
             const classFilter = document.getElementById('teacher-class-filter')?.value || 'all';
+            const weekFilter = document.getElementById('teacher-week-filter')?.value || 'all'; 
 
             if (!tbody) return;
             
@@ -1910,6 +1942,10 @@
             
             if (classFilter !== 'all') {
                 filteredData = filteredData.filter(d => d.className === classFilter);
+            }
+
+            if (weekFilter !== 'all') {
+                filteredData = filteredData.filter(d => d.weekId === weekFilter);
             }
 
             if (filteredData.length === 0) {
@@ -1958,7 +1994,13 @@
             if(!selectEl) return;
             
             const targetClass = selectEl.value;
-            const classScores = window.allScoresData.filter(d => d.className === targetClass);
+            const weekFilter = document.getElementById('teacher-week-filter')?.value || 'all'; 
+
+            let classScores = window.allScoresData.filter(d => d.className === targetClass);
+
+            if (weekFilter !== 'all') {
+                classScores = classScores.filter(d => d.weekId === weekFilter);
+            }
 
             // --- 計算最佳進步獎 ---
             const studentRecords = {};
@@ -2092,19 +2134,26 @@
 
         window.clearAllScores = async function() {
             let classFilter = 'all';
-            let scopeText = "【所有班級】的【所有學生成績】";
+            let weekFilter = document.getElementById('teacher-week-filter')?.value || 'all';
+            let scopeText = "【所有班級】";
 
             if (window.currentTeacherTab === 'podium') {
                 classFilter = document.getElementById('podium-class-select').value;
-                scopeText = `【${classFilter}班】的【所有學生成績】`;
+                scopeText = `【${classFilter}班】`;
             } else {
                 const classSelect = document.getElementById('teacher-class-filter');
                 if (classSelect) {
                     classFilter = classSelect.value;
                     if (classFilter !== 'all') {
-                        scopeText = `【${classFilter}班】的【所有學生成績】`;
+                        scopeText = `【${classFilter}班】`;
                     }
                 }
+            }
+
+            if (weekFilter !== 'all') {
+                scopeText += `的【${weekFilter} 週起】成績`;
+            } else {
+                scopeText += `的【所有歷史成績】`;
             }
 
             if (!confirm(`⚠️ 警告：這將會清空 ${scopeText}！\n\n請問確定要清空嗎？`)) return;
@@ -2116,6 +2165,10 @@
                 
                 if (classFilter !== 'all') {
                     docsToDelete = window.allScoresData.filter(d => d.className === classFilter);
+                }
+
+                if (weekFilter !== 'all') {
+                    docsToDelete = docsToDelete.filter(d => d.weekId === weekFilter);
                 }
 
                 if (docsToDelete.length === 0) {
@@ -2196,9 +2249,28 @@
                     snapshot.forEach(document => {
                         const data = document.data();
                         data.id = document.id; 
+                        // ✨ 確保舊資料也有週別 ID ✨
+                        data.weekId = data.weekId || window.getWeekId(data.timestamp);
                         window.allScoresData.push(data);
                     });
                     
+                    // ✨ 動態更新教師後台的「週別過濾器」選項 ✨
+                    const weeks = [...new Set(window.allScoresData.map(d => d.weekId))].sort().reverse();
+                    const weekSelect = document.getElementById('teacher-week-filter');
+                    if (weekSelect) {
+                        const currentVal = weekSelect.value;
+                        const currentWeek = window.getWeekId(Date.now());
+                        weekSelect.innerHTML = '<option value="all">所有歷史紀錄</option>';
+                        weeks.forEach(w => {
+                            const isCurrent = (w === currentWeek) ? " (本週)" : "";
+                            weekSelect.innerHTML += `<option value="${w}">${w}${isCurrent}</option>`;
+                        });
+                        // 嘗試保留原本的選擇，如果沒有就預設為 all
+                        if (currentVal && (weeks.includes(currentVal) || currentVal === 'all')) {
+                            weekSelect.value = currentVal;
+                        }
+                    }
+
                     if (window.currentGameState === 'leaderboard-screen') {
                         window.renderLeaderboard();
                     } else if (window.currentGameState === 'teacher-dashboard-screen') {
