@@ -171,7 +171,7 @@
                 <div class="text-6xl mb-6 text-gray-400"><i class="fa-solid fa-user-tie"></i></div>
                 <h2 class="text-2xl font-black text-gray-700 mb-6">教師專屬後台登入</h2>
                 <div class="bg-gray-50 border-2 border-gray-200 rounded-2xl p-6 max-w-sm w-full shadow-sm text-center">
-                    <input type="password" id="teacher-password" placeholder="請輸入密碼" class="w-full text-center px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-gray-500 text-xl mb-4">
+                    <input type="password" id="teacher-password" placeholder="請輸入密碼" class="w-full text-center px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-gray-500 text-xl mb-4" onkeydown="if(event.key === 'Enter') window.loginTeacher()">
                     <p id="teacher-login-error" class="hidden text-red-500 text-sm font-bold mb-4">密碼錯誤</p>
                     <div class="flex gap-3 justify-center">
                         <button onclick="window.showScreen('login-screen')" class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors">返回</button>
@@ -469,13 +469,14 @@
                     </select>
                 </div>
 
+                <!-- 排行榜空間加大優化版 -->
                 <div class="bg-white border-2 border-yellow-200 rounded-2xl shadow-md overflow-hidden">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-yellow-50 text-yellow-800 border-b-2 border-yellow-200">
-                                <th class="py-3 px-4 md:px-6 font-black text-center w-16 md:w-24">名次</th>
-                                <th class="py-3 px-4 md:px-6 font-black">學生姓名</th>
-                                <th class="py-3 px-4 md:px-6 font-black text-right">花費時間</th>
+                                <th class="py-3 px-2 md:px-4 font-black text-center w-12 md:w-20 whitespace-nowrap">名次</th>
+                                <th class="py-3 px-2 md:px-4 font-black w-full">學生姓名</th>
+                                <th class="py-3 px-2 md:px-4 font-black text-right whitespace-nowrap">花費時間</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body">
@@ -604,7 +605,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center md:text-right bg-red-50 px-6 py-3 rounded-xl border-2 border-red-100 w-full md:w-auto">
-                                        <div id="podium-improver-name" class="text-2xl md:text-4xl font-black text-blue-700 mb-1">-</div>
+                                        <div id="podium-improver-name" class="text-2xl md:text-4xl font-black text-blue-700 mb-1 break-words">-</div>
                                         <div id="podium-improver-time" class="text-lg font-bold text-red-600">快來挑戰超越自己！</div>
                                     </div>
                                 </div>
@@ -619,7 +620,7 @@
                                     <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
                                         <!-- 2nd Place -->
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-easy-2-name" class="text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-2-name" class="text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-easy-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
                                                 <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
@@ -628,7 +629,7 @@
                                         <!-- 1st Place -->
                                         <div class="flex flex-col items-center w-1/3 z-10">
                                             <div class="text-2xl mb-1 drop-shadow-md">👑</div>
-                                            <div id="podium-easy-1-name" class="text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-1-name" class="text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-easy-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
                                             <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
                                                 <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
@@ -636,7 +637,7 @@
                                         </div>
                                         <!-- 3rd Place -->
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-easy-3-name" class="text-xs md:text-sm font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-3-name" class="text-xs md:text-sm font-bold text-orange-700 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-easy-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
                                                 <span class="text-lg md:text-xl font-black text-orange-400">3</span>
@@ -651,7 +652,7 @@
                                     <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
                                         <!-- 2nd Place -->
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-medium-2-name" class="text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-2-name" class="text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-medium-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
                                                 <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
@@ -660,7 +661,7 @@
                                         <!-- 1st Place -->
                                         <div class="flex flex-col items-center w-1/3 z-10">
                                             <div class="text-2xl mb-1 drop-shadow-md">👑</div>
-                                            <div id="podium-medium-1-name" class="text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-1-name" class="text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-medium-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
                                             <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
                                                 <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
@@ -668,7 +669,7 @@
                                         </div>
                                         <!-- 3rd Place -->
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-medium-3-name" class="text-xs md:text-sm font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-3-name" class="text-xs md:text-sm font-bold text-orange-700 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-medium-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
                                                 <span class="text-lg md:text-xl font-black text-orange-400">3</span>
@@ -683,7 +684,7 @@
                                     <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
                                         <!-- 2nd Place -->
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-hard-2-name" class="text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-2-name" class="text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-hard-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
                                                 <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
@@ -692,7 +693,7 @@
                                         <!-- 1st Place -->
                                         <div class="flex flex-col items-center w-1/3 z-10">
                                             <div class="text-2xl mb-1 drop-shadow-md">👑</div>
-                                            <div id="podium-hard-1-name" class="text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-1-name" class="text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-hard-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
                                             <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
                                                 <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
@@ -700,7 +701,7 @@
                                         </div>
                                         <!-- 3rd Place -->
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-hard-3-name" class="text-xs md:text-sm font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-3-name" class="text-xs md:text-sm font-bold text-orange-700 w-full text-center px-1 break-words leading-tight">-</div>
                                             <div id="podium-hard-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
                                                 <span class="text-lg md:text-xl font-black text-orange-400">3</span>
@@ -820,7 +821,7 @@
             return `${y}/${m}/${date}`; 
         };
 
-        // --- 📚 超巨量緊湊字串題庫 📚 ---
+        // --- 📚 超巨量緊湊字串題庫 (已移除所有中英夾雜與冷門詞彙) 📚 ---
         const rawPools = {
             3: {
                 easy: {
@@ -960,14 +961,14 @@
                         "zip|拉鍊|🤐", "sun|太陽|☀️", "fox|狐狸|🦊"
                     ],
                     zh: [
-                        "哆啦A夢|ㄉㄨㄛ,ㄌㄚ,A,ㄇㄥˋ|機智貓|🐱", "蠟筆小新|ㄌㄚˋ,ㄅㄧˇ,ㄒㄧㄠˇ,ㄒㄧㄣ|野原新之助|🖍️", "皮卡丘|ㄆㄧˊ,ㄎㄚˇ,ㄑㄧㄡ|十萬伏特|⚡", "胖丁|ㄆㄤˋ,ㄉㄧㄥ|愛唱歌|🎤", "卡比|ㄎㄚˇ,ㄅㄧˇ|粉紅色|🌟",
+                        "小叮噹|ㄒㄧㄠˇ,ㄉㄧㄥ,ㄉㄤ|機器貓|🐱", "蠟筆小新|ㄌㄚˋ,ㄅㄧˇ,ㄒㄧㄠˇ,ㄒㄧㄣ|野原新之助|🖍️", "皮卡丘|ㄆㄧˊ,ㄎㄚˇ,ㄑㄧㄡ|十萬伏特|⚡", "胖丁|ㄆㄤˋ,ㄉㄧㄥ|愛唱歌|🎤", "卡比|ㄎㄚˇ,ㄅㄧˇ|粉紅色|🌟",
                         "瑪利歐|ㄇㄚˇ,ㄌㄧˋ,ㄡ|水管工|🍄", "庫巴|ㄎㄨˋ,ㄅㄚ|大魔王|🐢", "耀西|ㄧㄠˋ,ㄒㄧ|綠恐龍|🦖", "索隆|ㄙㄨㄛˇ,ㄌㄨㄥˊ|三刀流|⚔️", "魯夫|ㄌㄨˇ,ㄈㄨ|海賊王|🏴‍☠️",
-                        "娜美|ㄋㄚˋ,ㄇㄟˇ|航海士|🍊", "喬巴|ㄑㄧㄠˊ,ㄅㄚ|船醫|🦌", "羅賓|ㄌㄨㄛˊ,ㄅㄧㄣ|考古學家|📖", "炭治郎|ㄊㄢˋ,ㄓˋ,ㄌㄤˊ|鬼滅之刃|🎴", "禰豆子|ㄋㄧˇ,ㄉㄡˋ,ㄗ˙|咬竹子|🎍",
-                        "善逸|ㄕㄢˋ,ㄧˋ|雷之呼吸|⚡", "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|方塊遊戲|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|無人島|🏝️", "鉛筆盒|ㄑㄧㄢ,ㄅㄧˇ,ㄏㄜˊ|裝文具|✏️", "圖書館|ㄊㄨˊ,ㄕㄨ,ㄍㄨㄢˇ|借書|📚",
+                        "娜美|ㄋㄚˋ,ㄇㄟˇ|航海士|🍊", "喬巴|ㄑㄧㄠˊ,ㄅㄚ|船醫|🦌", "火車|ㄏㄨㄛˇ,ㄔㄜ|嘟嘟嘟|🚂", "白雲|ㄅㄞˊ,ㄩㄣˊ|天上飄|☁️", "閃電|ㄕㄢˇ,ㄉㄧㄢˋ|打雷|⚡",
+                        "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|方塊遊戲|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|無人島|🏝️", "鉛筆盒|ㄑㄧㄢ,ㄅㄧˇ,ㄏㄜˊ|裝文具|✏️", "圖書館|ㄊㄨˊ,ㄕㄨ,ㄍㄨㄢˇ|借書|📚",
                         "溜滑梯|ㄌㄧㄡ,ㄏㄨㄚˊ,ㄊㄧ|公園玩|🛝", "腳踏車|ㄐㄧㄠˇ,ㄊㄚˋ,ㄔㄜ|騎車|🚲", "連絡簿|ㄌㄧㄢˊ,ㄌㄨㄛˋ,ㄅㄨˋ|簽名|📒", "橡皮擦|ㄒㄧㄤˋ,ㄆㄧˊ,ㄘㄚ|擦錯字|🧽", "筆記本|ㄅㄧˇ,ㄐㄧˋ,ㄅㄣˇ|寫字|📓",
                         "彩色筆|ㄘㄞˇ,ㄙㄜˋ,ㄅㄧˇ|畫畫|🎨", "動物園|ㄉㄨㄥˋ,ㄨˋ,ㄩㄢˊ|看動物|🐘", "遊樂園|ㄧㄡˊ,ㄌㄜˋ,ㄩㄢˊ|玩耍|🎢", "看電視|ㄎㄢˋ,ㄉㄧㄢˋ,ㄕˋ|看卡通|📺", "打電腦|ㄉㄚˇ,ㄉㄧㄢˋ,ㄋㄠˇ|上網|💻",
                         "好朋友|ㄏㄠˇ,ㄆㄥˊ,ㄧㄡˇ|一起玩|🤝", "寶可夢|ㄅㄠˇ,ㄎㄜˇ,ㄇㄥˋ|抓怪獸|🔴", "汪汪隊|ㄨㄤ,ㄨㄤ,ㄉㄨㄟˋ|立大功|🐶", "蜘蛛人|ㄓ,ㄓㄨ,ㄖㄣˊ|吐絲|🕸️", "鋼鐵人|ㄍㄤ,ㄊㄧㄝˇ,ㄖㄣˊ|會飛|🤖",
-                        "蝙蝠俠|ㄅㄧㄢ,ㄈㄨˊ,ㄒㄧㄚˊ|黑漆漆|🦇", "美國隊長|ㄇㄟˇ,ㄍㄨㄛˊ,ㄉㄨㄟˋ,ㄓㄤˇ|拿盾牌|🛡️", "閃電俠|ㄕㄢˇ,ㄉㄧㄢˋ,ㄒㄧㄚˊ|跑很快|⚡", "超人|ㄔㄠ,ㄖㄣˊ|力氣大|🦸", "冰雪奇緣|ㄅㄧㄥ,ㄒㄩㄝˇ,ㄑㄧˊ,ㄩㄢˊ|Let it go|❄️",
+                        "蝙蝠俠|ㄅㄧㄢ,ㄈㄨˊ,ㄒㄧㄚˊ|黑漆漆|🦇", "美國隊長|ㄇㄟˇ,ㄍㄨㄛˊ,ㄉㄨㄟˋ,ㄓㄤˇ|拿盾牌|🛡️", "閃電俠|ㄕㄢˇ,ㄉㄧㄢˋ,ㄒㄧㄚˊ|跑很快|⚡", "超人|ㄔㄠ,ㄖㄣˊ|力氣大|🦸", "冰雪奇緣|ㄅㄧㄥ,ㄒㄩㄝˇ,ㄑㄧˊ,ㄩㄢˊ|公主的故事|❄️",
                         "艾莎|ㄞˋ,ㄕㄚ|冰魔法|👸", "安娜|ㄢ,ㄋㄚˋ|妹妹|👧", "雪寶|ㄒㄩㄝˇ,ㄅㄠˇ|雪人|⛄", "胡迪|ㄏㄨˊ,ㄉㄧˊ|牛仔|🤠", "巴斯光年|ㄅㄚ,ㄙ,ㄍㄨㄤ,ㄋㄧㄢˊ|飛向宇宙|🚀",
                         "佩佩豬|ㄆㄟˋ,ㄆㄟˋ,ㄓㄨ|粉紅豬|🐷", "史努比|ㄕˇ,ㄋㄨˇ,ㄅㄧˇ|白狗|🐶", "龍貓|ㄌㄨㄥˊ,ㄇㄠ|胖胖的|🐾", "維尼|ㄨㄟˊ,ㄋㄧˊ|吃蜂蜜|🍯", "小蘭|ㄒㄧㄠˇ,ㄌㄢˊ|空手道|👧",
                         "螞蟻|ㄇㄚˇ,ㄧˇ|昆蟲|🐜", "袋子|ㄉㄞˋ,ㄗ˙|裝東西|🛍️", "貓咪|ㄇㄠ,ㄇㄧ|喵叫|🐱", "公牛|ㄍㄨㄥ,ㄋㄧㄡˊ|動物|🐂", "女王|ㄋㄩˇ,ㄨㄤˊ|皇室|👑", 
@@ -1084,10 +1085,10 @@
                         "畫畫|ㄏㄨㄚˋ,ㄏㄨㄚˋ|用彩色筆|🎨", "唱歌|ㄔㄤˋ,ㄍㄜ|用麥克風|🎤", "跳舞|ㄊㄧㄠˋ,ㄨˇ|跟著音樂動|💃", "運動|ㄩㄣˋ,ㄉㄨㄥˋ|活動身體|🏃", "跑步|ㄆㄠˇ,ㄅㄨˋ|在操場上|🏃",
                         "游泳|ㄧㄡˊ,ㄩㄥˇ|在水裡|🏊", "遊戲|ㄧㄡˊ,ㄒㄧˋ|好玩的|🎮", "快樂|ㄎㄨㄞˋ,ㄌㄜˋ|心情好|😄", "開心|ㄎㄞ,ㄒㄧㄣ|很高興|😊", "勇敢|ㄩㄥˇ,ㄍㄢˇ|不怕困難|🦸",
                         "聰明|ㄘㄨㄥ,ㄇㄧㄥˊ|頭腦好|🧠", "漂亮|ㄆㄧㄠˋ,ㄌㄧㄤˋ|很好看|✨", "可愛|ㄎㄜˇ,ㄞˋ|討人喜歡|🥰", "發現|ㄈㄚ,ㄒㄧㄢˋ|找到新東西|👀", "觀察|ㄍㄨㄢ,ㄔㄚˊ|仔細看|🔎",
-                        "哆啦A夢|ㄉㄨㄛ,ㄌㄚ,A,ㄇㄥˋ|機智貓|🐱", "柯南|ㄎㄜ,ㄋㄢˊ|小偵探|🕵️", "皮卡丘|ㄆㄧˊ,ㄎㄚˇ,ㄑㄧㄡ|會放電|⚡", "瑪利歐|ㄇㄚˇ,ㄌㄧˋ,ㄡ|戴紅帽|🍄", "卡比|ㄎㄚˇ,ㄅㄧˇ|吃東西|🌟",
-                        "炭治郎|ㄊㄢˋ,ㄓˋ,ㄌㄤˊ|拿著劍|🎴", "禰豆子|ㄋㄧˇ,ㄉㄡˋ,ㄗ˙|咬竹子|🎍", "善逸|ㄕㄢˋ,ㄧˋ|很膽小|⚡", "芙莉蓮|ㄈㄨˊ,ㄌㄧˋ,ㄌㄧㄢˊ|精靈魔法使|🧝‍♀️", "欣梅爾|ㄒㄧㄣ,ㄇㄟˊ,ㄦˇ|人類勇者|🗡️",
-                        "五條悟|ㄨˇ,ㄊㄧㄠˊ,ㄨˋ|最強咒術師|🤞", "虎杖|ㄏㄨˇ,ㄓㄤˋ|力氣很大|👊", "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|蓋房子|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|抓蟲釣魚|🏝️", "原神|ㄩㄢˊ,ㄕㄣˊ|開放世界|🗺️",
-                        "絕區零|ㄐㄩㄝˊ,ㄑㄩ,ㄌㄧㄥˊ|最新遊戲|📺", "史迪奇|ㄕˇ,ㄉㄧˊ,ㄑㄧˊ|外星人|👽", "米老鼠|ㄇㄧˇ,ㄌㄠˇ,ㄕㄨˇ|迪士尼|🐭", "蜘蛛人|ㄓ,ㄓㄨ,ㄖㄣˊ|吐絲|🕸️", "鋼鐵人|ㄍㄤ,ㄊㄧㄝˇ,ㄖㄣˊ|紅金盔甲|🤖",
+                        "小叮噹|ㄒㄧㄠˇ,ㄉㄧㄥ,ㄉㄤ|機器貓|🐱", "柯南|ㄎㄜ,ㄋㄢˊ|小偵探|🕵️", "皮卡丘|ㄆㄧˊ,ㄎㄚˇ,ㄑㄧㄡ|會放電|⚡", "瑪利歐|ㄇㄚˇ,ㄌㄧˋ,ㄡ|戴紅帽|🍄", "卡比|ㄎㄚˇ,ㄅㄧˇ|吃東西|🌟",
+                        "火車|ㄏㄨㄛˇ,ㄔㄜ|嘟嘟嘟|🚂", "白雲|ㄅㄞˊ,ㄩㄣˊ|天上飄|☁️", "閃電|ㄕㄢˇ,ㄉㄧㄢˋ|打雷|⚡", "精靈|ㄐㄧㄥ,ㄌㄧㄥˊ|童話故事|🧚", "勇者|ㄩㄥˇ,ㄓㄜˇ|打敗魔王|🗡️",
+                        "魔法師|ㄇㄛˊ,ㄈㄚˇ,ㄕ|會變魔術|🧙", "大力士|ㄉㄚˋ,ㄌㄧˋ,ㄕˋ|力氣很大|💪", "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|蓋房子|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|抓蟲釣魚|🏝️", "原神|ㄩㄢˊ,ㄕㄣˊ|開放世界|🗺️",
+                        "電視機|ㄉㄧㄢˋ,ㄕˋ,ㄐㄧ|看節目|📺", "史迪奇|ㄕˇ,ㄉㄧˊ,ㄑㄧˊ|外星人|👽", "米老鼠|ㄇㄧˇ,ㄌㄠˇ,ㄕㄨˇ|迪士尼|🐭", "蜘蛛人|ㄓ,ㄓㄨ,ㄖㄣˊ|吐絲|🕸️", "鋼鐵人|ㄍㄤ,ㄊㄧㄝˇ,ㄖㄣˊ|紅金盔甲|🤖",
                         "蝙蝠俠|ㄅㄧㄢ,ㄈㄨˊ,ㄒㄧㄚˊ|黑漆漆|🦇", "艾莎|ㄞˋ,ㄕㄚ|冰雪魔法|❄️", "安娜|ㄢ,ㄋㄚˋ|勇敢妹妹|👧", "雪寶|ㄒㄩㄝˇ,ㄅㄠˇ|喜歡夏天|⛄", "胡迪|ㄏㄨˊ,ㄉㄧˊ|玩具牛仔|🤠",
                         "巴斯|ㄅㄚ,ㄙ|太空騎警|🚀", "佩佩豬|ㄆㄟˋ,ㄆㄟˋ,ㄓㄨ|喜歡泥巴|🐷", "史努比|ㄕˇ,ㄋㄨˇ,ㄅㄧˇ|躺在屋頂|🐶", "龍貓|ㄌㄨㄥˊ,ㄇㄠ|毛茸茸|🐾", "維尼|ㄨㄟˊ,ㄋㄧˊ|黃色小熊|🍯",
                         "蘋果|ㄆㄧㄥˊ,ㄍㄨㄛˇ|紅水果|🍎", "香蕉|ㄒㄧㄤ,ㄐㄧㄠ|黃水果|🍌", "西瓜|ㄒㄧ,ㄍㄨㄚ|綠水果|🍉", "太陽|ㄊㄞˋ,ㄧㄤˊ|很熱|☀️", "月亮|ㄩㄝˋ,ㄌㄧㄤˋ|晚上出來|🌙",
@@ -1214,18 +1215,6 @@
             return `${s}秒`;
         };
 
-        // --- ✨ 取得週別 ID ✨ ---
-        window.getWeekId = function(timestamp) {
-            const d = new Date(timestamp);
-            d.setHours(0, 0, 0, 0);
-            const day = d.getDay() || 7; 
-            d.setDate(d.getDate() - day + 1); 
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const date = String(d.getDate()).padStart(2, '0');
-            return `${y}/${m}/${date}`; 
-        };
-
         window.showScreen = function(screenId) {
             Object.values(screens).forEach(s => {
                 if (s) s.style.display = 'none';
@@ -1270,13 +1259,16 @@
 
         window.loginStudent = function() {
             const cInput = document.getElementById('login-class').value.trim();
-            const sInput = document.getElementById('login-seat').value.trim();
+            let sInput = document.getElementById('login-seat').value.trim();
             const err = document.getElementById('login-error');
 
             if (!cInput || !sInput) {
                 if(err) err.classList.remove('hidden');
                 return;
             }
+            
+            // ✨ 將座號統一補零至2位數，例如輸入 1 自動變成 01 ✨
+            sInput = sInput.padStart(2, '0');
             
             let detectedGrade = 3; 
             const match = cInput.match(/^[1-6]/);
@@ -1297,7 +1289,6 @@
             
             const welcomeEl = document.getElementById('welcome-student-name');
             if(welcomeEl) {
-                // 如果有找到名字就顯示「30101 張昱宸」，沒找到就顯示「301 班 01 號」
                 welcomeEl.innerText = sName ? `${studentId} ${sName}` : `${cInput} 班 ${sInput} 號`;
             }
 
@@ -1307,7 +1298,6 @@
                 welcomeGradeEl.innerText = actualGrade;
             }
 
-            // 動態更新畫面上的題數顯示
             const welcomeQCountEl = document.getElementById('welcome-q-count');
             const btnEasyDesc = document.getElementById('btn-easy-desc');
             const btnMediumDesc = document.getElementById('btn-medium-desc');
@@ -1538,7 +1528,8 @@
                 if (q.zhuyin && q.zhuyin[currentIndex]) {
                     const zyString = q.zhuyin[currentIndex];
                     for (let char of zyString) {
-                        const keyId = symbolToKey[char];
+                        // 👉 加入 .toLowerCase() 確保大寫也能抓到按鍵
+                        const keyId = symbolToKey[char.toLowerCase()]; 
                         if (keyId) {
                             const el = document.getElementById(keyId);
                             if (el) el.classList.add('highlight');
@@ -1546,7 +1537,8 @@
                     }
                 } else if (!q.zhuyin) {
                     const nextChar = q.target[currentIndex];
-                    const keyId = symbolToKey[nextChar];
+                    // 👉 加入 .toLowerCase() 確保大寫也能抓到按鍵
+                    const keyId = symbolToKey[nextChar.toLowerCase()]; 
                     if (keyId) {
                         const el = document.getElementById(keyId);
                         if (el) el.classList.add('highlight');
@@ -1878,11 +1870,12 @@
                 const sName = window.studentNames[sId] || '';
                 const displayName = sName ? `${sId} ${sName}` : `${data.className} 班 ${data.seatNumber} 號`;
 
+                // ✨ 修正：加大姓名欄位空間、允許換行、防止時間欄位變形 ✨
                 return `
                     <tr class="border-b border-gray-100 transition-colors ${rowClass}">
-                        <td class="py-3 px-4 md:px-6 text-center font-bold text-lg md:text-xl">${rankBadge}</td>
-                        <td class="py-3 px-4 md:px-6 font-bold text-gray-700 text-base md:text-lg">${displayName} ${isMe ? '<span class="text-xs bg-red-500 text-white px-2 py-1 rounded-full ml-2 drop-shadow-sm">我</span>' : ''}</td>
-                        <td class="py-3 px-4 md:px-6 font-black text-blue-600 text-right text-lg md:text-xl">${window.formatTime(data.time)}</td>
+                        <td class="py-3 px-2 md:px-4 text-center font-bold text-lg md:text-xl">${rankBadge}</td>
+                        <td class="py-3 px-2 md:px-4 font-bold text-gray-700 text-sm md:text-lg break-all md:break-normal">${displayName} ${isMe ? '<span class="text-xs bg-red-500 text-white px-2 py-1 rounded-full ml-1 drop-shadow-sm">我</span>' : ''}</td>
+                        <td class="py-3 px-2 md:px-4 font-black text-blue-600 text-right text-base md:text-xl whitespace-nowrap">${window.formatTime(data.time)}</td>
                     </tr>
                 `;
             }).join('');
@@ -2084,11 +2077,12 @@
                         const displayName = sName ? `${sId} ${sName}` : `${sortedData[i-1].seatNumber} 號`;
                         
                         nameEl.innerText = displayName;
-                        nameEl.className = i === 1 ? "text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1" : "text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1";
+                        // ✨ 修正頒獎台文字被截斷：改用自動換行 (break-words) ✨
+                        nameEl.className = i === 1 ? "text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 break-words leading-tight" : "text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 break-words leading-tight";
                         timeEl.innerText = window.formatTime(sortedData[i-1].time);
                     } else {
                         nameEl.innerText = "從缺";
-                        nameEl.className = "text-gray-300 font-bold truncate w-full text-center";
+                        nameEl.className = "text-gray-300 font-bold w-full text-center";
                         timeEl.innerText = "-";
                     }
                 }
