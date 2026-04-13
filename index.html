@@ -92,7 +92,7 @@
 
         <div class="absolute top-4 right-4 z-20">
             <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
-                <i class="fa-solid fa-trophy"></i> 本週英雄榜
+                <i class="fa-solid fa-trophy"></i> 英雄榜與回顧
             </button>
         </div>
 
@@ -106,6 +106,7 @@
 
         <div class="p-4 md:p-8 min-h-[500px]">
             
+            <!-- 學生登入畫面 -->
             <div id="login-screen" class="screen-section animate-fade-in flex flex-col items-center justify-center py-8">
                 <div class="text-7xl mb-6 animate-bounce">🎒</div>
                 <h2 class="text-3xl font-black text-blue-700 mb-2">準備開始冒險囉！</h2>
@@ -133,6 +134,7 @@
                 </button>
             </div>
 
+            <!-- 教師登入畫面 -->
             <div id="teacher-login-screen" class="screen-section animate-fade-in flex flex-col items-center justify-center py-12">
                 <div class="text-6xl mb-6 text-gray-400"><i class="fa-solid fa-user-tie"></i></div>
                 <h2 class="text-2xl font-black text-gray-700 mb-6">教師專屬後台登入</h2>
@@ -146,10 +148,11 @@
                 </div>
             </div>
 
+            <!-- 難度選擇畫面 -->
             <div id="intro-screen" class="screen-section animate-fade-in space-y-8">
                 <div class="flex justify-end mb-2">
                     <button onclick="window.showLeaderboard()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-md transition-transform transform hover:scale-105 flex items-center gap-2 border-2 border-yellow-200">
-                        <i class="fa-solid fa-trophy"></i> 本週英雄榜
+                        <i class="fa-solid fa-trophy"></i> 英雄榜與回顧
                     </button>
                 </div>
 
@@ -190,6 +193,7 @@
                 </div>
             </div>
 
+            <!-- 遊戲進行畫面 -->
             <div id="playing-screen" class="screen-section animate-fade-in">
                 <div class="flex flex-wrap justify-between items-center mb-6 text-gray-600 font-bold gap-3">
                     <div class="flex items-center gap-2">
@@ -320,6 +324,7 @@
                 </div>
             </div>
 
+            <!-- 遊戲結束畫面 -->
             <div id="finished-screen" class="screen-section animate-fade-in text-center py-8">
                 <div class="text-6xl mb-6 animate-bounce">🎉🏆🎉</div>
                 <h2 class="text-4xl font-black text-gray-800 mb-4">太厲害了！闖關成功！</h2>
@@ -354,7 +359,7 @@
                 
                 <div class="mt-4 flex justify-center gap-4">
                     <button onclick="window.showLeaderboard()" class="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
-                        <i class="fa-solid fa-trophy"></i> 查看排行榜
+                        <i class="fa-solid fa-trophy"></i> 查看英雄榜
                     </button>
                     <button onclick="window.showScreen('intro-screen')" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-2xl shadow-lg transition-all hover:scale-105 text-lg flex items-center gap-2">
                         <i class="fa-solid fa-house"></i> 回首頁
@@ -362,69 +367,137 @@
                 </div>
             </div>
 
+            <!-- 學生公開排行榜畫面 -->
             <div id="leaderboard-screen" class="screen-section animate-fade-in py-4">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                     <h2 class="text-3xl font-black text-yellow-600 flex items-center gap-3">
-                        <i class="fa-solid fa-crown"></i> 本週英雄榜
+                        <i class="fa-solid fa-crown"></i> 榮譽榜與回顧
                     </h2>
                     <button onclick="window.showScreen('intro-screen')" class="text-gray-500 hover:text-gray-700 bg-gray-100 px-4 py-2 rounded-full font-bold transition-colors shadow-sm">
                         <i class="fa-solid fa-arrow-left"></i> 返回選單
                     </button>
                 </div>
 
-                <div id="my-rank-banner" class="hidden bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-2xl mb-6 shadow-md flex justify-between items-center border-2 border-blue-300 transform transition-transform hover:scale-[1.02]">
-                    <div class="font-bold text-xl flex items-center gap-2">
-                        <i class="fa-solid fa-user-astronaut text-3xl"></i>
-                        我的排名：第 <span id="my-rank-num" class="text-4xl text-yellow-300 font-black px-1">?</span> 名
-                    </div>
-                    <div class="text-blue-100 font-medium text-right">
-                        最佳時間<br><span id="my-rank-time" class="text-white font-black text-2xl">?</span>
+                <!-- ✨ 新增：本週與上週回顧切換按鈕 ✨ -->
+                <div class="flex justify-center mb-6">
+                    <div class="bg-white p-1.5 rounded-full shadow-inner inline-flex border-2 border-gray-200 gap-2">
+                        <button onclick="window.switchLeaderboardView('current')" id="btn-view-current" class="px-6 py-2 rounded-full font-black bg-yellow-400 text-yellow-900 shadow-md border-2 border-yellow-300 transition-transform transform hover:scale-105">本週英雄榜</button>
+                        <button onclick="window.switchLeaderboardView('last-week')" id="btn-view-last-week" class="px-6 py-2 rounded-full font-bold bg-gray-100 text-gray-500 shadow-sm border border-gray-200 hover:bg-gray-200 transition-transform">上週回顧</button>
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row justify-center items-center gap-3 mb-6 bg-slate-100 p-3 rounded-2xl shadow-inner">
-                    <div class="flex gap-1 w-full md:w-auto">
-                        <button onclick="window.switchLeaderboardTab('easy')" id="tab-easy" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors bg-white shadow text-yellow-600 border border-gray-200 text-sm md:text-base">🌱 新手</button>
-                        <button onclick="window.switchLeaderboardTab('medium')" id="tab-medium" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">⭐ 進階</button>
-                        <button onclick="window.switchLeaderboardTab('hard')" id="tab-hard" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">🚀 高手</button>
+                <!-- 🌞 本週英雄榜視圖 🌞 -->
+                <div id="lb-current-view" class="animate-fade-in">
+                    <div id="my-rank-banner" class="hidden bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-2xl mb-6 shadow-md flex justify-between items-center border-2 border-blue-300 transform transition-transform hover:scale-[1.02]">
+                        <div class="font-bold text-xl flex items-center gap-2">
+                            <i class="fa-solid fa-user-astronaut text-3xl"></i>
+                            我的排名：第 <span id="my-rank-num" class="text-4xl text-yellow-300 font-black px-1">?</span> 名
+                        </div>
+                        <div class="text-blue-100 font-medium text-right">
+                            最佳時間<br><span id="my-rank-time" class="text-white font-black text-2xl">?</span>
+                        </div>
                     </div>
-                    <div class="w-full md:w-px md:h-8 bg-gray-300 my-1 md:my-0"></div>
-                    <div class="flex gap-2 w-full md:w-auto">
-                        <button onclick="window.setLbScope('class')" id="btn-scope-class" class="flex-1 px-4 py-2 rounded-xl bg-white shadow font-bold text-blue-600 border border-blue-200">
-                            <i class="fa-solid fa-users-rectangle"></i> 班級排名
-                        </button>
-                        <button onclick="window.setLbScope('grade')" id="btn-scope-grade" class="flex-1 px-4 py-2 rounded-xl font-bold text-gray-500 hover:bg-gray-200 border border-transparent transition-colors">
-                            <i class="fa-solid fa-earth-asia"></i> 全年級排名
-                        </button>
+
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-3 mb-6 bg-slate-100 p-3 rounded-2xl shadow-inner">
+                        <div class="flex gap-1 w-full md:w-auto">
+                            <button onclick="window.switchLeaderboardTab('easy')" id="tab-easy" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors bg-white shadow text-yellow-600 border border-gray-200 text-sm md:text-base">🌱 新手</button>
+                            <button onclick="window.switchLeaderboardTab('medium')" id="tab-medium" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">⭐ 進階</button>
+                            <button onclick="window.switchLeaderboardTab('hard')" id="tab-hard" class="flex-1 py-2 px-3 rounded-xl font-bold transition-colors text-gray-500 hover:bg-gray-200 border border-transparent text-sm md:text-base">🚀 高手</button>
+                        </div>
+                        <div class="w-full md:w-px md:h-8 bg-gray-300 my-1 md:my-0"></div>
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <button onclick="window.setLbScope('class')" id="btn-scope-class" class="flex-1 px-4 py-2 rounded-xl bg-white shadow font-bold text-blue-600 border border-blue-200">
+                                <i class="fa-solid fa-users-rectangle"></i> 班級排名
+                            </button>
+                            <button onclick="window.setLbScope('grade')" id="btn-scope-grade" class="flex-1 px-4 py-2 rounded-xl font-bold text-gray-500 hover:bg-gray-200 border border-transparent transition-colors">
+                                <i class="fa-solid fa-earth-asia"></i> 全年級排名
+                            </button>
+                        </div>
+                        <select id="lb-class-select" onchange="window.renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
+                            <option value="301">301班</option><option value="302">302班</option><option value="303">303班</option><option value="304">304班</option><option value="305">305班</option><option value="306">306班</option><option value="307">307班</option><option value="308">308班</option>
+                            <option value="401">401班</option><option value="402">402班</option><option value="403">403班</option><option value="404">404班</option><option value="405">405班</option><option value="406">406班</option><option value="407">407班</option><option value="408">408班</option>
+                            <option value="503">503班</option><option value="504">504班</option><option value="505">505班</option><option value="506">506班</option>
+                        </select>
+                        <select id="lb-grade-select" onchange="window.renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
+                            <option value="3">三年級</option>
+                            <option value="4">四年級</option>
+                            <option value="5">五六年級</option>
+                        </select>
                     </div>
-                    <select id="lb-class-select" onchange="window.renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
-                        <option value="301">301班</option><option value="302">302班</option><option value="303">303班</option><option value="304">304班</option><option value="305">305班</option><option value="306">306班</option><option value="307">307班</option><option value="308">308班</option>
-                        <option value="401">401班</option><option value="402">402班</option><option value="403">403班</option><option value="404">404班</option><option value="405">405班</option><option value="406">406班</option><option value="407">407班</option><option value="408">408班</option>
-                        <option value="503">503班</option><option value="504">504班</option><option value="505">505班</option><option value="506">506班</option>
-                    </select>
-                    <select id="lb-grade-select" onchange="window.renderLeaderboard()" class="hidden px-3 py-2 rounded-xl border-2 border-blue-200 font-bold text-gray-700 outline-none">
-                        <option value="3">三年級</option>
-                        <option value="4">四年級</option>
-                        <option value="5">五六年級</option>
-                    </select>
+
+                    <div class="bg-white border-2 border-yellow-200 rounded-2xl shadow-md overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-yellow-50 text-yellow-800 border-b-2 border-yellow-200">
+                                    <th class="py-3 px-2 md:px-4 font-black text-center w-12 md:w-20 whitespace-nowrap">名次</th>
+                                    <th class="py-3 px-2 md:px-4 font-black w-full">學生姓名</th>
+                                    <th class="py-3 px-2 md:px-4 font-black text-right whitespace-nowrap">花費時間</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <tr><td colspan="3" class="text-center py-10 text-gray-400 font-medium"><i class="fa-solid fa-spinner fa-spin mr-2"></i> 讀取資料中...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="bg-white border-2 border-yellow-200 rounded-2xl shadow-md overflow-hidden">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-yellow-50 text-yellow-800 border-b-2 border-yellow-200">
-                                <th class="py-3 px-2 md:px-4 font-black text-center w-12 md:w-20 whitespace-nowrap">名次</th>
-                                <th class="py-3 px-2 md:px-4 font-black w-full">學生姓名</th>
-                                <th class="py-3 px-2 md:px-4 font-black text-right whitespace-nowrap">花費時間</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboard-body">
-                            <tr><td colspan="3" class="text-center py-10 text-gray-400 font-medium"><i class="fa-solid fa-spinner fa-spin mr-2"></i> 讀取資料中...</td></tr>
-                        </tbody>
-                    </table>
+                <!-- 🌙 上週回顧視圖 🌙 -->
+                <div id="lb-last-week-view" class="hidden animate-fade-in">
+                    
+                    <div class="text-center mb-4">
+                        <span id="lw-week-label" class="inline-block bg-purple-100 text-purple-800 font-bold px-4 py-1 rounded-full border border-purple-200"></span>
+                    </div>
+
+                    <!-- 個人成績回顧 -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-5 mb-8 border-2 border-indigo-200 shadow-md">
+                        <h3 class="text-xl md:text-2xl font-black text-indigo-800 mb-4 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-user-astronaut"></i> 我的上週最佳紀錄
+                        </h3>
+                        <div class="grid grid-cols-3 gap-3 md:gap-6 text-center">
+                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 transform hover:scale-105 transition-transform">
+                                <div class="text-sm md:text-base font-bold text-gray-500 mb-2">🌱 新手</div>
+                                <div id="lw-my-easy" class="text-xl md:text-3xl font-black text-indigo-600">-</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 transform hover:scale-105 transition-transform">
+                                <div class="text-sm md:text-base font-bold text-gray-500 mb-2">⭐ 進階</div>
+                                <div id="lw-my-medium" class="text-xl md:text-3xl font-black text-indigo-600">-</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 transform hover:scale-105 transition-transform">
+                                <div class="text-sm md:text-base font-bold text-gray-500 mb-2">🚀 高手</div>
+                                <div id="lw-my-hard" class="text-xl md:text-3xl font-black text-indigo-600">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 全年級 Top 5 回顧 -->
+                    <div class="bg-yellow-50 rounded-3xl p-5 border-2 border-yellow-200 shadow-md">
+                        <h3 class="text-xl md:text-2xl font-black text-yellow-800 mb-4 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-medal"></i> 上週全年級 Top 5 <span id="lw-grade-label" class="text-lg"></span>
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                            <!-- 新手 -->
+                            <div class="bg-white rounded-2xl shadow border-t-4 border-green-400 overflow-hidden flex flex-col">
+                                <div class="bg-green-50 py-2 text-center font-bold text-green-800 border-b border-green-100">🌱 新手</div>
+                                <div class="p-2 flex-1" id="lw-top-easy"></div>
+                            </div>
+                            <!-- 進階 -->
+                            <div class="bg-white rounded-2xl shadow border-t-4 border-yellow-400 overflow-hidden flex flex-col">
+                                <div class="bg-yellow-50 py-2 text-center font-bold text-yellow-800 border-b border-yellow-100">⭐ 進階</div>
+                                <div class="p-2 flex-1" id="lw-top-medium"></div>
+                            </div>
+                            <!-- 高手 -->
+                            <div class="bg-white rounded-2xl shadow border-t-4 border-blue-400 overflow-hidden flex flex-col">
+                                <div class="bg-blue-50 py-2 text-center font-bold text-blue-800 border-b border-blue-100">🚀 高手</div>
+                                <div class="p-2 flex-1" id="lw-top-hard"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
+            <!-- 教師專屬後台畫面 -->
             <div id="teacher-dashboard-screen" class="screen-section animate-fade-in py-4">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-black text-gray-700 flex items-center gap-3">
@@ -679,6 +752,7 @@
         window.user = null;
         window.appId = GAME_APP_ID;
         window.allScoresData = []; 
+        window.lbCurrentView = 'current';
         window.currentLeaderboardTab = 'easy';
         window.lbScope = 'class'; 
         window.currentTeacherTab = 'easy';
@@ -706,6 +780,7 @@
             "50601": "柳翔喆", "50602": "陳柏禎", "50603": "黃士傑", "50604": "李建陞", "50605": "胡秉洆", "50606": "曾轅馗", "50607": "陳佑嘉", "50608": "林竑逸", "50609": "羅寬宇", "50610": "蔡忞修", "50611": "周鍇陽", "50612": "王禹凱", "50613": "江柔瑾", "50614": "余羿蓁", "50615": "羅子慈", "50616": "黃馨辰", "50617": "廖安媗", "50618": "洪思惟", "50619": "唐沐恩", "50620": "靖僈可", "50621": "林晨熙", "50622": "蘇泇鉻"
         };
 
+        // --- 抓取網頁 DOM 元素 ---
         const screens = {
             'login-screen': document.getElementById('login-screen'),
             'teacher-login-screen': document.getElementById('teacher-login-screen'),
@@ -718,6 +793,7 @@
         const typeInput = document.getElementById('type-input');
         const timerText = document.getElementById('timer-text');
 
+        // --- 虛擬鍵盤按鍵映射表 ---
         const symbolToKey = {
             'a':'k-a', 'b':'k-b', 'c':'k-c', 'd':'k-d', 'e':'k-e', 'f':'k-f', 'g':'k-g', 'h':'k-h', 'i':'k-i', 'j':'k-j', 'k':'k-k', 'l':'k-l', 'm':'k-m', 'n':'k-n', 'o':'k-o', 'p':'k-p', 'q':'k-q', 'r':'k-r', 's':'k-s', 't':'k-t', 'u':'k-u', 'v':'k-v', 'w':'k-w', 'x':'k-x', 'y':'k-y', 'z':'k-z',
             'ㄅ':'k-1', 'ㄆ':'k-q', 'ㄇ':'k-a', 'ㄈ':'k-z', 'ㄉ':'k-2', 'ㄊ':'k-w', 'ㄋ':'k-s', 'ㄌ':'k-x', 'ㄍ':'k-e', 'ㄎ':'k-d', 'ㄏ':'k-c', 'ㄐ':'k-r', 'ㄑ':'k-f', 'ㄒ':'k-v', 'ㄓ':'k-5', 'ㄔ':'k-t', 'ㄕ':'k-g', 'ㄖ':'k-b', 'ㄗ':'k-y', 'ㄘ':'k-h', 'ㄙ':'k-n', 'ㄧ':'k-u', 'ㄨ':'k-j', 'ㄩ':'k-m', 'ㄚ':'k-8', 'ㄛ':'k-i', 'ㄜ':'k-k', 'ㄝ':'k-,', 'ㄞ':'k-9', 'ㄟ':'k-o', 'ㄠ':'k-l', 'ㄡ':'k-.', 'ㄢ':'k-0', 'ㄣ':'k-p', 'ㄤ':'k-[', 'ㄥ':'k-;', 'ㄦ':'k--', 'ˇ':'k-3', 'ˋ':'k-4', 'ˊ':'k-6', '˙':'k-space', ' ':'k-space'
@@ -858,7 +934,7 @@
                         "toad|奇諾比奧|🍄", "luigi|路易吉|👨‍🔧", "bowser|庫巴|🐢", "robot|機器人|🤖", "alien|外星人|👽",
                         "magic|魔法|🪄", "sword|劍|🗡️", "shield|盾牌|🛡️", "potion|藥水|🧪", "coin|硬幣|🪙",
                         "level|等級|📈", "stage|關卡|🏁", "boss|魔王|👹", "hero|英雄|🦸", "party|隊伍|🎉",
-                        "clan|公會|🛡️", "guild|公會|🔰", "team|團隊|🤝", "match|比賽|⚔️", "score|分數|💯",
+                        "clan|公會|🛡️", "guild|公會|🔰", "team|團隊|🤝", "match|比赛|⚔️", "score|分數|💯",
                         "rank|排名|🏆", "star|星星|⭐", "point|點數|🎯", "time|時間|⏱️", "win|勝利|🏅",
                         "ant|螞蟻|🐜", "bag|袋子|🛍️", "cat|貓咪|🐱", "dog|小狗|🐶", "egg|蛋|🥚",
                         "fish|魚|🐟", "girl|女孩|👧", "hat|帽子|🧢", "jet|噴射機|✈️", "kite|風箏|🪁",
@@ -940,7 +1016,7 @@
                         "clean room|打掃房間|🧹", "help mother|幫忙媽媽|👩‍👧", "play with|一起玩|🧸", "run fast|跑很快|🏃", "jump high|跳很高|🦘",
                         "swim well|游得好|🏊", "sing songs|唱歌|🎤", "draw picture|畫畫|🖼️", "write story|寫故事|✍️", "make toys|做玩具|🧩",
                         "build blocks|堆積木|🧱", "play soccer|踢足球|⚽", "play tennis|打網球|🎾", "play chess|下棋|♟️", "win game|贏得比賽|🏆",
-                        "lose game|輸掉比賽|😭", "try again|再試一次|🔄", "never quit|永不放棄|💪", "do your best|盡全力|⭐", "keep going|繼續前進|🚶",
+                        "lose game|輸掉比赛|😭", "try again|再試一次|🔄", "never quit|永不放棄|💪", "do your best|盡全力|⭐", "keep going|繼續前進|🚶",
                         "stay strong|保持堅強|🏋️", "be happy|要開心|😁", "smile always|總是微笑|😊", "have fun|玩得開心|🥳", "enjoy life|享受生活|🌞",
                         "good job|做得好|👍", "well done|幹得好|👏", "awesome|太棒了|😎", "fantastic|太神奇了|✨", "amazing|令人驚嘆|😲",
                         "christmas tree|耶誕樹|🎄", "santa claus|耶誕老人|🎅", "stocking|長襪|🧦", "gift|禮物|🎁", "grandfather|祖父|👴", 
@@ -1064,7 +1140,7 @@
                         "clean room|打掃房間|🧹", "help mother|幫忙媽媽|👩‍👧", "play with|一起玩|🧸", "run fast|跑很快|🏃", "jump high|跳很高|🦘",
                         "swim well|游得好|🏊", "sing songs|唱歌|🎤", "draw picture|畫畫|🖼️", "write story|寫故事|✍️", "make toys|做玩具|🧩",
                         "build blocks|堆積木|🧱", "play soccer|踢足球|⚽", "play tennis|打網球|🎾", "play chess|下棋|♟️", "win game|贏得比賽|🏆",
-                        "lose game|輸掉比賽|😭", "try again|再試一次|🔄", "never quit|永不放棄|💪", "do your best|盡全力|⭐", "keep going|繼續前進|🚶",
+                        "lose game|輸掉比赛|😭", "try again|再試一次|🔄", "never quit|永不放棄|💪", "do your best|盡全力|⭐", "keep going|繼續前進|🚶",
                         "stay strong|保持堅強|🏋️", "be happy|要開心|😁", "smile always|總是微笑|😊", "have fun|玩得開心|🥳", "enjoy life|享受生活|🌞",
                         "good job|做得好|👍", "well done|幹得好|👏", "awesome|太棒了|😎", "fantastic|太神奇了|✨", "amazing|令人驚嘆|😲",
                         "christmas tree|耶誕樹|🎄", "santa claus|耶誕老人|🎅", "stocking|長襪|🧦", "gift|禮物|🎁", "grandfather|祖父|👴", 
@@ -1144,7 +1220,7 @@
                     const gradeSelect = document.getElementById('lb-grade-select');
                     if(gradeSelect) gradeSelect.value = window.studentInfo.grade;
                 }
-                window.renderLeaderboard();
+                window.switchLeaderboardView('current'); 
             }
             if (screenId === 'teacher-dashboard-screen') window.renderTeacherDashboard();
         };
@@ -1697,6 +1773,27 @@
             window.showScreen('leaderboard-screen');
         };
 
+        window.switchLeaderboardView = function(view) {
+            window.lbCurrentView = view;
+            const btnCurrent = document.getElementById('btn-view-current');
+            const btnLast = document.getElementById('btn-view-last-week');
+            const viewCurrent = document.getElementById('lb-current-view');
+            const viewLast = document.getElementById('lb-last-week-view');
+            
+            if (view === 'current') {
+                if(btnCurrent) btnCurrent.className = "px-6 py-2 rounded-full font-black bg-yellow-400 text-yellow-900 shadow-md border-2 border-yellow-300 transition-transform transform hover:scale-105";
+                if(btnLast) btnLast.className = "px-6 py-2 rounded-full font-bold bg-gray-100 text-gray-500 shadow-sm border border-gray-200 hover:bg-gray-200 transition-transform";
+                if(viewCurrent) viewCurrent.classList.remove('hidden');
+                if(viewLast) viewLast.classList.add('hidden');
+            } else {
+                if(btnLast) btnLast.className = "px-6 py-2 rounded-full font-black bg-purple-500 text-white shadow-md border-2 border-purple-400 transition-transform transform hover:scale-105";
+                if(btnCurrent) btnCurrent.className = "px-6 py-2 rounded-full font-bold bg-gray-100 text-gray-500 shadow-sm border border-gray-200 hover:bg-gray-200 transition-transform";
+                if(viewCurrent) viewCurrent.classList.add('hidden');
+                if(viewLast) viewLast.classList.remove('hidden');
+            }
+            window.renderLeaderboard();
+        };
+
         window.switchLeaderboardTab = function(diff) {
             window.currentLeaderboardTab = diff;
             window.renderLeaderboard();
@@ -1724,6 +1821,11 @@
         };
 
         window.renderLeaderboard = function() {
+            if (window.lbCurrentView === 'last-week') {
+                window.renderLastWeekView();
+                return;
+            }
+
             ['easy', 'medium', 'hard'].forEach(d => {
                 const btn = document.getElementById(`tab-${d}`);
                 if (btn) {
@@ -1815,6 +1917,67 @@
                     </tr>
                 `;
             }).join('');
+        };
+
+        window.renderLastWeekView = function() {
+            const lastWeekId = window.getWeekId(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const lwData = window.allScoresData.filter(d => d.weekId === lastWeekId);
+            
+            const myLwData = lwData.filter(d => d.className === window.studentInfo.classCode && d.seatNumber === window.studentInfo.seatCode);
+            const myBest = { easy: Infinity, medium: Infinity, hard: Infinity };
+            myLwData.forEach(d => {
+                if (d.time < myBest[d.difficulty]) myBest[d.difficulty] = d.time;
+            });
+            
+            document.getElementById('lw-my-easy').innerText = myBest.easy !== Infinity ? window.formatTime(myBest.easy) : '-';
+            document.getElementById('lw-my-medium').innerText = myBest.medium !== Infinity ? window.formatTime(myBest.medium) : '-';
+            document.getElementById('lw-my-hard').innerText = myBest.hard !== Infinity ? window.formatTime(myBest.hard) : '-';
+            
+            const gradeLwData = lwData.filter(d => d.gradePool === window.studentInfo.grade);
+            
+            const renderTop5List = (diff, containerId) => {
+                const diffData = gradeLwData.filter(d => d.difficulty === diff);
+                const bestMap = new Map();
+                diffData.forEach(d => {
+                    const k = `${d.className}-${d.seatNumber}`;
+                    if (!bestMap.has(k) || d.time < bestMap.get(k).time) bestMap.set(k, d);
+                });
+                const sorted = Array.from(bestMap.values()).sort((a,b) => a.time - b.time).slice(0, 5);
+                
+                const container = document.getElementById(containerId);
+                if (sorted.length === 0) {
+                    container.innerHTML = `<div class="text-center text-gray-400 font-medium py-4 text-sm">無資料</div>`;
+                    return;
+                }
+                
+                container.innerHTML = sorted.map((d, i) => {
+                    let icon = `<span class="font-bold text-gray-400 w-5 inline-block text-center">${i+1}</span>`;
+                    if(i===0) icon = `👑`;
+                    if(i===1) icon = `🥈`;
+                    if(i===2) icon = `🥉`;
+                    const sId = d.className + d.seatNumber;
+                    const sName = window.studentNames[sId] || '';
+                    const isMe = (d.className === window.studentInfo.classCode && d.seatNumber === window.studentInfo.seatCode);
+                    const displayName = sName ? `${sId} ${sName}` : `${d.className}班 ${d.seatNumber}號`;
+                    
+                    return `
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100 last:border-0 ${isMe ? 'bg-yellow-100 -mx-2 px-2 rounded-lg' : ''}">
+                            <div class="flex items-center gap-2">
+                                <div class="text-base md:text-lg w-5 flex justify-center">${icon}</div>
+                                <div class="font-bold text-gray-700 text-xs md:text-sm break-all">${displayName}</div>
+                            </div>
+                            <div class="font-black text-blue-600 text-xs md:text-sm whitespace-nowrap pl-2">${window.formatTime(d.time)}</div>
+                        </div>
+                    `;
+                }).join('');
+            };
+            
+            renderTop5List('easy', 'lw-top-easy');
+            renderTop5List('medium', 'lw-top-medium');
+            renderTop5List('hard', 'lw-top-hard');
+            
+            document.getElementById('lw-grade-label').innerText = `(${window.studentInfo.grade} 年級)`;
+            document.getElementById('lw-week-label').innerText = `📅 上週週期: ${lastWeekId}`;
         };
 
         window.switchTeacherTab = function(tabName) {
