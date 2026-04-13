@@ -283,6 +283,9 @@
                     <div class="relative w-full max-w-lg mb-6">
                         <input type="text" id="type-input" class="w-full text-center bg-transparent outline-none text-4xl md:text-5xl text-gray-800 font-bold border-b-4 border-blue-400 focus:border-blue-600 transition-colors py-2 mb-2 placeholder-blue-300/30" placeholder=" " autocomplete="off" oninput="window.checkInput()" onblur="window.handleInputBlur()" oncompositionstart="window.isComposing = true" oncompositionend="window.isComposing = false; window.checkInput()">
                         
+                        <!-- ✨ 新增：即時字元數與長度提示 ✨ -->
+                        <div id="char-counter" class="absolute right-0 bottom-4 text-gray-400 font-bold text-sm bg-gray-100 px-3 py-1 rounded-lg border border-gray-200 shadow-sm transition-colors z-10 tracking-widest" title="目前輸入字數 / 目標字數">0 / 0</div>
+
                         <div id="cursor-hint" class="absolute inset-0 flex items-center justify-center pointer-events-none mb-2">
                             <span class="w-1 h-12 bg-blue-400 animate-pulse rounded-full opacity-50"></span>
                         </div>
@@ -752,6 +755,7 @@
         window.isTransitioning = false;
         window.isComposing = false;
         window.isPaused = false;
+        window.warningTimeout = null; // ✨ 新增：警告延遲計時器
 
         // 學生身分 (包含姓名)
         window.studentInfo = { classCode: '', seatCode: '', name: '', grade: 3 };
@@ -965,7 +969,7 @@
                         "瑪利歐|ㄇㄚˇ,ㄌㄧˋ,ㄡ|水管工|🍄", "庫巴|ㄎㄨˋ,ㄅㄚ|大魔王|🐢", "耀西|ㄧㄠˋ,ㄒㄧ|綠恐龍|🦖", "索隆|ㄙㄨㄛˇ,ㄌㄨㄥˊ|三刀流|⚔️", "魯夫|ㄌㄨˇ,ㄈㄨ|海賊王|🏴‍☠️",
                         "娜美|ㄋㄚˋ,ㄇㄟˇ|航海士|🍊", "喬巴|ㄑㄧㄠˊ,ㄅㄚ|船醫|🦌", "火車|ㄏㄨㄛˇ,ㄔㄜ|嘟嘟嘟|🚂", "白雲|ㄅㄞˊ,ㄩㄣˊ|天上飄|☁️", "閃電|ㄕㄢˇ,ㄉㄧㄢˋ|打雷|⚡",
                         "麥塊|ㄇㄞˋ,ㄎㄨㄞˋ|方塊遊戲|🧱", "動森|ㄉㄨㄥˋ,ㄙㄣ|無人島|🏝️", "鉛筆盒|ㄑㄧㄢ,ㄅㄧˇ,ㄏㄜˊ|裝文具|✏️", "圖書館|ㄊㄨˊ,ㄕㄨ,ㄍㄨㄢˇ|借書|📚",
-                        "溜滑梯|ㄌㄧㄡ,ㄏㄨㄚˊ,ㄊㄧ|公園玩|🛝", "腳踏車|ㄐㄧㄠˇ,ㄊㄚˋ,ㄔㄜ|騎車|🚲", "連絡簿|ㄌㄧㄢˊ,ㄌㄨㄛˋ,ㄅㄨˋ|簽名|📒", "橡皮擦|ㄒㄧㄤˋ,ㄆㄧˊ,ㄘㄚ|擦錯字|🧽", "筆記本|ㄅㄧˇ,ㄐㄧˋ,ㄅㄣˇ|寫字|📓",
+                        "溜滑梯|ㄌㄧㄡ,ㄏㄨㄚˊ,ㄊㄧ|公園玩|🛝", "腳踏車|ㄐㄧㄠˇ,ㄊㄚˋ,ㄔㄜ|騎車|🚲", "聯絡簿|ㄌㄧㄢˊ,ㄌㄨㄛˋ,ㄅㄨˋ|簽名|📒", "橡皮擦|ㄒㄧㄤˋ,ㄆㄧˊ,ㄘㄚ|擦錯字|🧽", "筆記本|ㄅㄧˇ,ㄐㄧˋ,ㄅㄣˇ|寫字|📓",
                         "彩色筆|ㄘㄞˇ,ㄙㄜˋ,ㄅㄧˇ|畫畫|🎨", "動物園|ㄉㄨㄥˋ,ㄨˋ,ㄩㄢˊ|看動物|🐘", "遊樂園|ㄧㄡˊ,ㄌㄜˋ,ㄩㄢˊ|玩耍|🎢", "看電視|ㄎㄢˋ,ㄉㄧㄢˋ,ㄕˋ|看卡通|📺", "打電腦|ㄉㄚˇ,ㄉㄧㄢˋ,ㄋㄠˇ|上網|💻",
                         "好朋友|ㄏㄠˇ,ㄆㄥˊ,ㄧㄡˇ|一起玩|🤝", "寶可夢|ㄅㄠˇ,ㄎㄜˇ,ㄇㄥˋ|抓怪獸|🔴", "汪汪隊|ㄨㄤ,ㄨㄤ,ㄉㄨㄟˋ|立大功|🐶", "蜘蛛人|ㄓ,ㄓㄨ,ㄖㄣˊ|吐絲|🕸️", "鋼鐵人|ㄍㄤ,ㄊㄧㄝˇ,ㄖㄣˊ|會飛|🤖",
                         "蝙蝠俠|ㄅㄧㄢ,ㄈㄨˊ,ㄒㄧㄚˊ|黑漆漆|🦇", "美國隊長|ㄇㄟˇ,ㄍㄨㄛˊ,ㄉㄨㄟˋ,ㄓㄤˇ|拿盾牌|🛡️", "閃電俠|ㄕㄢˇ,ㄉㄧㄢˋ,ㄒㄧㄚˊ|跑很快|⚡", "超人|ㄔㄠ,ㄖㄣˊ|力氣大|🦸", "冰雪奇緣|ㄅㄧㄥ,ㄒㄩㄝˇ,ㄑㄧˊ,ㄩㄢˊ|公主的故事|❄️",
@@ -1390,6 +1394,12 @@
             window.isComposing = false;
             window.isPaused = false;
             
+            // 清除可能殘留的警告計時器
+            if (window.warningTimeout) {
+                clearTimeout(window.warningTimeout);
+                window.warningTimeout = null;
+            }
+            
             const pauseOverlay = document.getElementById('pause-overlay');
             if (pauseOverlay) pauseOverlay.classList.add('hidden');
             
@@ -1489,6 +1499,14 @@
             const keyHintEl = document.getElementById('key-hint');
             if (keyHintEl) keyHintEl.innerText = q.hint;
 
+            // ✨ 初始化字元數提示 ✨
+            const counterEl = document.getElementById('char-counter');
+            if (counterEl) {
+                counterEl.innerText = `0 / ${q.target.length}`;
+                counterEl.classList.remove('text-red-500', 'bg-red-50', 'border-red-200');
+                counterEl.classList.add('text-gray-400', 'bg-gray-100', 'border-gray-200');
+            }
+
             if (typeInput) {
                 typeInput.value = '';
                 typeInput.disabled = false;
@@ -1557,6 +1575,19 @@
             window.updateCursorHint();
             window.updateKeyboardHighlight();
 
+            // ✨ 動態更新字元數提示 ✨
+            const counterEl = document.getElementById('char-counter');
+            if (counterEl) {
+                counterEl.innerText = `${val.length} / ${q.target.length}`;
+                if (val.length > q.target.length) {
+                    counterEl.classList.add('text-red-500', 'bg-red-50', 'border-red-200');
+                    counterEl.classList.remove('text-gray-400', 'bg-gray-100', 'border-gray-200');
+                } else {
+                    counterEl.classList.remove('text-red-500', 'bg-red-50', 'border-red-200');
+                    counterEl.classList.add('text-gray-400', 'bg-gray-100', 'border-gray-200');
+                }
+            }
+
             if (val === q.target) {
                 window.handleSuccess();
                 return;
@@ -1564,13 +1595,24 @@
 
             if (window.isComposing) return;
 
+            // ✨ 清除之前的警告計時器，避免重複觸發 ✨
+            if (window.warningTimeout) {
+                clearTimeout(window.warningTimeout);
+                window.warningTimeout = null;
+            }
+
             if (val.length > 0) {
                 if (q.lang === 'zh' && /[a-zA-Z]/.test(val)) {
+                    // 輸入法錯誤比較急，立即提醒
                     window.showWarning('error', '⚠️ 哎呀！你打成英文了，請按一下 Shift 鍵切換成【中文】輸入法喔！');
                 } else if (q.lang === 'en' && /[A-Z]/.test(val)) {
+                    // 大小寫錯誤比較急，立即提醒
                     window.showWarning('error', '⚠️ 哎呀！你打成大寫字母了，請按一下鍵盤左邊的 Caps Lock 鍵關閉大寫喔！');
                 } else if (val.length >= q.target.length) {
-                    window.showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
+                    // ✨ 延遲 1.5 秒再顯示長度超過/打錯的警告，讓學生有時間用肉眼檢查 ✨
+                    window.warningTimeout = setTimeout(() => {
+                        window.showWarning('warning', '🤔 哎呀，好像打錯囉！請仔細看題目，清掉重打一次！');
+                    }, 1500);
                 } else {
                     window.hideWarning();
                 }
@@ -1613,6 +1655,11 @@
         };
 
         window.hideWarning = function() {
+            // 隱藏警告時，也要確保計時器被清空
+            if (window.warningTimeout) {
+                clearTimeout(window.warningTimeout);
+                window.warningTimeout = null;
+            }
             const box = document.getElementById('warning-box');
             if (box) box.classList.add('hidden');
         };
