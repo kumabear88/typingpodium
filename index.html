@@ -378,7 +378,6 @@
                     </button>
                 </div>
 
-                <!-- ✨ 新增：本週與上週回顧切換按鈕 ✨ -->
                 <div class="flex justify-center mb-6">
                     <div class="bg-white p-1.5 rounded-full shadow-inner inline-flex border-2 border-gray-200 gap-2">
                         <button onclick="window.switchLeaderboardView('current')" id="btn-view-current" class="px-6 py-2 rounded-full font-black bg-yellow-400 text-yellow-900 shadow-md border-2 border-yellow-300 transition-transform transform hover:scale-105">本週英雄榜</button>
@@ -386,7 +385,6 @@
                     </div>
                 </div>
 
-                <!-- 🌞 本週英雄榜視圖 🌞 -->
                 <div id="lb-current-view" class="animate-fade-in">
                     <div id="my-rank-banner" class="hidden bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-2xl mb-6 shadow-md flex justify-between items-center border-2 border-blue-300 transform transition-transform hover:scale-[1.02]">
                         <div class="font-bold text-xl flex items-center gap-2">
@@ -441,14 +439,12 @@
                     </div>
                 </div>
 
-                <!-- 🌙 上週回顧視圖 🌙 -->
                 <div id="lb-last-week-view" class="hidden animate-fade-in">
                     
                     <div class="text-center mb-4">
                         <span id="lw-week-label" class="inline-block bg-purple-100 text-purple-800 font-bold px-4 py-1 rounded-full border border-purple-200"></span>
                     </div>
 
-                    <!-- 個人成績回顧 -->
                     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-5 mb-8 border-2 border-indigo-200 shadow-md">
                         <h3 class="text-xl md:text-2xl font-black text-indigo-800 mb-4 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-user-astronaut"></i> 我的上週最佳紀錄
@@ -469,24 +465,20 @@
                         </div>
                     </div>
 
-                    <!-- 全年級 Top 5 回顧 -->
                     <div class="bg-yellow-50 rounded-3xl p-5 border-2 border-yellow-200 shadow-md">
                         <h3 class="text-xl md:text-2xl font-black text-yellow-800 mb-4 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-medal"></i> 上週全年級 Top 5 <span id="lw-grade-label" class="text-lg"></span>
                         </h3>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                            <!-- 新手 -->
                             <div class="bg-white rounded-2xl shadow border-t-4 border-green-400 overflow-hidden flex flex-col">
                                 <div class="bg-green-50 py-2 text-center font-bold text-green-800 border-b border-green-100">🌱 新手</div>
                                 <div class="p-2 flex-1" id="lw-top-easy"></div>
                             </div>
-                            <!-- 進階 -->
                             <div class="bg-white rounded-2xl shadow border-t-4 border-yellow-400 overflow-hidden flex flex-col">
                                 <div class="bg-yellow-50 py-2 text-center font-bold text-yellow-800 border-b border-yellow-100">⭐ 進階</div>
                                 <div class="p-2 flex-1" id="lw-top-medium"></div>
                             </div>
-                            <!-- 高手 -->
                             <div class="bg-white rounded-2xl shadow border-t-4 border-blue-400 overflow-hidden flex flex-col">
                                 <div class="bg-blue-50 py-2 text-center font-bold text-blue-800 border-b border-blue-100">🚀 高手</div>
                                 <div class="p-2 flex-1" id="lw-top-hard"></div>
@@ -615,7 +607,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center md:text-right bg-red-50 px-6 py-3 rounded-xl border-2 border-red-100 w-full md:w-auto">
-                                        <div id="podium-improver-name" class="text-2xl md:text-4xl font-black text-blue-700 mb-1 break-words">-</div>
+                                        <div id="podium-improver-name" class="font-black text-blue-700 mb-2 break-words">-</div>
                                         <div id="podium-improver-time" class="text-lg font-bold text-red-600">快來挑戰超越自己！</div>
                                     </div>
                                 </div>
@@ -627,7 +619,7 @@
                                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-4/5 bg-green-500 text-white font-bold py-1 rounded-full text-center shadow-sm tracking-widest text-sm">🌱 新手等級</div>
                                     <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-easy-2-name" class="text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-2-name" class="text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-easy-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
                                                 <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
@@ -635,14 +627,14 @@
                                         </div>
                                         <div class="flex flex-col items-center w-1/3 z-10">
                                             <div class="text-2xl mb-1 drop-shadow-md">👑</div>
-                                            <div id="podium-easy-1-name" class="text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-1-name" class="text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-easy-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
                                             <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
                                                 <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
                                             </div>
                                         </div>
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-easy-3-name" class="text-xs md:text-sm font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-easy-3-name" class="text-xs md:text-sm font-bold text-orange-700 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-easy-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
                                                 <span class="text-lg md:text-xl font-black text-orange-400">3</span>
@@ -655,7 +647,7 @@
                                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-4/5 bg-yellow-400 text-yellow-900 font-bold py-1 rounded-full text-center shadow-sm tracking-widest text-sm">⭐ 進階等級</div>
                                     <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-medium-2-name" class="text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-2-name" class="text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-medium-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
                                                 <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
@@ -663,14 +655,14 @@
                                         </div>
                                         <div class="flex flex-col items-center w-1/3 z-10">
                                             <div class="text-2xl mb-1 drop-shadow-md">👑</div>
-                                            <div id="podium-medium-1-name" class="text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-1-name" class="text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-medium-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
                                             <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
                                                 <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
                                             </div>
                                         </div>
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-medium-3-name" class="text-xs md:text-sm font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-medium-3-name" class="text-xs md:text-sm font-bold text-orange-700 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-medium-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
                                                 <span class="text-lg md:text-xl font-black text-orange-400">3</span>
@@ -683,7 +675,7 @@
                                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-4/5 bg-blue-500 text-white font-bold py-1 rounded-full text-center shadow-sm tracking-widest text-sm">🚀 高手等級</div>
                                     <div class="flex items-end justify-center gap-1 md:gap-2 flex-grow mt-6">
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-hard-2-name" class="text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-2-name" class="text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-hard-2-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-gray-200 rounded-t-lg h-16 md:h-20 flex items-start justify-center pt-1 shadow-inner border-t-4 border-gray-300">
                                                 <span class="text-xl md:text-2xl font-black text-gray-400">2</span>
@@ -691,14 +683,14 @@
                                         </div>
                                         <div class="flex flex-col items-center w-1/3 z-10">
                                             <div class="text-2xl mb-1 drop-shadow-md">👑</div>
-                                            <div id="podium-hard-1-name" class="text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-1-name" class="text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-hard-1-time" class="text-[10px] md:text-xs text-blue-600 font-black mb-1">-</div>
                                             <div class="w-full bg-yellow-200 rounded-t-lg h-24 md:h-32 flex items-start justify-center pt-1 shadow-inner border-t-4 border-yellow-400">
                                                 <span class="text-3xl md:text-4xl font-black text-yellow-600">1</span>
                                             </div>
                                         </div>
                                         <div class="flex flex-col items-center w-1/3">
-                                            <div id="podium-hard-3-name" class="text-xs md:text-sm font-bold text-orange-700 truncate w-full text-center px-1">-</div>
+                                            <div id="podium-hard-3-name" class="text-xs md:text-sm font-bold text-orange-700 w-full text-center px-1 mb-1">-</div>
                                             <div id="podium-hard-3-time" class="text-[10px] md:text-xs text-blue-600 font-bold mb-1">-</div>
                                             <div class="w-full bg-orange-100 rounded-t-lg h-12 md:h-16 flex items-start justify-center pt-1 shadow-inner border-t-4 border-orange-200">
                                                 <span class="text-lg md:text-xl font-black text-orange-400">3</span>
@@ -720,7 +712,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, getDocs, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDBLFK7T2ewIk4qgvlBz9hfQuxEALLUezQ",
@@ -843,7 +835,8 @@
                         "四|ㄙˋ|數字四|4️⃣", "五|ㄨˇ|數字五|5️⃣", "六|ㄌㄧㄡˋ|數字六|6️⃣", "七|ㄑㄧ|數字七|7️⃣", "八|ㄅㄚ|數字八|8️⃣",
                         "九|ㄐㄧㄡˇ|數字九|9️⃣", "十|ㄕˊ|數字十|🔟", "上|ㄕㄤˋ|上面|⬆️", "下|ㄒㄧㄚˋ|下面|⬇️", "左|ㄗㄨㄛˇ|左邊|⬅️",
                         "蛋|ㄉㄢˋ|雞蛋|🥚", "魚|ㄩˊ|水裡游|🐟", "豬|ㄓㄨ|胖嘟嘟|🐷", "牛|ㄋㄧㄡˊ|哞哞叫|🐮", "瘦|ㄕㄡˋ|不胖|🧍", 
-                        "矮|ㄞˇ|不高|📏", "高|ㄍㄠ|不矮|🦒", "尺|ㄔˇ|量長度|📏", "熊|ㄒㄩㄥˊ|很大隻|🐻", "馬|ㄇㄚˇ|跑很快|🐴", "花|ㄏㄨㄚ|香香的|🌸"
+                        "矮|ㄞˇ|不高|📏", "高|ㄍㄠ|不矮|🦒", "尺|ㄔˇ|量長度|📏", "熊|ㄒㄩㄥˊ|很大隻|🐻", "馬|ㄇㄚˇ|跑很快|🐴", "花|ㄏㄨㄚ|香香的|🌸",
+                        "泥土|ㄋㄧˊ,ㄊㄨˇ|地上的土|🌱", "時鐘|ㄕˊ,ㄓㄨㄥ|滴答滴答|⏰", "暑假|ㄕㄨˇ,ㄐㄧㄚˋ|放長假|🏖️"
                     ]
                 },
                 medium: {
@@ -882,7 +875,8 @@
                         "窗戶|ㄔㄨㄤ,ㄏㄨˋ|看外面|🪟", "狐狸|ㄏㄨˊ,ㄌㄧˊ|很聰明|🦊", "斑馬|ㄅㄢ,ㄇㄚˇ|黑白條紋|🦓", "名字|ㄇㄧㄥˊ,ㄗˋ|你的稱呼|📛", "強壯|ㄑㄧㄤˊ,ㄓㄨㄤˋ|力氣大|💪", 
                         "疲累|ㄆㄧˊ,ㄌㄟˋ|想睡覺|😫", "生氣|ㄕㄥ,ㄑㄧˋ|怒氣沖沖|😡", "難過|ㄋㄢˊ,ㄍㄨㄛˋ|想哭|😢", "長襪|ㄔㄤˊ,ㄨㄚˋ|穿腳上|🧦", "禮物|ㄌㄧˇ,ㄨˋ|拆開來|🎁", 
                         "地圖|ㄉㄧˋ,ㄊㄨˊ|找路用|🗺️", "拖把|ㄊㄨㄛ,ㄅㄚˇ|打掃用|🧹", "抹布|ㄇㄛˇ,ㄅㄨˋ|擦桌子|🧽", "標籤|ㄅㄧㄠ,ㄑㄧㄢ|貼紙|🏷️", "擁抱|ㄩㄥˇ,ㄅㄠˋ|抱一下|🫂", 
-                        "寵物|ㄔㄨㄥˇ,ㄨˋ|養在家裡|🐶", "坑洞|ㄎㄥ,ㄉㄨㄥˋ|路上破洞|🕳️", "修理|ㄒㄧㄡ,ㄌㄧˇ|修東西|🔧", "混合|ㄏㄨㄣˋ,ㄏㄜˊ|攪在一起|🥣", "蛋糕|ㄉㄢˋ,ㄍㄠ|生日吃|🍰"
+                        "寵物|ㄔㄨㄥˇ,ㄨˋ|養在家裡|🐶", "坑洞|ㄎㄥ,ㄉㄨㄥˋ|路上破洞|🕳️", "修理|ㄒㄧㄡ,ㄌㄧˇ|修東西|🔧", "混合|ㄏㄨㄣˋ,ㄏㄜˊ|攪在一起|🥣", "蛋糕|ㄉㄢˋ,ㄍㄠ|生日吃|🍰",
+                        "炎熱|ㄧㄢˊ,ㄖㄜˋ|很熱|🥵", "準備|ㄓㄨㄣˇ,ㄅㄟˋ|預先弄好|🎒", "羨慕|ㄒㄧㄢˋ,ㄇㄨˋ|想要一樣好|🥺"
                     ]
                 },
                 hard: {
@@ -917,7 +911,8 @@
                         "閱讀|ㄩㄝˋ,ㄉㄨˊ|看書|📚", "畫布|ㄏㄨㄚˋ,ㄅㄨˋ|畫畫用|🖼️", "水彩|ㄕㄨㄟˇ,ㄘㄞˇ|顏料|🎨", "剪刀|ㄐㄧㄢˇ,ㄉㄠ|剪紙|✂️", "膠水|ㄐㄧㄠ,ㄕㄨㄟˇ|黏東西|💧",
                         "噴射機|ㄆㄣ,ㄕㄜˋ,ㄐㄧ|天上飛很快|✈️", "溜溜球|ㄌㄧㄡ,ㄌㄧㄡ,ㄑㄧㄡˊ|一種玩具|🪀", "耶誕樹|ㄧㄝ,ㄉㄢˋ,ㄕㄨˋ|聖誕節裝飾|🎄", "水龍頭|ㄕㄨㄟˇ,ㄌㄨㄥˊ,ㄊㄡˊ|洗手開水|🚰", 
                         "馬克杯|ㄇㄚˇ,ㄎㄜˋ,ㄅㄟ|喝水用|☕", "橡皮擦|ㄒㄧㄤˋ,ㄆㄧˊ,ㄘㄚ|擦錯字|🧽", "原子筆|ㄩㄢˊ,ㄗˇ,ㄅㄧˇ|寫字用|🖊️", "彩色筆|ㄘㄞˇ,ㄙㄜˋ,ㄅㄧˇ|畫畫用|🖍️", "耶誕老人|ㄧㄝ,ㄉㄢˋ,ㄌㄠˇ,ㄖㄣˊ|送禮物|🎅",
-                        "直升機|ㄓˊ,ㄕㄥ,ㄐㄧ|飛上天|🚁", "熱氣球|ㄖㄜˋ,ㄑㄧˋ,ㄑㄧㄡˊ|飛很高|🎈", "溜溜球|ㄌㄧㄡ,ㄌㄧㄡ,ㄑㄧㄡˊ|玩具|🪀", "洋娃娃|ㄧㄤˊ,ㄨㄚ,ㄨㄚ˙|玩具|🎎"
+                        "直升機|ㄓˊ,ㄕㄥ,ㄐㄧ|飛上天|🚁", "熱氣球|ㄖㄜˋ,ㄑㄧˋ,ㄑㄧㄡˊ|飛很高|🎈", "溜溜球|ㄌㄧㄡ,ㄌㄧㄡ,ㄑㄧㄡˊ|玩具|🪀", "洋娃娃|ㄧㄤˊ,ㄨㄚ,ㄨㄚ˙|玩具|🎎",
+                        "魔術師|ㄇㄛˊ,ㄕㄨˋ,ㄕ|變出鴿子|🎩", "搗蛋鬼|ㄉㄠˇ,ㄉㄢˋ,ㄍㄨㄟˇ|愛調皮|👻", "鐵鉤|ㄊㄧㄝˇ,ㄍㄡ|釣魚用|🪝"
                     ]
                 }
             },
@@ -965,7 +960,8 @@
                         "姊姊|ㄐㄧㄝˇ,ㄐㄧㄝ˙|家人|👧", "弟弟|ㄉㄧˋ,ㄉㄧ˙|家人|👦", "妹妹|ㄇㄟˋ,ㄇㄟ˙|家人|👧", "爺爺|ㄧㄝˊ,ㄧㄝ˙|長輩|👴", "奶奶|ㄋㄞˇ,ㄋㄞ˙|長輩|👵", 
                         "學生|ㄒㄩㄝˊ,ㄕㄥ|上學|🎒", "廚師|ㄔㄨˊ,ㄕ|煮飯|🧑‍🍳", "醫生|ㄧ,ㄕㄥ|看病|👨‍⚕️", "護士|ㄏㄨˋ,ㄕˋ|打針|👩‍⚕️", "農夫|ㄋㄨㄥˊ,ㄈㄨ|種田|🧑‍🌾", 
                         "浴室|ㄩˋ,ㄕˋ|洗澡|🛁", "廁所|ㄘㄜˋ,ㄙㄨㄛˇ|大號|🚽", "臥室|ㄨㄛˋ,ㄕˋ|睡覺|🛏️", "廚房|ㄔㄨˊ,ㄈㄤˊ|煮菜|🍳", "飯廳|ㄈㄢˋ,ㄊㄧㄥ|吃飯|🍽️", 
-                        "客廳|ㄎㄜˋ,ㄊㄧㄥ|電視|🛋️", "哪裡|ㄋㄚˇ,ㄌㄧˇ|問路|❓", "烏龜|ㄨ,ㄍㄨㄟ|很慢|🐢", "蝙蝠|ㄅㄧㄢ,ㄈㄨˊ|倒掛|🦇", "蜘蛛|ㄓ,ㄓㄨ|八腳|🕷️"
+                        "客廳|ㄎㄜˋ,ㄊㄧㄥ|電視|🛋️", "哪裡|ㄋㄚˇ,ㄌㄧˇ|問路|❓", "烏龜|ㄨ,ㄍㄨㄟ|很慢|🐢", "蝙蝠|ㄅㄧㄢ,ㄈㄨˊ|倒掛|🦇", "蜘蛛|ㄓ,ㄓㄨ|八腳|🕷️",
+                        "季節|ㄐㄧˋ,ㄐㄧㄝˊ|春夏秋冬|🌸", "陪伴|ㄆㄟˊ,ㄅㄢˋ|在身邊|👫", "兒童|ㄦˊ,ㄊㄨㄥˊ|小朋友|🧒", "爆炸|ㄅㄠˋ,ㄓㄚˋ|碰的一聲|💥"
                     ]
                 },
                 medium: {
@@ -1002,7 +998,8 @@
                         "銀行存錢|ㄧㄣˊ,ㄏㄤˊ,ㄘㄨㄣˊ,ㄑㄧㄢˊ|存錢|🏦", "百貨公司|ㄅㄞˇ,ㄏㄨㄛˋ,ㄍㄨㄥ,ㄙ|逛街|🏬", "電影院|ㄉㄧㄢˋ,ㄧㄥˇ,ㄩㄢˋ|看電影|🍿", "咖啡廳|ㄎㄚ,ㄈㄟ,ㄊㄧㄥ|喝飲料|☕", "麵包店|ㄇㄧㄢˋ,ㄅㄠ,ㄉㄧㄢˋ|買麵包|🥐",
                         "噴射機|ㄆㄣ,ㄕㄜˋ,ㄐㄧ|天上飛|✈️", "溜溜球|ㄌㄧㄡ,ㄌㄧㄡ,ㄑㄧㄡˊ|玩具|🪀", "耶誕樹|ㄧㄝ,ㄉㄢˋ,ㄕㄨˋ|裝飾|🎄", "水龍頭|ㄕㄨㄟˇ,ㄌㄨㄥˊ,ㄊㄡˊ|洗手|🚰", "馬克杯|ㄇㄚˇ,ㄎㄜˋ,ㄅㄟ|喝水|☕", 
                         "原子筆|ㄩㄢˊ,ㄗˇ,ㄅㄧˇ|寫字|🖊️", "耶誕老人|ㄧㄝ,ㄉㄢˋ,ㄌㄠˇ,ㄖㄣˊ|送禮|🎅", "大頭針|ㄉㄚˋ,ㄊㄡˊ,ㄓㄣ|刺刺的|📍", "口香糖|ㄎㄡˇ,ㄒㄧㄤ,ㄊㄤˊ|泡泡|🍬", "箱型車|ㄒㄧㄤ,ㄒㄧㄥˊ,ㄔㄜ|大車|🚐", 
-                        "電風扇|ㄉㄧㄢˋ,ㄈㄥ,ㄕㄢˋ|吹風|🌬️", "麻布袋|ㄇㄚˊ,ㄅㄨˋ,ㄉㄞˋ|裝東西|🥔", "南瓜燈|ㄋㄢˊ,ㄍㄨㄚ,ㄉㄥ|萬聖節|🎃"
+                        "電風扇|ㄉㄧㄢˋ,ㄈㄥ,ㄕㄢˋ|吹風|🌬️", "麻布袋|ㄇㄚˊ,ㄅㄨˋ,ㄉㄞˋ|裝東西|🥔", "南瓜燈|ㄋㄢˊ,ㄍㄨㄚ,ㄉㄥ|萬聖節|🎃",
+                        "浪漫|ㄌㄤˋ,ㄇㄢˋ|氣氛好|🌹", "驕傲|ㄐㄧㄠ,ㄠˋ|很得意|🦚", "鈔票|ㄔㄠ,ㄆㄧㄠˋ|紙錢|💵", "網路|ㄨㄤˇ,ㄌㄨˋ|上網找資料|🌐"
                     ]
                 },
                 hard: {
@@ -1034,7 +1031,8 @@
                         "飛蛾撲火|ㄈㄟ,ㄜˊ,ㄆㄨ,ㄏㄨㄛˇ|比喻自尋死路|🔥", "蜂擁而至|ㄈㄥ,ㄩㄥˇ,ㄦˊ,ㄓˋ|形容許多人聚集|🐝", "螳臂當車|ㄊㄤˊ,ㄅㄧˋ,ㄉㄤ,ㄔㄜ|比喻不自量力|🦗", "車水馬龍|ㄔㄜ,ㄕㄨㄟˇ,ㄇㄚˇ,ㄌㄨㄥˊ|形容繁華熱鬧|🚗", "門庭若市|ㄇㄣˊ,ㄊㄧㄥˊ,ㄖㄨㄛˋ,ㄕˋ|形容來往人客很多|🏠",
                         "打字速度快|ㄉㄚˇ,ㄗˋ,ㄙㄨˋ,ㄉㄨˋ,ㄎㄨㄞˋ|手指飛舞|🚀", "鍵盤小精靈|ㄐㄧㄢˋ,ㄆㄢˊ,ㄒㄧㄠˇ,ㄐㄧㄥ,ㄌㄧㄥˊ|鍵盤打得很順|🧚", "電腦小達人|ㄉㄧㄢˋ,ㄋㄠˇ,ㄒㄧㄠˇ,ㄉㄚˊ,ㄖㄣˊ|很會用電腦|👨‍💻", "網路探險家|ㄨㄤˇ,ㄌㄨˋ,ㄊㄢˋ,ㄒㄧㄢˇ,ㄐㄧㄚ|在網路上找資料|🧭", "寫程式好玩|ㄒㄧㄝˇ,ㄔㄥˊ,ㄕˋ,ㄏㄠˇ,ㄨㄢˊ|寫代碼很有趣|💻",
                         "學習新知識|ㄒㄩㄝˊ,ㄒㄧˋ,ㄒㄧㄣ,ㄓ,ㄕˋ|學到新東西|🧠", "每天都進步|ㄇㄟˇ,ㄊㄧㄢ,ㄉㄡ,ㄐㄧㄣˋ,ㄅㄨˋ|越來越厲害|📈", "考試得滿分|ㄎㄠˇ,ㄕˋ,ㄉㄜˊ,ㄇㄢˇ,ㄈㄣ|考了一百分|💯", "大家一起玩|ㄉㄚˋ,ㄐㄧㄚ,ㄧˋ,ㄑㄧˇ,ㄨㄢˊ|和好朋友玩|🏃", "快樂上學去|ㄎㄨㄞˋ,ㄌㄜˋ,ㄕㄤˋ,ㄒㄩㄝˊ,ㄑㄩˋ|開心的去學校|🎒",
-                        "努力不懈怠|ㄋㄨˇ,ㄌㄧˋ,ㄅㄨˋ,ㄒㄧㄝˋ,ㄉㄞˋ|一直很認真|💪", "堅持到最後|ㄐㄧㄢ,ㄔˊ,ㄉㄠˋ,ㄗㄨㄟˋ,ㄏㄡˋ|絕不放棄|🏁", "成功靠自己|ㄔㄥˊ,ㄍㄨㄥ,ㄎㄠˋ,ㄗˋ,ㄐㄧˇ|自己最棒|🏆", "加油你能行|ㄐㄧㄚ,ㄧㄡˊ,ㄋㄧˇ,ㄋㄥˊ,ㄒㄧㄥˊ|為自己打氣|🔥", "未來無限好|ㄨㄟˋ,ㄌㄞˊ,ㄨˊ,ㄒㄧㄢˋ,ㄏㄠˇ|前途光明|🌟"
+                        "努力不懈怠|ㄋㄨˇ,ㄌㄧˋ,ㄅㄨˋ,ㄒㄧㄝˋ,ㄉㄞˋ|一直很認真|💪", "堅持到最後|ㄐㄧㄢ,ㄔˊ,ㄉㄠˋ,ㄗㄨㄟˋ,ㄏㄡˋ|絕不放棄|🏁", "成功靠自己|ㄔㄥˊ,ㄍㄨㄥ,ㄎㄠˋ,ㄗˋ,ㄐㄧˇ|自己最棒|🏆", "加油你能行|ㄐㄧㄚ,ㄧㄡˊ,ㄋㄧˇ,ㄋㄥˊ,ㄒㄧㄥˊ|為自己打氣|🔥", "未來無限好|ㄨㄟˋ,ㄌㄞˊ,ㄨˊ,ㄒㄧㄢˋ,ㄏㄠˇ|前途光明|🌟",
+                        "酸辣湯|ㄙㄨㄢ,ㄌㄚˋ,ㄊㄤ|好喝的湯|🥣", "裝飾品|ㄓㄨㄤ,ㄕˋ,ㄆㄧㄣˇ|布置用|🎀", "智慧|ㄓˋ,ㄏㄨㄟˋ|很聰明|🧠", "災難|ㄗㄞ,ㄋㄢˋ|危險的事|🌋"
                     ]
                 }
             },
@@ -1081,7 +1079,8 @@
                         "星星|ㄒㄧㄥ,ㄒㄧㄥ|一閃一閃|⭐", "雲朵|ㄩㄣˊ,ㄉㄨㄛˇ|白白的|☁️", "海洋|ㄏㄞˇ,ㄧㄤˊ|很大|🌊", "高山|ㄍㄠ,ㄕㄢ|很高|⛰️", "河流|ㄏㄜˊ,ㄌㄧㄡˊ|水在跑|🏞️",
                         "動物|ㄉㄨㄥˋ,ㄨˋ|有生命|🦁", "植物|ㄓˊ,ㄨˋ|綠綠的|🌿", "昆蟲|ㄎㄨㄣ,ㄔㄨㄥˊ|有六隻腳|🐛", "蝴蝶|ㄏㄨˊ,ㄉㄧㄝˊ|很漂亮|🦋", "蜜蜂|ㄇㄧˋ,ㄈㄥ|採花蜜|🐝",
                         "螞蟻|ㄇㄚˇ,ㄧˇ|很團結|🐜", "飛鳥|ㄈㄟ,ㄋㄧㄠˇ|有翅膀|🐦", "魚兒|ㄩˊ,ㄦˊ|會游泳|🐟", "花朵|ㄏㄨㄚ,ㄉㄨㄛˇ|香香的|🌸", "樹木|ㄕㄨˋ,ㄇㄨˋ|有樹幹|🌳",
-                        "宇宙|ㄩˇ,ㄓㄡˋ|浩瀚無垠|🌌", "探險|ㄊㄢˋ,ㄒㄧㄢˇ|找寶藏|🧭", "森林|ㄙㄣ,ㄌㄧㄣˊ|很多樹|🌲", "挑戰|ㄊㄧㄠˇ,ㄓㄢˋ|不怕難|💪", "勝利|ㄕㄥˋ,ㄌㄧˋ|贏了|🏆"
+                        "宇宙|ㄩˇ,ㄓㄡˋ|浩瀚無垠|🌌", "探險|ㄊㄢˋ,ㄒㄧㄢˇ|找寶藏|🧭", "森林|ㄙㄣ,ㄌㄧㄣˊ|很多樹|🌲", "挑戰|ㄊㄧㄠˇ,ㄓㄢˋ|不怕難|💪", "勝利|ㄕㄥˋ,ㄌㄧˋ|贏了|🏆",
+                        "成熟|ㄔㄥˊ,ㄕㄡˊ|長大了|🍎", "拼圖|ㄆㄧㄣ,ㄊㄨˊ|益智遊戲|🧩", "購物|ㄍㄡˋ,ㄨˋ|買東西|🛍️", "鑽石|ㄗㄨㄢˋ,ㄕˊ|亮晶晶|💎", "咖啡|ㄎㄚ,ㄈㄟ|好喝的飲料|☕", "橘子|ㄐㄩˊ,ㄗ˙|橘色水果|🍊", "蔬菜|ㄕㄨ,ㄘㄞˋ|多吃青菜|🥬"
                     ]
                 },
                 medium: {
@@ -1126,7 +1125,8 @@
                         "銀行存錢|ㄧㄣˊ,ㄏㄤˊ,ㄘㄨㄣˊ,ㄑㄧㄢˊ|存錢|🏦", "百貨公司|ㄅㄞˇ,ㄏㄨㄛˋ,ㄍㄨㄥ,ㄙ|逛街|🏬", "電影院|ㄉㄧㄢˋ,ㄧㄥˇ,ㄩㄢˋ|看電影|🍿", "咖啡廳|ㄎㄚ,ㄈㄟ,ㄊㄧㄥ|喝飲料|☕", "麵包店|ㄇㄧㄢˋ,ㄅㄠ,ㄉㄧㄢˋ|買麵包|🥐",
                         "噴射機|ㄆㄣ,ㄕㄜˋ,ㄐㄧ|天上飛|✈️", "溜溜球|ㄌㄧㄡ,ㄌㄧㄡ,ㄑㄧㄡˊ|玩具|🪀", "耶誕樹|ㄧㄝ,ㄉㄢˋ,ㄕㄨˋ|裝飾|🎄", "水龍頭|ㄕㄨㄟˇ,ㄌㄨㄥˊ,ㄊㄡˊ|洗手|🚰", "馬克杯|ㄇㄚˇ,ㄎㄜˋ,ㄅㄟ|喝水|☕", 
                         "原子筆|ㄩㄢˊ,ㄗˇ,ㄅㄧˇ|寫字|🖊️", "耶誕老人|ㄧㄝ,ㄉㄢˋ,ㄌㄠˇ,ㄖㄣˊ|送禮|🎅", "大頭針|ㄉㄚˋ,ㄊㄡˊ,ㄓㄣ|刺刺的|📍", "口香糖|ㄎㄡˇ,ㄒㄧㄤ,ㄊㄤˊ|泡泡|🍬", "箱型車|ㄒㄧㄤ,ㄒㄧㄥˊ,ㄔㄜ|大車|🚐", 
-                        "電風扇|ㄉㄧㄢˋ,ㄈㄥ,ㄕㄢˋ|吹風|🌬️", "麻布袋|ㄇㄚˊ,ㄅㄨˋ,ㄉㄞˋ|裝東西|🥔", "南瓜燈|ㄋㄢˊ,ㄍㄨㄚ,ㄉㄥ|萬聖節|🎃"
+                        "電風扇|ㄉㄧㄢˋ,ㄈㄥ,ㄕㄢˋ|吹風|🌬️", "麻布袋|ㄇㄚˊ,ㄅㄨˋ,ㄉㄞˋ|裝東西|🥔", "南瓜燈|ㄋㄢˊ,ㄍㄨㄚ,ㄉㄥ|萬聖節|🎃",
+                        "準確|ㄓㄨㄣˇ,ㄑㄩㄝˋ|很精準|🎯", "穩定|ㄨㄣˇ,ㄉㄧㄥˋ|不搖晃|⚖️", "塗鴉|ㄊㄨˊ,ㄧㄚ|亂畫畫|🖍️", "玻璃|ㄅㄛ,ㄌㄧˊ|透明的|🪟", "賺錢|ㄓㄨㄢˋ,ㄑㄧㄢˊ|發大財|💰", "轟炸|ㄏㄨㄥ,ㄓㄚˋ|大爆炸|💣", "道歉|ㄉㄠˋ,ㄑㄧㄢˋ|說對不起|🙇", "誇獎|ㄎㄨㄚ,ㄐㄧㄤˇ|說你好|👍"
                     ]
                 },
                 hard: {
@@ -1158,7 +1158,8 @@
                         "飛蛾撲火|ㄈㄟ,ㄜˊ,ㄆㄨ,ㄏㄨㄛˇ|比喻自尋死路|🔥", "蜂擁而至|ㄈㄥ,ㄩㄥˇ,ㄦˊ,ㄓˋ|形容許多人聚集|🐝", "螳臂當車|ㄊㄤˊ,ㄅㄧˋ,ㄉㄤ,ㄔㄜ|比喻不自量力|🦗", "車水馬龍|ㄔㄜ,ㄕㄨㄟˇ,ㄇㄚˇ,ㄌㄨㄥˊ|形容繁華熱鬧|🚗", "門庭若市|ㄇㄣˊ,ㄊㄧㄥˊ,ㄖㄨㄛˋ,ㄕˋ|形容來往人客很多|🏠",
                         "打字速度快|ㄉㄚˇ,ㄗˋ,ㄙㄨˋ,ㄉㄨˋ,ㄎㄨㄞˋ|手指飛舞|🚀", "鍵盤小精靈|ㄐㄧㄢˋ,ㄆㄢˊ,ㄒㄧㄠˇ,ㄐㄧㄥ,ㄌㄧㄥˊ|鍵盤打得很順|🧚", "電腦小達人|ㄉㄧㄢˋ,ㄋㄠˇ,ㄒㄧㄠˇ,ㄉㄚˊ,ㄖㄣˊ|很會用電腦|👨‍💻", "網路探險家|ㄨㄤˇ,ㄌㄨˋ,ㄊㄢˋ,ㄒㄧㄢˇ,ㄐㄧㄚ|在網路上找資料|🧭", "寫程式好玩|ㄒㄧㄝˇ,ㄔㄥˊ,ㄕˋ,ㄏㄠˇ,ㄨㄢˊ|寫代碼很有趣|💻",
                         "學習新知識|ㄒㄩㄝˊ,ㄒㄧˋ,ㄒㄧㄣ,ㄓ,ㄕˋ|學到新東西|🧠", "每天都進步|ㄇㄟˇ,ㄊㄧㄢ,ㄉㄡ,ㄐㄧㄣˋ,ㄅㄨˋ|越來越厲害|📈", "考試得滿分|ㄎㄠˇ,ㄕˋ,ㄉㄜˊ,ㄇㄢˇ,ㄈㄣ|考了一百分|💯", "大家一起玩|ㄉㄚˋ,ㄐㄧㄚ,ㄧˋ,ㄑㄧˇ,ㄨㄢˊ|和好朋友玩|🏃", "快樂上學去|ㄎㄨㄞˋ,ㄌㄜˋ,ㄕㄤˋ,ㄒㄩㄝˊ,ㄑㄩˋ|開心的去學校|🎒",
-                        "努力不懈怠|ㄋㄨˇ,ㄌㄧˋ,ㄅㄨˋ,ㄒㄧㄝˋ,ㄉㄞˋ|一直很認真|💪", "堅持到最後|ㄐㄧㄢ,ㄔˊ,ㄉㄠˋ,ㄗㄨㄟˋ,ㄏㄡˋ|絕不放棄|🏁", "成功靠自己|ㄔㄥˊ,ㄍㄨㄥ,ㄎㄠˋ,ㄗˋ,ㄐㄧˇ|自己最棒|🏆", "加油你能行|ㄐㄧㄚ,ㄧㄡˊ,ㄋㄧˇ,ㄋㄥˊ,ㄒㄧㄥˊ|為自己打氣|🔥", "未來無限好|ㄨㄟˋ,ㄌㄞˊ,ㄨˊ,ㄒㄧㄢˋ,ㄏㄠˇ|前途光明|🌟"
+                        "努力不懈怠|ㄋㄨˇ,ㄌㄧˋ,ㄅㄨˋ,ㄒㄧㄝˋ,ㄉㄞˋ|一直很認真|💪", "堅持到最後|ㄐㄧㄢ,ㄔˊ,ㄉㄠˋ,ㄗㄨㄟˋ,ㄏㄡˋ|絕不放棄|🏁", "成功靠自己|ㄔㄥˊ,ㄍㄨㄥ,ㄎㄠˋ,ㄗˋ,ㄐㄧˇ|自己最棒|🏆", "加油你能行|ㄐㄧㄚ,ㄧㄡˊ,ㄋㄧˇ,ㄋㄥˊ,ㄒㄧㄥˊ|為自己打氣|🔥", "未來無限好|ㄨㄟˋ,ㄌㄞˊ,ㄨˊ,ㄒㄧㄢˋ,ㄏㄠˇ|前途光明|🌟",
+                        "滔滔不絕|ㄊㄠ,ㄊㄠ,ㄅㄨˋ,ㄐㄩㄝˊ|一直說話|🗣️", "栩栩如生|ㄒㄩˇ,ㄒㄩˇ,ㄖㄨˊ,ㄕㄥ|像真的一樣|🖼️"
                     ]
                 }
             }
@@ -2143,13 +2144,18 @@
             if (bestImprover && maxImprovement > 0) {
                 const sId = bestImprover.className + bestImprover.seatNumber;
                 const sName = window.studentNames[sId] || '';
-                const displayName = sName ? `${sId} ${sName}` : `${bestImprover.className}班 ${bestImprover.seatNumber}號`;
+                const classSeatText = `${bestImprover.className}班 ${bestImprover.seatNumber}號`;
                 
-                improverNameEl.innerText = displayName;
+                if (sName) {
+                    improverNameEl.innerHTML = `<div class="text-xl md:text-2xl">${classSeatText}</div><div class="text-3xl md:text-4xl mt-1">${sName}</div>`;
+                } else {
+                    improverNameEl.innerHTML = `<div class="text-2xl md:text-4xl">${classSeatText}</div>`;
+                }
+                
                 improverTimeEl.innerHTML = `狂飆進步了 <span class="text-3xl text-yellow-500 font-black px-1">${window.formatTime(bestImprover.improvement)}</span>！`;
             } else {
-                improverNameEl.innerText = "從缺";
-                improverTimeEl.innerText = "快來挑戰超越自己！";
+                improverNameEl.innerHTML = "從缺";
+                improverTimeEl.innerHTML = "快來挑戰超越自己！";
             }
 
             const topEasy = window.getTop3ForClassAndDiff(classScores, 'easy');
@@ -2186,16 +2192,26 @@
                 const timeEl = document.getElementById(`${prefix}-${i}-time`);
                 if (nameEl && timeEl) {
                     if (sortedData.length >= i) {
-                        const sId = sortedData[i-1].className + sortedData[i-1].seatNumber;
+                        const data = sortedData[i-1];
+                        const sId = data.className + data.seatNumber;
                         const sName = window.studentNames[sId] || '';
-                        const displayName = sName ? `${sId} ${sName}` : `${sortedData[i-1].className}班 ${sortedData[i-1].seatNumber}號`;
                         
-                        nameEl.innerText = displayName;
-                        nameEl.className = i === 1 ? "text-sm md:text-base font-black text-yellow-600 truncate w-full text-center px-1" : "text-xs md:text-sm font-bold text-gray-700 truncate w-full text-center px-1";
-                        timeEl.innerText = window.formatTime(sortedData[i-1].time);
+                        const classSeatText = `${data.className}班 ${data.seatNumber}號`;
+                        
+                        if (sName) {
+                            nameEl.innerHTML = `<div class="leading-tight">${classSeatText}</div><div class="leading-tight">${sName}</div>`;
+                        } else {
+                            nameEl.innerHTML = `<div class="leading-tight">${classSeatText}</div>`;
+                        }
+                        
+                        nameEl.className = i === 1 
+                            ? "text-sm md:text-base font-black text-yellow-600 w-full text-center px-1 mb-1" 
+                            : "text-xs md:text-sm font-bold text-gray-700 w-full text-center px-1 mb-1";
+                            
+                        timeEl.innerText = window.formatTime(data.time);
                     } else {
-                        nameEl.innerText = "從缺";
-                        nameEl.className = "text-gray-300 font-bold truncate w-full text-center";
+                        nameEl.innerHTML = "從缺";
+                        nameEl.className = "text-gray-300 font-bold w-full text-center mb-1";
                         timeEl.innerText = "-";
                     }
                 }
@@ -2349,18 +2365,18 @@
             }
         };
 
-        window.setupDatabaseListener = function() {
-            if (!window.db || !window.user) return;
+        window.setupDatabaseListener = async function() {
+            if (!window.user || !window.db) return;
             
-            import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(fsModule => {
-                const scoresRef = fsModule.collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores');
+            try {
+                const fsModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                const q = fsModule.query(fsModule.collection(window.db, 'artifacts', window.appId, 'public', 'data', 'typing_scores'));
                 
-                fsModule.onSnapshot(scoresRef, (snapshot) => {
+                fsModule.onSnapshot(q, (snapshot) => {
                     window.allScoresData = [];
-                    snapshot.forEach(document => {
-                        const data = document.data();
-                        data.id = document.id; 
-                        data.weekId = data.weekId || window.getWeekId(data.timestamp);
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        data.id = doc.id;
                         window.allScoresData.push(data);
                     });
                     
@@ -2382,12 +2398,18 @@
                     if (window.currentGameState === 'leaderboard-screen') {
                         window.renderLeaderboard();
                     } else if (window.currentGameState === 'teacher-dashboard-screen') {
-                        window.renderTeacherDashboard();
+                        if (window.currentTeacherTab === 'podium') {
+                            window.renderPodium();
+                        } else {
+                            window.renderTeacherDashboard();
+                        }
                     }
                 }, (error) => {
                     console.error("資料讀取錯誤:", error);
                 });
-            });
+            } catch (error) {
+                console.error("設定資料庫監聽器失敗:", error);
+            }
         };
 
         window.initFirebase();
