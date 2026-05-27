@@ -795,6 +795,7 @@
         window.isComposing = false;
         window.isPaused = false;
         window.warningTimeout = null;
+        window.timerStarted = false;
 
         // 加入 isAnonymous 屬性判斷是否為匿名訪客
         window.studentInfo = { classCode: '', seatCode: '', name: '', grade: 3, isAnonymous: false };
@@ -1483,6 +1484,7 @@
             window.isTransitioning = false;
             window.isComposing = false;
             window.isPaused = false;
+            window.timerStarted = false;
             
             if (window.warningTimeout) {
                 clearTimeout(window.warningTimeout);
@@ -1492,8 +1494,10 @@
             const pauseOverlay = document.getElementById('pause-overlay');
             if (pauseOverlay) pauseOverlay.classList.add('hidden');
             
+            if (timerText) timerText.innerText = "0秒";
+            clearInterval(window.timerInterval);
+
             window.renderQuestion();
-            window.startTimer();
             window.showScreen('playing-screen');
         };
 
@@ -1655,6 +1659,12 @@
             if (window.isPaused) return;
             if (window.isTransitioning || window.currentQIndex >= window.questions.length || !typeInput) return;
 
+            // --- 新增：按下第一個按鍵才開始計時 ---
+            if (!window.timerStarted && typeInput.value.length > 0) {
+                window.timerStarted = true;
+                window.startTimer();
+            }
+
             const q = window.questions[window.currentQIndex];
             const val = typeInput.value;
             
@@ -1757,8 +1767,6 @@
 
         window.startTimer = function() {
             clearInterval(window.timerInterval);
-            window.elapsedTime = 0;
-            if (timerText) timerText.innerText = "0秒";
             
             window.timerInterval = setInterval(() => {
                 if (!window.isPaused && !window.isTransitioning) {
