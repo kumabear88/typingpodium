@@ -562,6 +562,10 @@
                     <button onclick="window.switchTeacherTab('students')" id="t-tab-students" class="flex-1 min-w-[120px] py-2 px-4 rounded-xl font-bold transition-colors text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-address-book"></i> 名單管理
                     </button>
+                    <div class="w-px bg-gray-300 mx-1"></div>
+                    <button onclick="window.switchTeacherTab('questions')" id="t-tab-questions" class="flex-1 min-w-[120px] py-2 px-4 rounded-xl font-bold transition-colors text-pink-600 bg-pink-50 hover:bg-pink-100 border border-pink-200 shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-book"></i> 題庫管理
+                    </button>
                 </div>
 
                 <!-- 老師後台：名單列表 -->
@@ -760,6 +764,44 @@
                             </button>
                         </div>
                         <textarea id="teacher-students-textarea" class="w-full h-[400px] p-4 border-2 border-gray-300 rounded-xl font-mono text-lg focus:border-blue-500 focus:outline-none whitespace-pre overflow-auto bg-gray-50 shadow-inner" spellcheck="false" placeholder="讀取中..."></textarea>
+                    </div>
+                </div>
+
+                <!-- 老師後台：題庫編輯器 -->
+                <div id="teacher-view-questions" class="hidden">
+                    <div class="bg-white border-2 border-gray-200 rounded-2xl shadow-md p-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                            <div>
+                                <h3 class="text-2xl font-black text-gray-800">📚 題庫管理</h3>
+                                <p class="text-gray-500 font-bold text-sm mt-1">選擇你要編輯的題庫，格式為：<br>
+                                    英文：<span class="text-blue-600">單字|提示|Emoji</span> (如：apple|蘋果|🍎)<br>
+                                    中文：<span class="text-blue-600">詞語|注音(逗號分隔)|提示|Emoji</span> (如：你好|ㄋㄧˇ,ㄏㄠˇ|打招呼|👋)
+                                </p>
+                            </div>
+                            <button onclick="window.saveTeacherQuestions()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-transform hover:scale-105 flex items-center gap-2 whitespace-nowrap">
+                                <i class="fa-solid fa-save"></i> 儲存題庫
+                            </button>
+                        </div>
+                        <div class="flex gap-2 mb-4 flex-wrap">
+                            <select id="q-grade-select" onchange="window.renderTeacherQuestions()" class="px-3 py-2 border-2 border-pink-300 rounded-lg font-bold text-pink-800 outline-none">
+                                <option value="3">三年級</option>
+                                <option value="4">四年級</option>
+                                <option value="5">五六年級</option>
+                            </select>
+                            <select id="q-diff-select" onchange="window.renderTeacherQuestions()" class="px-3 py-2 border-2 border-pink-300 rounded-lg font-bold text-pink-800 outline-none">
+                                <option value="easy">🌱 新手</option>
+                                <option value="medium">⭐ 進階</option>
+                                <option value="hard">🚀 高手</option>
+                            </select>
+                            <select id="q-lang-select" onchange="window.renderTeacherQuestions()" class="px-3 py-2 border-2 border-pink-300 rounded-lg font-bold text-pink-800 outline-none">
+                                <option value="zh">🇹🇼 中文</option>
+                                <option value="en">🔤 英文</option>
+                            </select>
+                            <button onclick="window.resetCurrentQuestionPool()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition-colors text-sm ml-auto">
+                                <i class="fa-solid fa-rotate-left"></i> 還原為預設題庫
+                            </button>
+                        </div>
+                        <textarea id="teacher-questions-textarea" class="w-full h-[400px] p-4 border-2 border-gray-300 rounded-xl font-mono text-lg focus:border-pink-500 focus:outline-none whitespace-pre overflow-auto bg-gray-50 shadow-inner" spellcheck="false" placeholder="讀取中..."></textarea>
                     </div>
                 </div>
 
@@ -1232,23 +1274,31 @@
         };
 
         // --- 將原始字串題庫解析為應用程式需要的物件格式 ---
-        window.questionPools = {};
-        for (let grade in rawPools) {
-            window.questionPools[grade] = {};
-            for (let diff in rawPools[grade]) {
-                window.questionPools[grade][diff] = {
-                    en: rawPools[grade][diff].en.map(str => {
-                        const parts = str.split('|');
-                        return { target: parts[0], hint: parts[1], emoji: parts[2], lang: 'en' };
-                    }),
-                    zh: rawPools[grade][diff].zh.map(str => {
-                        const parts = str.split('|');
-                        const zhuyinArray = parts[1].includes(',') ? parts[1].split(',') : [parts[1]];
-                        return { target: parts[0], zhuyin: zhuyinArray, hint: parts[2], emoji: parts[3], lang: 'zh' };
-                    })
-                };
+        window.customPools = {};
+        window.buildQuestionPools = function() {
+            window.questionPools = {};
+            for (let grade in rawPools) {
+                window.questionPools[grade] = {};
+                for (let diff in rawPools[grade]) {
+                    window.questionPools[grade][diff] = {};
+                    for (let lang of ['en', 'zh']) {
+                        const key = `${grade}_${diff}_${lang}`;
+                        const listToParse = window.customPools[key] || rawPools[grade][diff][lang];
+                        
+                        window.questionPools[grade][diff][lang] = listToParse.map(str => {
+                            const parts = str.split('|');
+                            if (lang === 'en') {
+                                return { target: parts[0], hint: parts[1], emoji: parts[2], lang: 'en' };
+                            } else {
+                                const zhuyinArray = parts[1] && parts[1].includes(',') ? parts[1].split(',') : [(parts[1] || '')];
+                                return { target: parts[0], zhuyin: zhuyinArray, hint: parts[2], emoji: parts[3], lang: 'zh' };
+                            }
+                        });
+                    }
+                }
             }
-        }
+        };
+        window.buildQuestionPools();
 
         // --- 輔助函數 ---
         window.getRandomItems = function(array, count) {
@@ -1293,6 +1343,8 @@
             if (screenId === 'teacher-dashboard-screen') {
                 if(window.currentTeacherTab === 'students') {
                     window.renderTeacherStudents();
+                } else if(window.currentTeacherTab === 'questions') {
+                    window.renderTeacherQuestions();
                 } else if(window.currentTeacherTab === 'podium') {
                     window.renderPodium();
                 } else {
@@ -2218,15 +2270,25 @@
                     studentsBtn.className = "flex-1 min-w-[120px] py-2 px-4 rounded-xl font-bold transition-colors text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 shadow-sm flex items-center justify-center gap-2";
                 }
             }
+            const questionsBtn = document.getElementById('t-tab-questions');
+            if (questionsBtn) {
+                if (tabName === 'questions') {
+                    questionsBtn.className = "flex-1 min-w-[120px] py-2 px-4 rounded-xl font-bold transition-colors text-pink-700 bg-pink-200 border border-pink-400 shadow-inner flex items-center justify-center gap-2";
+                } else {
+                    questionsBtn.className = "flex-1 min-w-[120px] py-2 px-4 rounded-xl font-bold transition-colors text-pink-600 bg-pink-50 hover:bg-pink-100 border border-pink-200 shadow-sm flex items-center justify-center gap-2";
+                }
+            }
 
             const viewList = document.getElementById('teacher-view-list');
             const viewPodium = document.getElementById('teacher-view-podium');
             const viewStudents = document.getElementById('teacher-view-students');
+            const viewQuestions = document.getElementById('teacher-view-questions');
             const teacherFilters = document.getElementById('teacher-filters');
             
             if (tabName === 'podium') {
                 if(viewList) viewList.classList.add('hidden');
                 if(viewStudents) viewStudents.classList.add('hidden');
+                if(viewQuestions) viewQuestions.classList.add('hidden');
                 if(viewPodium) viewPodium.classList.remove('hidden');
                 if(teacherFilters) teacherFilters.classList.remove('hidden');
                 document.getElementById('podium-results').classList.replace('opacity-100', 'opacity-0');
@@ -2234,11 +2296,20 @@
                 if(viewList) viewList.classList.add('hidden');
                 if(viewPodium) viewPodium.classList.add('hidden');
                 if(teacherFilters) teacherFilters.classList.add('hidden');
+                if(viewQuestions) viewQuestions.classList.add('hidden');
                 if(viewStudents) viewStudents.classList.remove('hidden');
                 window.renderTeacherStudents();
+            } else if (tabName === 'questions') {
+                if(viewList) viewList.classList.add('hidden');
+                if(viewPodium) viewPodium.classList.add('hidden');
+                if(teacherFilters) teacherFilters.classList.add('hidden');
+                if(viewStudents) viewStudents.classList.add('hidden');
+                if(viewQuestions) viewQuestions.classList.remove('hidden');
+                window.renderTeacherQuestions();
             } else {
                 if(viewPodium) viewPodium.classList.add('hidden');
                 if(viewStudents) viewStudents.classList.add('hidden');
+                if(viewQuestions) viewQuestions.classList.add('hidden');
                 if(viewList) viewList.classList.remove('hidden');
                 if(teacherFilters) teacherFilters.classList.remove('hidden');
                 window.renderTeacherDashboard();
@@ -2246,7 +2317,7 @@
         };
 
         window.renderTeacherDashboard = function() {
-            if (window.currentTeacherTab === 'podium' || window.currentTeacherTab === 'students') return; 
+            if (window.currentTeacherTab === 'podium' || window.currentTeacherTab === 'students' || window.currentTeacherTab === 'questions') return; 
 
             const tbody = document.getElementById('teacher-dashboard-body');
             const classFilter = document.getElementById('teacher-class-filter')?.value || 'all';
@@ -2592,6 +2663,80 @@
             }
         };
 
+        window.renderTeacherQuestions = function() {
+            const grade = document.getElementById('q-grade-select').value;
+            const diff = document.getElementById('q-diff-select').value;
+            const lang = document.getElementById('q-lang-select').value;
+            const textarea = document.getElementById('teacher-questions-textarea');
+            if (!textarea) return;
+            
+            const key = `${grade}_${diff}_${lang}`;
+            const list = window.customPools[key] || rawPools[grade][diff][lang];
+            
+            textarea.value = list.join('\n');
+        };
+
+        window.saveTeacherQuestions = async function() {
+            const grade = document.getElementById('q-grade-select').value;
+            const diff = document.getElementById('q-diff-select').value;
+            const lang = document.getElementById('q-lang-select').value;
+            const textarea = document.getElementById('teacher-questions-textarea');
+            
+            if (!textarea) return;
+            if (!window.user || !window.db) {
+                alert("尚未連線至資料庫！");
+                return;
+            }
+
+            const text = textarea.value;
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            const key = `${grade}_${diff}_${lang}`;
+            window.customPools[key] = lines;
+            
+            window.buildQuestionPools();
+
+            try {
+                await window.setDoc(window.doc(window.db, 'artifacts', window.appId, 'public', 'data', 'settings', 'question_pools'), {
+                    poolData: JSON.stringify(window.customPools),
+                    updatedAt: Date.now()
+                });
+                alert("題庫已成功儲存並生效！下次遊戲將會使用新的題目。");
+            } catch (err) {
+                console.error("儲存題庫失敗", err);
+                alert("儲存題庫失敗，請確認資料庫權限。");
+            }
+        };
+
+        window.resetCurrentQuestionPool = async function() {
+            const grade = document.getElementById('q-grade-select').value;
+            const diff = document.getElementById('q-diff-select').value;
+            const lang = document.getElementById('q-lang-select').value;
+            const key = `${grade}_${diff}_${lang}`;
+            
+            if (!window.customPools[key]) {
+                alert("此題庫目前已經是系統預設值，無需還原！");
+                return;
+            }
+
+            if (!confirm(`確定要將這組題庫還原為預設值嗎？\n這將會刪除您所有的自訂修改！`)) return;
+
+            delete window.customPools[key];
+            window.buildQuestionPools();
+            window.renderTeacherQuestions();
+            
+            if (window.user && window.db) {
+                try {
+                    await window.setDoc(window.doc(window.db, 'artifacts', window.appId, 'public', 'data', 'settings', 'question_pools'), {
+                        poolData: JSON.stringify(window.customPools),
+                        updatedAt: Date.now()
+                    });
+                } catch(e) {
+                    console.error("還原題庫失敗", e);
+                }
+            }
+        };
+
         window.initFirebase = async function() {
             try {
                 const appModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
@@ -2634,10 +2779,39 @@
                     if (window.user) {
                         window.setupDatabaseListener(); 
                         window.loadCustomStudentList();
+                        window.loadCustomQuestionPool();
                     }
                 });
             } catch (err) {
                 console.error("Firebase 初始化失敗:", err);
+            }
+        };
+
+        window.loadCustomQuestionPool = async function() {
+            if (!window.db) return;
+            try {
+                const fsModule = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                const docRef = fsModule.doc(window.db, 'artifacts', window.appId, 'public', 'data', 'settings', 'question_pools');
+                fsModule.onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data && data.poolData) {
+                            try {
+                                window.customPools = JSON.parse(data.poolData);
+                                window.buildQuestionPools();
+                                if (window.currentGameState === 'teacher-dashboard-screen' && window.currentTeacherTab === 'questions') {
+                                    window.renderTeacherQuestions();
+                                }
+                            } catch(e) {
+                                console.error("解析自訂題庫失敗", e);
+                            }
+                        }
+                    }
+                }, (error) => {
+                    console.error("讀取自訂題庫失敗:", error);
+                });
+            } catch(e) {
+                console.error("設定題庫監聽失敗", e);
             }
         };
 
